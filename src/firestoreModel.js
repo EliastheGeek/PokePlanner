@@ -42,7 +42,7 @@ export function connectToPersistence(store) {
 
         if (prev.hello !== curr.hello) {   
             if (curr.user && curr.ready) {
-                setDoc(firestoreDoc, {hello: curr.numberOfGuests}, {merge:true})
+                setDoc(firestoreDoc, {hello: curr.hello}, {merge:true})
             }
         }
     })
