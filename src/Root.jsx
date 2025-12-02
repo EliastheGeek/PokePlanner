@@ -4,20 +4,22 @@ import { Logout } from "/src/presenters/logoutPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
-
-
 import { ChatInputPresenter } from "/src/presenters/chatInputPresenter.jsx";
 import { ChatOutputPresenter } from "/src/presenters/chatOutputPresenter.jsx";
 
+
+// Chat test //
 export function Root(){
 
     return (
         <div>
-            <h2>Chat Test</h2>
             <ChatInputPresenter />
             <ChatOutputPresenter />
         </div>
     );
+}
+// ---- //
+
 
 /*
 function makeRouter(){
@@ -55,6 +57,7 @@ export function Root() {
         );
         return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
     }
-        */
+        
 }
+*/
 
