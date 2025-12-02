@@ -53,11 +53,58 @@ export const {
     setCurrentPassword,
 } = pokeSlice.actions;
 
+// ---------- //
+// Chat stuff //
+// ---------- //
+const chatInitialState = {
+    query: "",
+    response: null,
+    loading: false,
+    error: null
+};
+
+const chatSlice = createSlice({
+    name: "chat",
+    initialState: chatInitialState,
+    reducers: {
+        setQuery(state, action) {
+            state.query = action.payload;
+        },
+        promptStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        promptSuccess(state, action) {
+            state.loading = false;
+            state.response = action.payload;
+        },
+        promptError(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        resetResponse(state) {
+            state.response = null;
+            state.query = null;
+            state.error = null;
+            state.loading = false;
+        }
+    }
+})
+
+export const {
+    setQuery,
+    promptStart,
+    promptSuccess,
+    promptError,
+    resetResponse
+  } = chatSlice.actions;
+
 const listenerMiddleware = createListenerMiddleware();
 
 export const store = configureStore({
    reducer: {
      poke: pokeSlice.reducer,
+     chat: chatSlice.reducer
    },
   // optional: add a middleware
   middleware(getDefaultMiddleware){

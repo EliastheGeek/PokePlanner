@@ -5,6 +5,21 @@ import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
 
+
+import { ChatInputPresenter } from "/src/presenters/chatInputPresenter.jsx";
+import { ChatOutputPresenter } from "/src/presenters/chatOutputPresenter.jsx";
+
+export function Root(){
+
+    return (
+        <div>
+            <h2>Chat Test</h2>
+            <ChatInputPresenter />
+            <ChatOutputPresenter />
+        </div>
+    );
+
+/*
 function makeRouter(){
     return createHashRouter([
     {
@@ -20,7 +35,9 @@ function makeRouter(){
 ])
 }
 
-export function Root(){
+export function Root() {
+
+    
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
     
@@ -38,5 +55,6 @@ export function Root(){
         );
         return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
     }
+        */
 }
 
