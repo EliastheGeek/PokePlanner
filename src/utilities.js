@@ -1,10 +1,7 @@
-import { version } from "react";
-
-export function sortPokeIdCB(pokeA,pokeB){
-    pokeA.id==pokeB.id?0 : pokeA.id<pokeB.id?-1:1;
-}
-
 export function sortPokemon(pokeArray){//Sortera pokemon från sökresultat utifrån deras id
+    function sortPokeIdCB(pokeA,pokeB){
+    pokeA.id==pokeB.id?0 : pokeA.id<pokeB.id?-1:1;
+    }
     const pokemon = [...pokeArray];
     return pokemon.sort(sortPokeIdCB);
 }
@@ -25,4 +22,4 @@ function findGameVersion(move){ //kanske ersätta med en variabel currentGameVer
     const result = move.version_group_details.find(checkGameCB);
     return result;
 }
-//avancerat, filterera alla pokemon som är tillgängliga för en version.
+//avancerat, filterera alla pokemon som är tillgängliga för en version. TODO
