@@ -6,6 +6,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
 import { ChatInputPresenter } from "/src/presenters/chatInputPresenter.jsx";
 import { ChatOutputPresenter } from "/src/presenters/chatOutputPresenter.jsx";
+import "./style.css";
 
 
 // Chat test //
@@ -13,9 +14,21 @@ export function Root(){
 
     return (
         <div>
-            <ChatInputPresenter />
-            <ChatOutputPresenter />
+            <div className="topMenuBar">
+            Menu
+            </div>
+            <div className="horizontalFlexParent">
+                <div className="mainAreaTest">
+                    main area
+                </div>
+                <div className="pokeBotBox">
+                    <b>PokéBot</b>
+                    <ChatInputPresenter />
+                    <ChatOutputPresenter />
+                </div>
+            </div>
         </div>
+        
     );
 }
 // ---- //
