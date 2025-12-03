@@ -2,8 +2,6 @@ import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/
 
 const initialState = {
     team: [],
-    /*currentGameVersion: null,*/ //vilken version användaren har valt, avgör vilka pokemon och moves som finns tillgängliga
-    //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
     currentDishPromiseState: { promise: null, data: null, error: null },
@@ -22,10 +20,6 @@ const pokeSlice = createSlice({
     name: "poke",
     initialState: initialState,
     reducers: {
-       /* setCurrentGameVersion(state, action){
-            state.currentGameVersion = action.payload;
-            state.currentDishPromiseState = { promise: null, data: null, error: null };
-        },*/
         addToTeam(state, action){
             state.team = [...state.team,action.payload];
         },
