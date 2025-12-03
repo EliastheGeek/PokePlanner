@@ -1,7 +1,8 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
-
+import { pokemonConst } from "./pokemonConst";
+const teamMaxSize = 6;
 const initialState = {
-    team: [],
+    team: [pokemonConst],
     /*currentGameVersion: null,*/ //vilken version användaren har valt, avgör vilka pokemon och moves som finns tillgängliga
     //Promise-stuff
     searchParams: {},
@@ -26,8 +27,9 @@ const pokeSlice = createSlice({
             state.currentGameVersion = action.payload;
             state.currentDishPromiseState = { promise: null, data: null, error: null };
         },*/
-        addToTeam(state, action){
-            state.team = [...state.team,action.payload];
+        addToTeam(state, action){ //Lägg till ny pokemon till laget, max antal är 6
+            if(state.team.length()<teamMaxSize){state.team = [...state.team,action.payload];}
+            
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){

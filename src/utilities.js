@@ -8,7 +8,7 @@ export function sortPokemon(pokeArray){//Sortera pokemon från sökresultat utif
 
 export function filterMoves(moves){//filtrerar alla moves en pokemon kan ha efter spelversion
     function moveFilterCB(move){//hittas spelversion, behåll, annars ta bort
-        findGameVersion(move)?1:0;
+        return findGameVersion(move)?1:0;
     }
 const result = moves.filter(moveFilterCB);
 return result;
@@ -22,4 +22,5 @@ function findGameVersion(move){ //kanske ersätta med en variabel currentGameVer
     const result = move.version_group_details.find(checkGameCB);
     return result;
 }
+
 //avancerat, filterera alla pokemon som är tillgängliga för en version. TODO
