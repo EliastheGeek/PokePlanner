@@ -2,15 +2,15 @@ export function ChatView(props) {
 
     function onPromptChangeACB(e) {
         props.onPromptTextChange(e.target.value);
-        console.log("props.query =", props.query);
+        console.log("props.currentQuery =", props.currentQuery);
     }
 
-    function promptACB(e) { 
+    function promptACB(e) {
         props.onPromptNow();
     }
 
-    function askAnotherQuestionACB() {
-        props.onResponseReset();
+    function startNewSessionACB() {
+        props.onSessionReset();
     }
 
     function handleInputKeyDownACB(evt){
@@ -22,20 +22,20 @@ export function ChatView(props) {
         return <div className="loadingText">Loading...</div>;
     }
 
-    if (props.response == null) {
+    if (props.currentResponse == null) {
         return (
             <div className="inputBox">
     
                 <input
                         type="text"
                         placeholder="Ask something..."
-                        value={props.query || ""}
+                        value={props.currentQuery || ""}
                         onChange={onPromptChangeACB}
                         onKeyDown={ handleInputKeyDownACB }
                 />
     
                 <button type="button" onClick={promptACB}>Prompt away</button>
-                <button type="button" onClick={askAnotherQuestionACB}>Ask another question</button>
+                <button type="button" onClick={startNewSessionACB}>Start new chat session</button>
     
             </div>
         );
@@ -44,7 +44,7 @@ export function ChatView(props) {
             <div className="responseText">
                 <span className="responseLabel">Response:</span>
                 <div className="responseContent">
-                    {props.response}
+                    {props.currentResponse}
                 </div>
             </div>
         );

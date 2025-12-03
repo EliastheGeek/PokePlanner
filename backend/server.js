@@ -22,8 +22,8 @@ app.post("/api/chat", async (req, res) => {
         const result = await client.chat.completions.create({
             model: "gpt-4.1",
             messages: [
-                { role: "system", content: "You are a Pokémon expert. Answer detailed but brief." },
-                { role: "user", content: "Here are my current team of Pókemons: " + {} },
+                //{ role: "system", content: "You are a Pokémon expert. Answer detailed but brief." },
+                //{ role: "user", content: "Here are my current team of Pókemons: " + {} },
                 { role: "user", content: userQuery }]
         });
 

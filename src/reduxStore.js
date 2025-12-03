@@ -1,4 +1,5 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
+import { formatTimestamp } from "/src/utility";
 
 const initialState = {
     //Promise-stuff
@@ -56,9 +57,14 @@ export const {
 // ---------- //
 // Chat stuff //
 // ---------- //
+
 const chatInitialState = {
-    query: "",
-    response: null,
+    sessionId: null,
+    sessionName: "",
+    startTime: null,
+    currentQuery: "",
+    currentResponse: "",
+    conversation: {},
     loading: false,
     error: null
 };
@@ -67,24 +73,49 @@ const chatSlice = createSlice({
     name: "chat",
     initialState: chatInitialState,
     reducers: {
-        setQuery(state, action) {
-            state.query = action.payload;
+        setSessionId(state, action) {
+            state.sessionId = action.payload;
+        },
+        setSessionName(state, action) {
+            state.sessionName = action.payload;
+        },
+        setCurrentQuery(state, action) {
+            state.currentQuery = action.payload;
         },
         promptStart(state) {
             state.loading = true;
             state.error = null;
+
+            if (!state.startTime) {
+                state.startTime = formatTimestamp(new Date());
+            }
         },
         promptSuccess(state, action) {
             state.loading = false;
-            state.response = action.payload;
+            
+            const responseId = action.payload.id;
+            const responseText = action.payload.choices[0].message.content;
+
+            if (!state.sessionId && state.currentQuery.trim() !== ""){
+                state.sessionId = responseId;
+                state.sessionName = state.currentQuery;
+            }
+            
+            state.currentResponse = responseText;
+
+            if (state.currentQuery.trim() !== "") {
+                state.conversation[state.currentQuery] = responseText; // Update conversation
+            }
         },
         promptError(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
-        resetResponse(state) {
-            state.response = null;
-            state.query = null;
+        resetSession(state) {
+            state.sessionId = null;
+            state.sessionName = "";
+            state.currentQuery = "";
+            state.conversation = {};
             state.error = null;
             state.loading = false;
         }
@@ -92,11 +123,13 @@ const chatSlice = createSlice({
 })
 
 export const {
-    setQuery,
+    setSessionId,
+    setSessionName,
+    setCurrentQuery,
     promptStart,
     promptSuccess,
     promptError,
-    resetResponse
+    resetSession
   } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
@@ -113,3 +146,5 @@ export const store = configureStore({
         ignoredPaths: ['poke']}}).prepend(listenerMiddleware.middleware)
   }, 
 } );
+
+window.store = store;

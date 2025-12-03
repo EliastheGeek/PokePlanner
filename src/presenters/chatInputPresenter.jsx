@@ -7,12 +7,20 @@ export const ChatInputPresenter = connect(
     mapDispatchToProps
   )(function ChatInputPresenter(props) {
 
+    function promptNowACB(){
+        props.doPrompt(props.currentQuery);
+    }
+
+    function resetSessionACB(){
+        props.resetSession();
+    }
+
     return (
         <ChatView
-            query={props.query}
-            onPromptTextChange={props.setQuery}
-            onPromptNow={() => props.doPrompt(props.query)}
-            onResponseReset={() => props.resetResponse()}
+            currentQuery={props.currentQuery}
+            onPromptTextChange={props.setCurrentQuery}
+            onPromptNow={promptNowACB}
+            onSessionReset={resetSessionACB}
         />
     );
 });

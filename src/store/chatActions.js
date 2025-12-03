@@ -10,8 +10,8 @@ export function doPromptThunk(query) {
         .then(result => {
           if (!result?.choices?.[0]) 
             throw new Error("Bad API response: " + JSON.stringify(result));
-  
-          dispatch(promptSuccess(result.choices[0].message.content));
+
+          dispatch(promptSuccess(result));
         })
         .catch(err => {
           dispatch(promptError(err.message));
