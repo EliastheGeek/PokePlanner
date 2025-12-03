@@ -3,7 +3,6 @@ import { pokemonConst } from "./pokemonConst";
 const teamMaxSize = 6;
 const initialState = {
     team: [pokemonConst],
-    /*currentGameVersion: null,*/ //vilken version användaren har valt, avgör vilka pokemon och moves som finns tillgängliga
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
@@ -23,13 +22,8 @@ const pokeSlice = createSlice({
     name: "poke",
     initialState: initialState,
     reducers: {
-       /* setCurrentGameVersion(state, action){
-            state.currentGameVersion = action.payload;
-            state.currentDishPromiseState = { promise: null, data: null, error: null };
-        },*/
-        addToTeam(state, action){ //Lägg till ny pokemon till laget, max antal är 6
-            if(state.team.length()<teamMaxSize){state.team = [...state.team,action.payload];}
-            
+        addToTeam(state, action){
+            if(state.team.length()<teamMaxSize){state.team = [...state.team, action.payload];}
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
