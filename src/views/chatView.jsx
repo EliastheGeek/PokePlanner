@@ -1,8 +1,3 @@
-import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-
-
 export function ChatView(props) {
 
     function onPromptChangeACB(e) {
@@ -29,12 +24,20 @@ export function ChatView(props) {
 
     if (props.currentResponse == null) {
         return (
-            <Box>
-                <TextField sx={{ width: 300, color: 'black' }} id="standard-basic-basic" label="Type your prompt here" variant="standard" onChange={onPromptChangeACB} onKeyDown={ handleInputKeyDownACB }/>
-                <Button sx={{ width: 150, color: 'black' }} variant="contained" >
-
-                </Button>
-            </Box>
+            <div className="inputBox">
+    
+                <input
+                        type="text"
+                        placeholder="Ask something..."
+                        value={props.currentQuery || ""}
+                        onChange={onPromptChangeACB}
+                        onKeyDown={ handleInputKeyDownACB }
+                />
+    
+                <button type="button" onClick={promptACB}>Prompt away</button>
+                <button type="button" onClick={startNewSessionACB}>Start new chat session</button>
+    
+            </div>
         );
     } else {
         return (
