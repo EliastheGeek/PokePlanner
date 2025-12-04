@@ -1,4 +1,4 @@
-export const pokemonConst = [{  
+export const pokemonConst = {  
    abilities: [
     {
       ability: {
@@ -124,4 +124,4 @@ export const pokemonConst = [{
         }
     ],
    types:[{type:{name:"electric"}}, ] //kan vara flera, samma format som första
-}]  
+}

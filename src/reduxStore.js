@@ -2,7 +2,8 @@ import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/
 import { pokemonConst } from "./pokemonConst";
 const teamMaxSize = 6;
 const initialState = {
-    team: [pokemonConst],
+    team: [pokemonConst,],
+    currentPokemonId: null,
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
