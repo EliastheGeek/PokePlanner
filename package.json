@@ -23,6 +23,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "^9.2.0",
-    "react-router-dom": "latest"
+    "react-router-dom": "latest",
+    "stylis": "^4.3.6"
   }
 }
