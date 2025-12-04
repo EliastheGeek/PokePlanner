@@ -9,6 +9,7 @@ export const ChatInputPresenter = connect(
 
     function promptNowACB(){
         props.doPrompt(props.currentQuery);
+        
     }
 
     function resetSessionACB(){

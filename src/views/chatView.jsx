@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import SendIcon from '@mui/icons-material/Send';
 
 
 export function ChatView(props) {
@@ -29,10 +30,10 @@ export function ChatView(props) {
 
     if (props.currentResponse == null) {
         return (
-            <Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <TextField sx={{ width: 300, color: 'black' }} id="standard-basic-basic" label="Type your prompt here" variant="standard" onChange={onPromptChangeACB} onKeyDown={ handleInputKeyDownACB }/>
-                <Button sx={{ width: 150, color: 'black' }} variant="contained" >
-
+                <Button sx={{ width: 150, color: 'black' }} variant="contained" onClick={ promptACB }>
+                    <SendIcon sx={{ color: "white" }}/>
                 </Button>
             </Box>
         );
