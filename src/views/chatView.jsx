@@ -30,21 +30,78 @@ export function ChatView(props) {
 
     if (props.currentResponse == null) {
         return (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <TextField sx={{ width: 300, color: 'black' }} id="standard-basic-basic" label="Type your prompt here" variant="standard" onChange={onPromptChangeACB} onKeyDown={ handleInputKeyDownACB }/>
-                <Button sx={{ width: 150, color: 'black' }} variant="contained" onClick={ promptACB }>
-                    <SendIcon sx={{ color: "white" }}/>
-                </Button>
-            </Box>
+                <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            height: "70vh",     // full height view
+                            padding: 2
+                        }}
+                    >
+                        {/* MESSAGES AREA */}
+                        <Box
+                            sx={{
+                                flexGrow: 1,
+                                overflowY: "auto",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                                paddingRight: 1
+                            }}
+                        >
+                            {/* Example: render previous responses */}
+                            {props.responses?.map((msg, index) => (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        backgroundColor: "#eaeaea",
+                                        padding: 2,
+                                        borderRadius: 2,
+                                        maxWidth: "80%"
+                                    }}
+                                >
+                                    {msg}
+                                </Box>
+                            ))}
+
+                            {/* Show current response if one exists */}
+                            {props.currentResponse && (
+                                <Box
+                                    sx={{
+                                        backgroundColor: "#dcdcdc",
+                                        padding: 2,
+                                        borderRadius: 2,
+                                        maxWidth: "80%"
+                                    }}
+                                >
+                                    {props.currentResponse}
+                                </Box>
+                            )}
+                        </Box>
+
+                        {/* INPUT BAR (BOTTOM) */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 2,
+                                mt: "auto"
+                            }}
+                        >
+                            <TextField
+                                sx={{ flexGrow: 1 }}
+                                label="Type your prompt here"
+                                variant="standard"
+                                onChange={onPromptChangeACB}
+                                onKeyDown={handleInputKeyDownACB}
+                            />
+
+                            <Button variant="contained" onClick={promptACB}>
+                                <SendIcon sx={{ fontSize: 32, color: "white" }} />
+                            </Button>
+                        </Box>
+                    </Box>
+
         );
-    } else {
-        return (
-            <div className="responseText">
-                <span className="responseLabel">Response:</span>
-                <div className="responseContent">
-                    {props.currentResponse}
-                </div>
-            </div>
-        );
-    }
+    } 
 }
