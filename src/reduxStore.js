@@ -61,10 +61,9 @@ export const {
 const chatInitialState = {
     sessionId: null,
     sessionName: "",
-    startTime: null,
-    currentQuery: "",
-    currentResponse: "",
-    conversation: {},
+    timeStamp: null,
+    input: "",
+    messages: [],
     loading: false,
     error: null
 };
@@ -79,45 +78,59 @@ const chatSlice = createSlice({
         setSessionName(state, action) {
             state.sessionName = action.payload;
         },
-        setCurrentQuery(state, action) {
-            state.currentQuery = action.payload;
+        setInput(state, action) {
+            state.input = action.payload;
         },
-        promptStart(state) {
+        promptStart(state, action) {
+
+            const query = action.payload;
+
             state.loading = true;
             state.error = null;
+            
+            state.messages.push({
+                id: Date.now(),
+                role: "user",
+                content: query,
+                timestamp: new Date().toISOString()
+            });
 
-            if (!state.startTime) {
-                state.startTime = formatTimestamp(new Date());
+            state.input = "";
+
+            if (!state.timeStamp) {
+                state.timeStamp = formatTimestamp(new Date());
+                state.sessionId = ""; // TODO: Fix an id generator
+                state.sessionName = query;
             }
         },
         promptSuccess(state, action) {
             state.loading = false;
             
-            const responseId = action.payload.id;
-            const responseText = action.payload.choices[0].message.content;
+            const responseText = 
+                action.payload?.choices?.[0]?.message?.content ?? "[Empty response]";
 
-            if (!state.sessionId && state.currentQuery.trim() !== ""){
-                state.sessionId = responseId;
-                state.sessionName = state.currentQuery;
-            }
-            
-            state.currentResponse = responseText;
-
-            if (state.currentQuery.trim() !== "") {
-                state.conversation[state.currentQuery] = responseText; // Update conversation
-            }
+            state.messages.push({
+                id: Date.now() + 1,
+                role: "assistant",
+                content: responseText,
+                timestamp: new Date().toISOString()
+            });
         },
         promptError(state, action) {
             state.loading = false;
             state.error = action.payload;
         },
-        resetSession(state) {
+        addMessage(state, action){
+            state.messages.push(action.payload);
+        },
+        resetChat(state) {
             state.sessionId = null;
             state.sessionName = "";
-            state.currentQuery = "";
-            state.conversation = {};
-            state.error = null;
+            state.timeStamp = null;
+            state.messages = [];
+            state.input = "";
             state.loading = false;
+            state.error = null;
         }
     }
 })
@@ -125,11 +138,11 @@ const chatSlice = createSlice({
 export const {
     setSessionId,
     setSessionName,
-    setCurrentQuery,
+    setInput,
     promptStart,
     promptSuccess,
     promptError,
-    resetSession
+    resetChat
   } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
@@ -148,3 +161,8 @@ export const store = configureStore({
 } );
 
 window.store = store;
+window.promptStart = promptStart;
+window.promptSuccess = promptSuccess;
+window.promptError = promptError;
+window.setInput = setInput;
+window.resetChat = resetChat;
