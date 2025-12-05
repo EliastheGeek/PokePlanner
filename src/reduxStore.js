@@ -3,7 +3,7 @@ import { pokemonConst } from "./pokemonConst";
 const teamMaxSize = 6;
 const initialState = {
     team: [pokemonConst,],
-    currentPokemonId: null,
+    currentPokemonId: null, //address race condition
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
@@ -31,6 +31,9 @@ const pokeSlice = createSlice({
                 return pokemon.id !== action.payload.id;
             }
             state.team = state.team.filter(keepPokemonCB);
+        },
+        currentPokemon(state,action){
+            state.currentPokemonId = action.payload.id;
         },
         //Authentication
         setCurrentEmail(state, action){
@@ -60,6 +63,7 @@ const pokeSlice = createSlice({
 export const {
     addToTeam,
     removeFromTeam,
+    currentPokemon,
     setUser,
     setReady,
     fillFirestore,

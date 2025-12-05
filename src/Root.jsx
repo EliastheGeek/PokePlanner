@@ -1,9 +1,12 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Logout } from "/src/presenters/logoutPresenter.jsx";
+import { Team } from "/src/presenters/teamPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
+
+
 
 function makeRouter(){
     return createHashRouter([
@@ -14,6 +17,16 @@ function makeRouter(){
             {
                 path: "main",
                 element: <Summary />
+            }
+        ]
+    },
+    {
+        path: "/team",
+        element: <Team />,
+        children: [
+            {
+                path: "team",
+                element: <Team />
             }
         ]
     },
