@@ -4,7 +4,8 @@ import { pokemonConst } from "./pokemonConst";
 const teamMaxSize = 6;
 
 const initialState = {
-    team: [pokemonConst],
+    team: [pokemonConst,],
+    currentPokemonId: null, //för att 
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
@@ -34,6 +35,9 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
+        currentPokemon(state,action){
+            state.currentPokemonId = action.payload.id;
+        },
         //Authentication
         setCurrentEmail(state, action){
             state.currentEmail = action.payload;
@@ -62,6 +66,7 @@ const pokeSlice = createSlice({
 export const {
     addToTeam,
     removeFromTeam,
+    currentPokemon,
     setUser,
     setReady,
     fillFirestore,
