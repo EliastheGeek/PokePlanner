@@ -1,5 +1,5 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
-import { formatTimestamp } from "/src/utility";
+import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
 const teamMaxSize = 6;
 

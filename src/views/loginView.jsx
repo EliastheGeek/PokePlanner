@@ -3,7 +3,7 @@ import { Box, TextField, Button, Typography, Card, CardContent } from '@mui/mate
 
 export function LoginView(props){
     return (
-        <form onSubmit={ submitHandlerACB}>
+        <form onSubmit={submitHandlerACB}>
             <Box
                 sx={{
                     height: "100vh",

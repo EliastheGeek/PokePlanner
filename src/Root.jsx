@@ -12,17 +12,13 @@ function makeRouter(){
     return createHashRouter([
         {
             path: "/",
-            element: <Summary  />,
+            element: <Team  />,
             children: [
                 {
-                    path: "main",
-                    element: <Summary  />
+                    path: "team",
+                    element: <Team />
                 }
             ]
-        },
-        {
-            path: "/team",
-            element: <Team />
         },
     ])
 }
@@ -60,26 +56,3 @@ export function Root(){
         return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
     }
 }
-/*
-
-export function Root() {
-    const user = useSelector((state) => state.poke.user);
-    const ready = useSelector((state) => state.poke.ready);
-    
-    if(user===undefined) return <SuspenseView  promise="notEmpty" />
-    if(user===null) return <Login/>
-    else 
-    {   
-        if (ready) return (
-            <div>
-                <div>
-                    <RouterProvider router={makeRouter()}/> 
-                    <Logout/>
-                </div>
-            </div>
-        );
-        return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
-    }
-        
-}
-*/

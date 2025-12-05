@@ -1,13 +1,13 @@
 export function sortPokemon(pokeArray){//Sortera pokemon från sökresultat utifrån deras id
     function sortPokeIdCB(pokeA,pokeB){
-    pokeA.id==pokeB.id?0 : pokeA.id<pokeB.id?-1:1;
+        pokeA.id==pokeB.id?0 : pokeA.id<pokeB.id?-1:1;
     }
     const pokemon = [...pokeArray];
     return pokemon.sort(sortPokeIdCB);
 }
 export function sortMoves(moveArray){//Sortera moves i en pokemon efter namn
     function sortMoveNameCB(moveA,moveB){
-    moveA.move.name==moveB.move.name?0 : moveA.move.name<moveB.move.name?-1:1;
+        moveA.move.name==moveB.move.name?0 : moveA.move.name<moveB.move.name?-1:1;
     }
     const moves = [...moveArray];
     return moves.sort(sortMoveNameCB);
@@ -17,8 +17,8 @@ export function filterMoves(moves){//filtrerar alla moves en pokemon kan ha efte
     function moveFilterCB(move){//hittas spelversion, behåll, annars ta bort
         return findGameVersion(move)?1:0;
     }
-const result = moves.filter(moveFilterCB);
-return result;
+    const result = moves.filter(moveFilterCB);
+    return result;
 }
 const latestVersion = "scarlet-violet"
 //hittar om spelversion finns för ett move
@@ -28,6 +28,19 @@ function findGameVersion(move){ //kanske ersätta med en variabel currentGameVer
     }
     const result = move.version_group_details.find(checkGameCB);
     return result;
+}
+
+export function formatTimestamp(date) {
+    const pad = (n) => String(n).padStart(2, '0');
+
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hour = pad(date.getHours());
+    const minute = pad(date.getMinutes());
+    const second = pad(date.getSeconds());
+
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
 //avancerat, filterera alla pokemon som är tillgängliga för en version. TODO
