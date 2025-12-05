@@ -21,6 +21,15 @@ import {
   PromptInputToolbar,
 } from "@/components/ui/shadcn-io/ai/prompt-input";
 
+
+
+
+/*
+MUI
+*/
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import FaceIcon from '@mui/icons-material/Face';
+
 export function ChatInterface() {
   const dispatch = useDispatch();
 
@@ -51,33 +60,31 @@ export function ChatInterface() {
           {messages.map((msg) => (
             <Message key={msg.id} from={msg.role}>
               <MessageContent>{msg.content}</MessageContent>
-              <MessageAvatar
-                src={msg.role === "assistant" ? "/bot.png" : "/user.png"}
-                name={msg.role}
-              />
+                <MessageAvatar
+                  src={msg.role === "assistant" ? <SmartToyIcon /> : <FaceIcon />}
+                  name={msg.role}
+                />
             </Message>
           ))}
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
 
-      <PromptInput 
-        value={input}
-        //onValueChange={(v) => dispatch(setInput(v))}
-        onSubmit={handleSubmit}>
-        <PromptInputTextarea
-          placeholder="Ask me anything..."
-        />
-        <PromptInputToolbar>
-          <PromptInputSubmit />
-        </PromptInputToolbar>
-      </PromptInput>
-
       {loading && (
         <div className="text-sm text-gray-500 px-4 py-2">
           Loading...
         </div>
       )}
+      
+      <PromptInput 
+        value={input}
+        //onValueChange={(v) => dispatch(setInput(v))}
+        onSubmit={handleSubmit}>
+        <PromptInputTextarea placeholder="Ask me anything..."/>
+          <PromptInputToolbar>
+              <PromptInputSubmit />
+            </PromptInputToolbar>
+      </PromptInput>
 
       {error && (
         <div className="text-red-600 text-sm px-4 py-2">
