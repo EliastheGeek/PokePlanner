@@ -63,7 +63,6 @@ const chatInitialState = {
     sessionId: null,
     sessionName: "",
     timeStamp: null,
-    input: "",
     messages: [],
     loading: false,
     error: null
@@ -118,7 +117,6 @@ const chatSlice = createSlice({
             state.sessionName = "";
             state.timeStamp = null;
             state.messages = [];
-            state.input = "";
             state.loading = false;
             state.error = null;
         }
