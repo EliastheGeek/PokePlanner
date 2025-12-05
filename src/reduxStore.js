@@ -3,7 +3,7 @@ import { pokemonConst } from "./pokemonConst";
 const teamMaxSize = 6;
 const initialState = {
     team: [pokemonConst,],
-    currentPokemonId: null, //address race condition
+    currentPokemonId: null, //för att 
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
