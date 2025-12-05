@@ -4,8 +4,7 @@ import { Logout } from "/src/presenters/logoutPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
-import { ChatInputPresenter } from "/src/presenters/chatInputPresenter.jsx";
-import { ChatOutputPresenter } from "/src/presenters/chatOutputPresenter.jsx";
+import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
 
@@ -23,8 +22,7 @@ export function Root(){
                 </div>
                 <div className="pokeBotBox">
                     <b>PokéBot</b>
-                    <ChatInputPresenter />
-                    <ChatOutputPresenter />
+                    <ChatInterface />
                 </div>
             </div>
         </div>

@@ -17,19 +17,21 @@ const client = new OpenAI({
 
 app.post("/api/chat", async (req, res) => {
     try {
-        const userQuery = req.body.query;
+    
+        const team = req.body.team;
+        const query = req.body.query;
 
         const result = await client.chat.completions.create({
             model: "gpt-4.1",
             messages: [
                 //{ role: "system", content: "You are a Pokémon expert. Answer detailed but brief." },
-                //{ role: "user", content: "Here are my current team of Pókemons: " + {} },
-                { role: "user", content: userQuery }]
+                { role: "user", content: "My team: " + JSON.stringify(team)},
+                { role: "user", content: "Question: " + query }]
         });
 
+        console.log(result);
         res.json(result);
     } catch (err) {
-        console.error(err);
         res.status(500).json({ error: err.message });
     }
 });
