@@ -4,6 +4,7 @@ import {getFirestore, doc, setDoc, getDoc} from "firebase/firestore";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 // uncomment the following lines when you have your firebaseConfig. Understand what the lines are doing!
+
 import {firebaseConfig} from "/src/firebaseConfig.js";
 const app= initializeApp(firebaseConfig);
 export const auth = getAuth(app);

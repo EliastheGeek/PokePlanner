@@ -1,0 +1,25 @@
+.horizontalFlexParent {
+    display: flex;
+    flex-direction: row;
+    width: 99vw;
+    height: 100vh;
+}
+
+.mainAreaTest {
+    flex: 0.6;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.pokeBotBox {
+    flex: 0.40;
+    border: 2px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.topMenuBar{
+    border: 2px solid #ccc;
+    padding: 50px;
+}

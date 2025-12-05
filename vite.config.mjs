@@ -7,6 +7,10 @@ export default defineConfig({
         reactJsxPlugin(),
     ],
     server: {
+        https: {
+            key: "./localhost-key.pem",
+            cert: "./localhost.pem"
+        },
         port: 8080,
     },
     build: {

@@ -6,17 +6,24 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "vite": "latest",
-    "@vitejs/plugin-react": "latest"
+    "@vitejs/plugin-react": "latest",
+    "vite": "^7.2.6"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
     "@reduxjs/toolkit": "^2.11.0",
-    "react-redux": "^9.2.0",
+    "dotenv": "^17.2.3",
     "firebase": "latest",
     "mobx": "latest",
     "mobx-react-lite": "latest",
+    "openai": "^6.9.1",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "latest",
+    "stylis": "^4.3.6"
   }
 }
