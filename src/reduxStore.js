@@ -14,7 +14,6 @@ const initialState = {
     //Persistance
     hello: "hello",
     user: undefined,
-    team: [{id: 1, name: "snorlax"}, {id: 2, name: "squirtle"}],
     ready: false,
 
     //Authentication

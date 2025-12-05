@@ -1,9 +1,5 @@
 export function TeamView(props){
-    function onAddToTeamACB(evt){
-        props.onAddToTeam(props.currentPokemonId)//fetch ny pokemon
-    }
-
- const teamCopy = props.team;
+    const teamCopy = props.team;
     return (
         <div>
             <table>
@@ -14,6 +10,11 @@ export function TeamView(props){
                  <button style={{float: "right"}} onClick={onAddToTeamACB}>Add to Team</button>
         </div>
     );
+    
+    function onAddToTeamACB(evt){
+        props.onAddToTeam(props.currentPokemonId)//fetch ny pokemon
+    }
+
     function showTeamCB(pokemon){
             return <tr key={pokemon.id}>
                      <td><button onClick = {onRemoveFromTeamACB}>x</button></td>

@@ -8,57 +8,61 @@ import {useSelector} from "react-redux"
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
-
-/*// Chat test //
-export function Root(){
-
-    return (
-        <div>
-            <div className="topMenuBar">
-            Menu
-            </div>
-            <div className="horizontalFlexParent">
-                <div className="mainAreaTest">
-                    main area
-                </div>
-                <div className="pokeBotBox">
-                    <b>PokéBot</b>
-                    <ChatInterface />
-                </div>
-            </div>
-        </div>
-        
-    );
-}
-*/
 function makeRouter(){
     return createHashRouter([
-    {
-        path: "/",
-        element: <Summary />,
-        children: [
-            {
-                path: "main",
-                element: <Summary />
-            }
-        ]
-    },
-    {
-        path: "/team",
-        element: <Team />,
-        children: [
-            {
-                path: "team",
-                element: <Team />
-            }
-        ]
-    },
-])
+        {
+            path: "/",
+            element: <Summary  />,
+            children: [
+                {
+                    path: "main",
+                    element: <Summary  />
+                }
+            ]
+        },
+        {
+            path: "/team",
+            element: <Team />
+        },
+    ])
 }
+// Chat test //
+export function Root(){
+    const user = useSelector((state) => state.poke.user);
+    const ready = useSelector((state) => state.poke.ready);
+    
+    if(user===undefined) return <SuspenseView  promise="notEmpty" />
+    if(user===null) return <Login/>
+    else 
+    {   
+        if (ready) return (
+            <div>
+                <div className="topMenuBar">
+                Menu
+                </div>
+                <div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <RouterProvider router={makeRouter()}/> 
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatInterface />
+                    </div>
+                </div>
+                <Logout/>
+            </div>
+            
+        );
+        return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
+    }
+}
+/*
 
 export function Root() {
-
-    
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
     
@@ -78,4 +82,4 @@ export function Root() {
     }
         
 }
-
+*/
