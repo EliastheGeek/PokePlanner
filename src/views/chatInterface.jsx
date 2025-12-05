@@ -29,6 +29,8 @@ MUI
 */
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import FaceIcon from '@mui/icons-material/Face';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export function ChatInterface() {
   const dispatch = useDispatch();
@@ -53,7 +55,7 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col border border-gray-400 rounded-lg">
       
       <Conversation className="flex-1">
         <ConversationContent>
@@ -72,7 +74,7 @@ export function ChatInterface() {
 
       {loading && (
         <div className="text-sm text-gray-500 px-4 py-2">
-          Loading...
+          <CircularProgress />
         </div>
       )}
       
@@ -80,10 +82,17 @@ export function ChatInterface() {
         value={input}
         //onValueChange={(v) => dispatch(setInput(v))}
         onSubmit={handleSubmit}>
-        <PromptInputTextarea placeholder="Ask me anything..."/>
+        <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%"}}>
+                                   
+          <PromptInputTextarea placeholder="Ask me anything..."/>
           <PromptInputToolbar>
               <PromptInputSubmit />
-            </PromptInputToolbar>
+          </PromptInputToolbar>
+        </Box>
       </PromptInput>
 
       {error && (
