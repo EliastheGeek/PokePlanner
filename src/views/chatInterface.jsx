@@ -24,22 +24,19 @@ import {
 export function ChatInterface() {
   const dispatch = useDispatch();
 
-  const input = useSelector((state) => state.chat.input);
   const messages = useSelector((state) => state.chat.messages);
   const loading = useSelector((state) => state.chat.loading);
   const error = useSelector((state) => state.chat.error);
 
   const handleSubmit = (event) => {
-    event.preventDefault();                          // <-- prevent form reset
-    const form = event.target;                       // `<form>` element
+    event.preventDefault();
+    const form = event.target;
     const textarea = form.querySelector("textarea");
     const text = textarea?.value || "";
 
     if (!text) return;
 
     dispatch(doPromptThunk(text));
-
-    dispatch(setInput("")); 
     textarea.value = "";
   };
 
@@ -62,8 +59,6 @@ export function ChatInterface() {
       </Conversation>
 
       <PromptInput 
-        value={input}
-        //onValueChange={(v) => dispatch(setInput(v))}
         onSubmit={handleSubmit}>
         <PromptInputTextarea
           placeholder="Ask me anything..."

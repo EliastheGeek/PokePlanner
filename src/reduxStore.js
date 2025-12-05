@@ -10,7 +10,8 @@ const initialState = {
     //Persistance
     hello: "hello",
     user: undefined,
-    ready: false, 
+    team: [{id: 1, name: "snorlax"}, {id: 2, name: "squirtle"}],
+    ready: false,
 
     //Authentication
     currentEmail: null,
@@ -72,15 +73,6 @@ const chatSlice = createSlice({
     name: "chat",
     initialState: chatInitialState,
     reducers: {
-        setSessionId(state, action) {
-            state.sessionId = action.payload;
-        },
-        setSessionName(state, action) {
-            state.sessionName = action.payload;
-        },
-        setInput(state, action) {
-            state.input = action.payload;
-        },
         promptStart(state, action) {
 
             const query = action.payload;
@@ -95,11 +87,9 @@ const chatSlice = createSlice({
                 timestamp: new Date().toISOString()
             });
 
-            state.input = "";
-
             if (!state.timeStamp) {
                 state.timeStamp = formatTimestamp(new Date());
-                state.sessionId = ""; // TODO: Fix an id generator
+                state.sessionId = 0; // TODO: Fix id generator
                 state.sessionName = query;
             }
         },
@@ -136,9 +126,6 @@ const chatSlice = createSlice({
 })
 
 export const {
-    setSessionId,
-    setSessionName,
-    setInput,
     promptStart,
     promptSuccess,
     promptError,
@@ -164,5 +151,4 @@ window.store = store;
 window.promptStart = promptStart;
 window.promptSuccess = promptSuccess;
 window.promptError = promptError;
-window.setInput = setInput;
 window.resetChat = resetChat;

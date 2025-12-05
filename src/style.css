@@ -1,6 +1,31 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+.horizontalFlexParent {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;   /* full page width */
+  height: 100vh;  /* optional: full page height */
+}
+
+.mainAreaTest {
+  flex: 0.6;             /* 60% of width */
+  border: 2px solid #ccc;/* frame around main area */
+  padding: 20px;         /* optional spacing inside */
+  box-sizing: border-box;
+}
+
+.pokeBotBox {
+  flex: 0.4;             /* 40% of width */
+  padding: 20px;         /* optional */
+  box-sizing: border-box;
+  overflow-y: auto;      /* useful for chat output */
+}
+
+/* ---------------------- */
+/* CHAT INTERFACE STYLING */
+/* ---------------------- */
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

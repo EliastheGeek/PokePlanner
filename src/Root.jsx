@@ -4,7 +4,7 @@ import { Logout } from "/src/presenters/logoutPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
-import { ChatInterface } from "/src/chatbot/chatInterface.jsx";
+import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
 
