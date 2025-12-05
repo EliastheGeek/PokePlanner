@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import type { UIMessage } from 'ai';
 import type { ComponentProps, HTMLAttributes } from 'react';
 
+
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage['role'];
 };
@@ -43,8 +44,10 @@ export const MessageContent = ({
   </div>
 );
 
+import { ReactNode } from 'react';
+
 export type MessageAvatarProps = ComponentProps<typeof Avatar> & {
-  src: string;
+  src?: string | ReactNode;
   name?: string;
 };
 
@@ -55,10 +58,12 @@ export const MessageAvatar = ({
   ...props
 }: MessageAvatarProps) => (
   <Avatar
-    className={cn('size-8 ring ring-1 ring-border', className)}
-    {...(props as any)}
-  >
-    <AvatarImage alt="" className="mt-0 mb-0" src={src} />
-    <AvatarFallback>{name?.slice(0, 2) || 'ME'}</AvatarFallback>
+    className={cn('size-8 ring ring-1 ring-border flex items-center justify-center', className)}
+    {...(props as any)}>
+    {typeof src === 'string' ? (
+      <AvatarImage alt="" className="mt-0 mb-0" src={src} />
+    ) : (
+      src
+    )}
   </Avatar>
 );

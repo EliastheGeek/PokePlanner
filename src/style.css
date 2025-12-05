@@ -143,3 +143,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+.horizontalFlexParent {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;   
+  height: 80vh;  
+}
+
+.mainAreaTest {
+  flex: 0.6;             
+  border: 2px solid #ccc;
+  padding: 20px;         
+  box-sizing: border-box;
+}
+
+.pokeBotBox {
+  flex: 0.4;          
+  padding: 20px;       
+  box-sizing: border-box;
+  overflow-y: auto;    
+}

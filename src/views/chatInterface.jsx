@@ -21,6 +21,17 @@ import {
   PromptInputToolbar,
 } from "@/components/ui/shadcn-io/ai/prompt-input";
 
+
+
+
+/*
+MUI
+*/
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import FaceIcon from '@mui/icons-material/Face';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 export function ChatInterface() {
   const dispatch = useDispatch();
 
@@ -41,38 +52,43 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col border border-gray-400 rounded-lg">
       
       <Conversation className="flex-1">
         <ConversationContent>
           {messages.map((msg) => (
             <Message key={msg.id} from={msg.role}>
               <MessageContent>{msg.content}</MessageContent>
-              <MessageAvatar
-                src={msg.role === "assistant" ? "/bot.png" : "/user.png"}
-                name={msg.role}
-              />
+                <MessageAvatar
+                  src={msg.role === "assistant" ? <SmartToyIcon /> : <FaceIcon />}
+                  name={msg.role}
+                />
             </Message>
           ))}
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
 
-      <PromptInput 
-        onSubmit={handleSubmit}>
-        <PromptInputTextarea
-          placeholder="Ask me anything..."
-        />
-        <PromptInputToolbar>
-          <PromptInputSubmit />
-        </PromptInputToolbar>
-      </PromptInput>
-
       {loading && (
         <div className="text-sm text-gray-500 px-4 py-2">
-          Loading...
+          <CircularProgress />
         </div>
       )}
+      
+      <PromptInput 
+        onSubmit={handleSubmit}>
+        <Box sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%"}}>
+                                   
+          <PromptInputTextarea placeholder="Ask me anything..."/>
+          <PromptInputToolbar>
+              <PromptInputSubmit />
+          </PromptInputToolbar>
+        </Box>
+      </PromptInput>
 
       {error && (
         <div className="text-red-600 text-sm px-4 py-2">

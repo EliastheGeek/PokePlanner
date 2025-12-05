@@ -41,6 +41,4 @@ const options = {
     cert: fs.readFileSync("./localhost.pem")
   };
 
-  https.createServer(options, app).listen(3001, () =>
-    console.log("HTTPS backend running at https://localhost:3001")
-  );
+app.listen(3001, () => console.log("Backend on http://localhost:3001"));
