@@ -1,17 +1,74 @@
+import { Box, TextField, Button, Typography, Card, CardContent } from '@mui/material';
+
+
 export function LoginView(props){
     return (
-    <div>
-        <form onSubmit={submitHandlerACB}>
-            <label>
-                email: <input type="email" value = {props.email || ""} onChange={setEmailACB}/>
-            </label>
-            <label>
-                password: <input type="password" value = {props.password || ""} onChange={setPasswordACB}/>
-            </label>
-            <input type="submit" value="Log in"/>
-            <input type="submit" value="Register"/>
+        <form onSubmit={ submitHandlerACB}>
+            <Box
+                sx={{
+                    height: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#f5f5f5"
+                }}>
+                <Card sx={{ width: 400, padding: 2 }}>
+                    <CardContent
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 2
+                        }}>
+                        <Typography variant="h5" textAlign="center">
+                            Login
+                        </Typography>
+
+                        <TextField 
+                            onChange={ setEmailACB }
+                            label="Email" 
+                            type="email" 
+                            variant="outlined"
+                            fullWidth/>
+
+                        <TextField 
+                            onChange={ setPasswordACB }
+                            label="Password" 
+                            type="password"
+                            variant="outlined" 
+                            fullWidth/>
+
+                        <Button 
+                            type="submit"
+                            value="login"
+                            variant="contained" 
+                            fullWidth
+                            sx={{ marginTop: 1 }}>
+                            Login
+                        </Button>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                width: "100%"
+                            }}>
+                            <Typography variant="h5" fontSize={16}>
+                                Not registered?
+                            </Typography>
+
+                            <Button
+                                type="submit"
+                                value="register"
+                                variant="contained"
+                                sx={{ height: 32, whiteSpace: "nowrap" }}>
+                                Register
+                            </Button>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Box>
         </form>
-    </div>);
+    );
 
     function setEmailACB(evt) {
         props.emailEvent(evt.target.value);
@@ -21,13 +78,14 @@ export function LoginView(props){
         props.passwordEvent(evt.target.value);
     }
 
-    function submitHandlerACB(event) {
-        event.preventDefault();
+    function submitHandlerACB(e) {
+        e.preventDefault();
 
-        const submitter = event.nativeEvent.submitter;
-        const action = submitter.value;
+       
+        const action = e.nativeEvent.submitter.value;
 
-        if (action === "Log in") props.onLogin(props.email, props.password, true);
-        else props.onLogin(props.email, props.password, false);
+        action === 'login' ?
+        props.onLogin(props.email, props.password, true) :
+        props.onLogin(props.email, props.password, false)
     } 
 }
