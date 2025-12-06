@@ -5,24 +5,25 @@ import { Team } from "/src/presenters/teamPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
+import MenuBarView from "/src/views/menuBarveiw.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
 function makeRouter(){
     return createHashRouter([
-        {
-            path: "/",
-            element: <Team  />,
-            children: [
-                {
-                    path: "team",
-                    element: <Team />
-                }
-            ]
-        },
-    ])
+    {
+        path: "/",
+        element: <Team />,
+        children: [
+            {
+                path: "team",
+                element: <Team />
+            }
+        ]
+    },
+])
 }
-// Chat test //
+
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
@@ -34,7 +35,7 @@ export function Root(){
         if (ready) return (
             <div>
                 <div className="topMenuBar">
-                Menu
+                    <MenuBarView />
                 </div>
                 <div className="horizontalFlexParent">
                     <div className="mainAreaTest">
