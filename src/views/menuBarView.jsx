@@ -27,11 +27,14 @@ export default function MenuBarView(props) {
           </IconButton>
 
           {props.user ? 
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }}>Logout</Button> :
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }}>Login</Button>
+            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout</Button> :
+            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLoginMenuACB }>Login</Button>
           }
         </Toolbar>
       </AppBar>
     </Box>
   );
+
+  function handleLoginMenuACB(){ window.location.hash = "#/login"; }
+  function handleLogoutACB(){ props.onLogout(); }
 }

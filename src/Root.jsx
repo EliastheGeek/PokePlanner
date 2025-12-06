@@ -1,16 +1,16 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
+import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Logout } from "/src/presenters/logoutPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
-import {MenuBar} from "/src/presenters/menuBarPresenter.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
-function makeRouter(){
-    return createHashRouter([
+function makeRouter() {
+  return createHashRouter([
     {
         path: "/",
         element: <Team />,
@@ -50,10 +50,9 @@ export function Root(){
                         <ChatInterface />
                     </div>
                 </div>
-                <Logout/>
             </div>
             
         );
-        return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
+        return <div> <SuspenseView promise="notEmpty"/></div>
     }
 }
