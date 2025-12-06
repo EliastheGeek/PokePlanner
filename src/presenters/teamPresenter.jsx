@@ -9,12 +9,12 @@ export function Team(){
         (state) => state.poke.team
     );
 
-    const currentPokemonId = useSelector(
-        (state) => state.poke.currentPokemonId
+    const currentPokemonName = useSelector(
+        (state) => state.poke.currentPokemonName
     );
 
     return <TeamView team={team}
-                     currentPokemonId={currentPokemonId}
+                     currentPokemonName={currentPokemonName}
                      onAddToTeam={addToTeamACB}
                      onRemoveFromTeam={removeFromTeamACB}
                      onClickPokemon={showDetailsACB}/>;

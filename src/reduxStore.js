@@ -1,11 +1,12 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
 import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
+import { searchPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
 const initialState = {
     team: [pokemonConst,],
-    currentPokemonId: null, //för att 
+    currentPokemonName: null, //för att söka pokemon
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
@@ -35,7 +36,15 @@ const pokeSlice = createSlice({
             state.team = state.team.filter(keepPokemonCB);
         },
         currentPokemon(state,action){
-            state.currentPokemonId = action.payload.id;
+            state.currentPokemonName = action.payload.name;
+        },
+        //Search
+         setSearchQuery(state, action) {
+            state.searchParams.query = action.payload;
+        },
+        doSearch(state, action) {
+            state.searchParams = action.payload;
+            state.searchResultsPromiseState = { promise: null, data: null, error: null };
         },
         //Authentication
         setCurrentEmail(state, action){
@@ -59,6 +68,24 @@ const pokeSlice = createSlice({
         },
 
         //just for middleware
+        searchStarted(state, action) {
+            const promise = action.payload;
+            state.searchResultsPromiseState.promise = promise;
+            state.searchResultsPromiseState.data = null;
+            state.searchResultsPromiseState.error = null;
+        },
+
+        searchResolved(state, action) {
+            const {promise, data} = action.payload;
+            if (state.searchResultsPromiseState.promise !== promise) return;
+            state.searchResultsPromiseState.data = data;
+        },
+
+        searchRejected(state, action) {
+            const {promise, error} = action.payload;
+            if (state.searchResultsPromiseState.promise !== promise) return;
+            state.searchResultsPromiseState.error = error;
+        },
     }
 });
 
@@ -66,11 +93,16 @@ export const {
     addToTeam,
     removeFromTeam,
     currentPokemon,
+    setSearchQuery,
     setUser,
+    doSearch,
     setReady,
     fillFirestore,
     setCurrentEmail,
     setCurrentPassword,
+    searchStarted,
+    searchResolved,
+    searchRejected,
 } = pokeSlice.actions;
 
 // ---------- //
@@ -162,6 +194,25 @@ export const store = configureStore({
         ignoredPaths: ['poke']}}).prepend(listenerMiddleware.middleware)
   }, 
 } );
+listenerMiddleware.startListening(
+  {
+  type: 'poke/doSearch',
+  effect(action, store){  
+    const params = action.payload;
+
+    const promise = searchPokemon(params);
+    store.dispatch(searchStarted(promise))
+
+    if (!promise) return;
+    promise
+        .then((data) => {
+            store.dispatch(searchResolved({promise,data}));
+        })
+        .catch((error) => {
+            store.dispatch(searchRejected({promise,error}));
+        })
+  }
+})
 
 window.store = store;
 window.promptStart = promptStart;

@@ -16,7 +16,7 @@ function makeRouter(){
         element: <Team />,
         children: [
             {
-                path: "team",
+                path: "main",
                 element: <Team />
             }
         ]
