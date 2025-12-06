@@ -1,4 +1,5 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
+import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Logout } from "/src/presenters/logoutPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
@@ -8,51 +9,47 @@ import {useSelector} from "react-redux"
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
-function makeRouter(){
-    return createHashRouter([
+function makeRouter() {
+  return createHashRouter([
+    {
+      path: "/",
+      element: (
+            <div className="layout-grid">
+                <Team />
+                <ChatInterface />
+            </div>
+      ),
+      children: [
         {
-            path: "/",
-            element: <Team  />,
-            children: [
-                {
-                    path: "team",
-                    element: <Team />
-                }
-            ]
+          path: "team",
+          element: (
+            <div className="layout-grid">
+                <Team />
+                <ChatInterface />
+            </div>
+          ),
         },
-    ])
+      ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+  ]);
 }
 // Chat test //
 export function Root(){
-    const user = useSelector((state) => state.poke.user);
-    const ready = useSelector((state) => state.poke.ready);
-    
-    if(user===undefined) return <SuspenseView  promise="notEmpty" />
-    if(user===null) return <Login/>
-    else 
-    {   
-        if (ready) return (
-            <div>
-                <div className="topMenuBar">
-                Menu
-                </div>
-                <div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
+         
+            return (
+                <div>
+                    <div>
+                        <MenuBar/>
+                    </div>
                         <div>
-                            <div>
-                                <RouterProvider router={makeRouter()}/> 
-                            </div>
-                        </div>  
+                            <RouterProvider router={makeRouter()}/> 
+                        </div>
                     </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>
-                <Logout/>
-            </div>
-            
-        );
-        return <div><Logout/> <SuspenseView promise="notEmpty"/></div>
+                
+            );
+
     }
-}

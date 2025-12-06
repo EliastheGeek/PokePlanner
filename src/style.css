@@ -164,3 +164,9 @@
   box-sizing: border-box;
   overflow-y: auto;    
 }
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  height: 80vh;
+}

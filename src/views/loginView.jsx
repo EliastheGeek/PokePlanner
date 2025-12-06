@@ -1,5 +1,5 @@
 import { Box, TextField, Button, Typography, Card, CardContent } from '@mui/material';
-
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 export function LoginView(props){
     return (
@@ -64,6 +64,33 @@ export function LoginView(props){
                                 Register
                             </Button>
                         </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '100%',
+                            }}
+                            >
+                            <Button
+                                variant="contained"
+                                sx={{
+                                height: 32,
+                                backgroundColor: '#fff',
+                                color: '#424242',
+                                fontSize: '0.75rem',
+                                textTransform: 'none',
+                                boxShadow: 'none',
+                                '&:hover': {
+                                    backgroundColor: '#f5f5f5',
+                                    boxShadow: 'none',
+                                },
+                                }}
+                                onClick={ goBackACB }>
+                                Go back
+                                <KeyboardReturnIcon sx={{ ml:1, fontSize: 16 }} />
+                            </Button>
+                            </Box>
                     </CardContent>
                 </Card>
             </Box>
@@ -87,5 +114,6 @@ export function LoginView(props){
         action === 'login' ?
         props.onLogin(props.email, props.password, true) :
         props.onLogin(props.email, props.password, false)
-    } 
+    }
+    function goBackACB(){ window.location.hash = "#/"; }
 }
