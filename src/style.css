@@ -169,4 +169,5 @@
   display: grid;
   grid-template-columns: 3fr 2fr;
   height: 80vh;
+  margin: 0.5rem;
 }
