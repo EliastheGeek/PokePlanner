@@ -4,9 +4,11 @@ import {LoginView} from "/src/views/loginView.jsx"
 import {signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
 import { setCurrentEmail, setCurrentPassword } from "/src/reduxStore.js"
 
+import { useEffect } from "react";
+
 export function Login(){
     const dispatch = useDispatch();
-
+    const user = useSelector((state) => state.poke.user);
     const currentEmail = useSelector(
         (state) => state.poke.currentEmail
     );
@@ -14,6 +16,17 @@ export function Login(){
     const currentPassword = useSelector(
         (state) => state.poke.currentPassword
     );
+
+
+    useEffect(() => {
+        if (user) {
+            window.location.hash = "#/";
+        }
+    }, [user]);
+
+    if (user) {
+        return null;
+    }
 
     return <LoginView 
     email={currentEmail} 
