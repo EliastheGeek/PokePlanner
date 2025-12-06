@@ -21,9 +21,6 @@ import {
   PromptInputToolbar,
 } from "@/components/ui/shadcn-io/ai/prompt-input";
 
-
-
-
 /*
 MUI
 */
