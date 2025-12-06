@@ -9,6 +9,20 @@ import MenuBarView from "/src/views/menuBarveiw.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
+export function Root() {
+  return (
+    <div className="flex h-full w-full flex-col">
+      <MenuBarView />
+      <div className="h-[900px]">
+      </div>
+    </div>
+  );
+}
+
+=========
+import { ChatInterface } from "/src/views/chatInterface.jsx";
+import "./style.css";
+
 function makeRouter(){
     return createHashRouter([
     {
