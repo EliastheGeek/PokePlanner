@@ -1,7 +1,6 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
-import { Logout } from "/src/presenters/logoutPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
