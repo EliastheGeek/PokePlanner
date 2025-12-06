@@ -5,21 +5,7 @@ import { Team } from "/src/presenters/teamPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
-import MenuBarView from "/src/views/menuBarveiw.jsx";
-import { ChatInterface } from "/src/views/chatInterface.jsx";
-import "./style.css";
-
-export function Root() {
-  return (
-    <div className="flex h-full w-full flex-col">
-      <MenuBarView />
-      <div className="h-[900px]">
-      </div>
-    </div>
-  );
-}
-
-=========
+import {MenuBar} from "/src/presenters/menuBarPresenter.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
@@ -49,7 +35,7 @@ export function Root(){
         if (ready) return (
             <div>
                 <div className="topMenuBar">
-                    <MenuBarView />
+                    <MenuBar />
                 </div>
                 <div className="horizontalFlexParent">
                     <div className="mainAreaTest">
