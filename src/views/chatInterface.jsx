@@ -28,6 +28,9 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import FaceIcon from '@mui/icons-material/Face';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 export function ChatInterface() {
   const dispatch = useDispatch();
@@ -71,21 +74,27 @@ export function ChatInterface() {
           <CircularProgress />
         </div>
       )}
-      
-      <PromptInput 
-        onSubmit={handleSubmit}>
-        <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%"}}>
-                                   
-          <PromptInputTextarea placeholder="Ask me anything..."/>
-          <PromptInputToolbar>
-              <PromptInputSubmit />
-          </PromptInputToolbar>
+      <Box> 
+        <Box>
+          <FormGroup >
+            <FormControlLabel control={<Switch defaultChecked />} label="Include Team Object" sx={{ ml:0, fontSize: 8 }}/>
+          </FormGroup>
         </Box>
-      </PromptInput>
+        <PromptInput 
+          onSubmit={handleSubmit}>
+          <Box sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%"}}>
+                                    
+            <PromptInputTextarea placeholder="Ask me anything..."/>
+            <PromptInputToolbar>
+                <PromptInputSubmit />
+            </PromptInputToolbar>
+          </Box>
+        </PromptInput>
+      </Box>
 
       {error && (
         <div className="text-red-600 text-sm px-4 py-2">
