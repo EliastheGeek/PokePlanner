@@ -2,10 +2,11 @@ import { Summary } from "/src/presenters/summaryPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
+import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
+import { ChatInterface } from "/src/views/chatInterface.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
-import { ChatInterface } from "/src/views/chatInterface.jsx";
 import "./style.css";
 
 function makeRouter() {
@@ -30,11 +31,7 @@ function makeRouter() {
     },
     {
       path: "/dmgcalc",
-      element: (
-        <div>
-            Damage calc
-        </div>
-      ),
+      element: <DamageCalculator />,
     },
   ]);
 }

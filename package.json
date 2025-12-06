@@ -27,6 +27,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@reduxjs/toolkit": "^2.11.0",
+    "@smogon/calc": "^0.10.0",
     "@tailwindcss/vite": "^4.1.17",
     "ai": "^5.0.106",
     "class-variance-authority": "^0.7.1",

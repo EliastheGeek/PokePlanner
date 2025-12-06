@@ -20,6 +20,17 @@ const initialState = {
     //Authentication
     currentEmail: null,
     currentPassword: null,
+
+    // Damage calculator
+    damageAttackerName: "",
+    damageDefenderName: "",
+    damageMoveName: "",
+    damageWeather: "",
+    damageGameType: "Singles", // 'Singles' | 'Doubles'
+    damageReflect: false,
+    damageLightScreen: false,
+    damageResult: null,
+    damageError: null,  
 };
 
 const pokeSlice = createSlice({
@@ -54,6 +65,36 @@ const pokeSlice = createSlice({
         setCurrentPassword(state, action){
             state.currentPassword = action.payload;
         },
+
+        // Damage calculator
+        setDamageAttackerName(state, action) {
+            state.damageAttackerName = action.payload;
+        },
+        setDamageDefenderName(state, action) {
+            state.damageDefenderName = action.payload;
+        },
+        setDamageMoveName(state, action) {
+            state.damageMoveName = action.payload;
+        },
+        setDamageWeather(state, action) {
+            state.damageWeather = action.payload;
+        },
+        setDamageGameType(state, action) {
+            state.damageGameType = action.payload;
+        },
+        setDamageReflect(state, action) {
+            state.damageReflect = action.payload;
+        },
+        setDamageLightScreen(state, action) {
+            state.damageLightScreen = action.payload;
+        },
+        setDamageResult(state, action) {
+            state.damageResult = action.payload;
+        },
+        setDamageError(state, action) {
+            state.damageError = action.payload;
+        },
+
         //Just for persistence
         setUser(state, action) {
             state.user = action.payload;
@@ -103,6 +144,17 @@ export const {
     searchStarted,
     searchResolved,
     searchRejected,
+
+    // Damage calculator
+    setDamageAttackerName,
+    setDamageDefenderName,
+    setDamageMoveName,
+    setDamageWeather,
+    setDamageGameType,
+    setDamageReflect,
+    setDamageLightScreen,
+    setDamageResult,
+    setDamageError,
 } = pokeSlice.actions;
 
 // ---------- //

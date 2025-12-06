@@ -90,7 +90,7 @@ export function LoginView(props){
                                 Go back
                                 <KeyboardReturnIcon sx={{ ml:1, fontSize: 16 }} />
                             </Button>
-                            </Box>
+                        </Box>
                     </CardContent>
                 </Card>
             </Box>
