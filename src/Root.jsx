@@ -20,14 +20,30 @@ function makeRouter() {
             }
         ]
     },
-])
+    {
+      path: "/team",
+      element: <Team />,
+    },
+    {
+      path: "/pokebot",
+      element: <ChatInterface />,
+    },
+    {
+      path: "/dmgcalc",
+      element: (
+        <div>
+            Damage calc
+        </div>
+      ),
+    },
+  ]);
 }
-
+// Chat test //
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
     
-    if(user===undefined) return <SuspenseView  promise="notEmpty" />
+    if(user===undefined) return <SuspenseView promise="notEmpty" />
     if(user===null) return <Login/>
     else 
     {   
