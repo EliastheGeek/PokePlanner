@@ -19,21 +19,26 @@ function makeRouter() {
                 <ChatInterface />
             </div>
       ),
-      children: [
-        {
-          path: "team",
-          element: (
-            <div className="layout-grid">
-                <Team />
-                <ChatInterface />
-            </div>
-          ),
-        },
-      ],
     },
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/team",
+      element: <Team />,
+    },
+    {
+      path: "/pokebot",
+      element: <ChatInterface />,
+    },
+    {
+      path: "/dmgcalc",
+      element: (
+        <div>
+            Damage calc
+        </div>
+      ),
     },
   ]);
 }
