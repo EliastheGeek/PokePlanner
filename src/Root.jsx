@@ -50,11 +50,9 @@ export function Root(){
                     <div>
                         <MenuBar/>
                     </div>
-                        <div>
-                            <RouterProvider router={makeRouter()}/> 
-                        </div>
+                    <div>
+                        <RouterProvider router={makeRouter()}/> 
                     </div>
-                
+                </div>
             );
-
     }
