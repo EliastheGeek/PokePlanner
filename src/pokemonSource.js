@@ -13,8 +13,21 @@ export function searchPokemon(searchParams) {//searchparams är pokemon namn
 
     function responseACB(response) {return response.json();}
     function resultACB(result) {return result.results;}
+}
 
+export function showAllPokemon(){
+    const url = PROXY_URL + "pokemon/?offset=0&limit=1328";
+        const options = {
+        method: "GET",
+        headers: {
+            "X-DH2642-Key": PROXY_KEY,
+            "X-DH2642-Group": "480"
+        }
+    };
+    return fetch(url, options).then(responseACB).then(resultACB);
 
+    function responseACB(response) {return response.json();}
+    function resultACB(result) {return result.results;}
 }
 //TODO 
 export function getMenuDetails(ids_array) {

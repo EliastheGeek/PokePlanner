@@ -12,20 +12,10 @@ function makeRouter(){
     return createHashRouter([
     {
         path: "/",
-        element: <Summary />,
-        children: [
-            {
-                path: "main",
-                element: <Summary />
-            }
-        ]
-    },
-    {
-        path: "/team",
         element: <Team />,
         children: [
             {
-                path: "team",
+                path: "main",
                 element: <Team />
             }
         ]
