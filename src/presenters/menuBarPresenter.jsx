@@ -9,7 +9,7 @@ export function MenuBar(){
     const user = useSelector((state) => state.poke.user);
 
     return <MenuBarView user={user} 
-                      onLogout={onLogoutACB}/>
+                        onLogout={onLogoutACB}/>
 
     function onLogoutACB(){signOut(auth).catch(onErrorACB);}
     function onErrorACB(err) {console.error(err);}

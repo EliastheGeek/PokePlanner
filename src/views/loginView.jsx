@@ -106,9 +106,7 @@ export function LoginView(props){
     }
 
     function submitHandlerACB(e) {
-        e.preventDefault();
-
-       
+        e.preventDefault();   
         const action = e.nativeEvent.submitter.value;
 
         action === 'login' ?

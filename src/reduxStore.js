@@ -178,40 +178,41 @@ export const {
     promptSuccess,
     promptError,
     resetChat
-  } = chatSlice.actions;
+} = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
 
 export const store = configureStore({
-   reducer: {
-     poke: pokeSlice.reducer,
-     chat: chatSlice.reducer
-   },
-  // optional: add a middleware
-  middleware(getDefaultMiddleware){
+    reducer: {
+        poke: pokeSlice.reducer,
+        chat: chatSlice.reducer
+    },
+    // optional: add a middleware
+    middleware(getDefaultMiddleware){
     return getDefaultMiddleware({serializableCheck: {
         ignoredActionPaths: ['payload'],
         ignoredPaths: ['poke']}}).prepend(listenerMiddleware.middleware)
-  }, 
-} );
+    }, 
+});
+
 listenerMiddleware.startListening(
-  {
-  type: 'poke/doSearch',
-  effect(action, store){  
-    const params = action.payload;
+{
+    type: 'poke/doSearch',
+    effect(action, store){  
+        const params = action.payload;
 
-    const promise = searchPokemon(params);
-    store.dispatch(searchStarted(promise))
+        const promise = searchPokemon(params);
+        store.dispatch(searchStarted(promise))
 
-    if (!promise) return;
-    promise
-        .then((data) => {
-            store.dispatch(searchResolved({promise,data}));
-        })
-        .catch((error) => {
-            store.dispatch(searchRejected({promise,error}));
-        })
-  }
+        if (!promise) return;
+        promise
+            .then((data) => {
+                store.dispatch(searchResolved({promise,data}));
+            })
+            .catch((error) => {
+                store.dispatch(searchRejected({promise,error}));
+            })
+    }
 })
 
 window.store = store;
