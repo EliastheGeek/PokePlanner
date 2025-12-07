@@ -105,6 +105,14 @@ export function Root(){
     const ready = useSelector((state) => state.poke.ready);
     
     if(user===undefined) return <SuspenseView promise="notEmpty" />
+    if(user===null) return (
+            <div>
+                <div className="topMenuBar">
+                    <MenuBar />
+                </div>
+                <RouterProvider router={makeRouter()}/> 
+            </div>    
+        );
     else 
     {   
         if (ready) return (
@@ -116,6 +124,6 @@ export function Root(){
             </div>
             
         );
-        return <div> <SuspenseView promise="notEmpty"/></div>
+        return <div><SuspenseView promise="notEmpty"/></div>
     }
 }
