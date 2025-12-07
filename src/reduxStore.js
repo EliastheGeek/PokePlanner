@@ -2,6 +2,7 @@ import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/
 import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
 import { searchPokemon } from "./pokemonSource";
+
 const teamMaxSize = 6;
 
 const initialState = {
@@ -165,6 +166,7 @@ const chatInitialState = {
     sessionId: null,
     sessionName: "",
     timeStamp: null,
+    includeTeam: true,
     messages: [],
     loading: false,
     error: null
@@ -174,6 +176,9 @@ const chatSlice = createSlice({
     name: "chat",
     initialState: chatInitialState,
     reducers: {
+        setIncludeTeam(state, action){
+            state.includeTeam = action.payload;
+        },
         promptStart(state, action) {
 
             const query = action.payload;
@@ -213,23 +218,15 @@ const chatSlice = createSlice({
         },
         addMessage(state, action){
             state.messages.push(action.payload);
-        },
-        resetChat(state) {
-            state.sessionId = null;
-            state.sessionName = "";
-            state.timeStamp = null;
-            state.messages = [];
-            state.loading = false;
-            state.error = null;
         }
     }
 })
 
 export const {
+    setIncludeTeam,
     promptStart,
     promptSuccess,
-    promptError,
-    resetChat
+    promptError
 } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
@@ -271,4 +268,3 @@ window.store = store;
 window.promptStart = promptStart;
 window.promptSuccess = promptSuccess;
 window.promptError = promptError;
-window.resetChat = resetChat;

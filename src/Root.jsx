@@ -3,11 +3,22 @@ import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
-import { ChatInterface } from "/src/views/chatInterface.jsx";
+import { ChatBot } from "/src/presenters/chatPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
 import "./style.css";
+
+export function Root(){
+    return (
+        <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatBot />
+        </div>
+    )
+}
+
+/*
 
 function makeRouter() {
   return createHashRouter([
@@ -127,3 +138,4 @@ export function Root(){
         return <div><SuspenseView promise="notEmpty"/></div>
     }
 }
+    */

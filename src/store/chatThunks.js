@@ -3,12 +3,16 @@ import { prompt } from "/src/chatSource.js";
 
 export function doPromptThunk(query) {
     return async function (dispatch, getState) {
-      
-      const currentTeam = getState().poke.team;
+
+      let currentTeam = null;
 
       dispatch(promptStart(query));
 
       try {
+        if (getState().chat.includeTeam){
+          currentTeam = getState().poke.team;
+        }
+
         const result = await prompt(currentTeam, query);
         dispatch(promptSuccess(result));
       } catch (err) {

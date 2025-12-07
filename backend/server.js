@@ -21,12 +21,31 @@ app.post("/api/chat", async (req, res) => {
         const team = req.body.team;
         const query = req.body.query;
 
+        let messages = [];
+
+        // Only include team message if team is NOT null
+        if (team !== null) {
+            messages.push({
+                role: "user",
+                content: "My team: " + JSON.stringify(team)
+            });
+        }
+
+        messages.push(
+            /*
+            {
+                role: "user",
+                content: "Question: " + query
+            },*/
+            {
+            role: "user",
+            content: "Question: " + query
+            }
+        );
+
         const result = await client.chat.completions.create({
             model: "gpt-4.1",
-            messages: [
-                //{ role: "system", content: "You are a Pokémon expert. Answer detailed but brief." },
-                { role: "user", content: "My team: " + JSON.stringify(team)},
-                { role: "user", content: "Question: " + query }]
+            messages: messages
         });
 
         console.log(result);
