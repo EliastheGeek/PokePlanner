@@ -16,7 +16,7 @@ function makeRouter() {
       element: (
             <div className="layout-grid">
                 <Team />
-                <ChatInterface />
+                <ChatBot />
             </div>
       ),
     },
@@ -29,13 +29,13 @@ function makeRouter() {
       element: (
             <div className="layout-grid">
                 <Team />
-                <ChatInterface />
+                <ChatBot />
             </div>
       ),
     },
     {
       path: "/pokebot",
-      element: <ChatInterface />,
+      element: <ChatBot />,
     },
     {
       path: "/dmgcalc",
@@ -46,7 +46,7 @@ function makeRouter() {
                         </div>  
                     </div>
                     <div className="pokeBotBox">
-                        <ChatInterface />
+                        <ChatBot />
                     </div>
                 </div>),
     },
