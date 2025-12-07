@@ -5,6 +5,7 @@ import { Team } from "/src/presenters/teamPresenter.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
+import { Details } from "/src/presenters/detailsPresenter.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
 import "./style.css";
@@ -90,6 +91,22 @@ function makeRouter() {
                     <div className="pokeBotBox">
                         <b>PokéBot</b>
                         <ChatInterface />
+                    </div>
+                </div>),
+    },
+    {
+      path: "/details",
+      element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <Details />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <Details />
                     </div>
                 </div>),
     },

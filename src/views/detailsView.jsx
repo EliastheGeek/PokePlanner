@@ -10,23 +10,23 @@ export function DetailsView(props) {//skicka in en pokemon singular
         <header>
             
             
-            <h2>{props.name}</h2>
+            <h2>{props.pokemon.name}</h2>
         </header>
         <div class="detailsDish">
             <div class="image_price">
-                <img class="detailsImage" src={props.sprites?.front_default}/>
+                <img className="detailsImage" src={props.sprites?.front_default}/>
                 <aside>
                 <h3>Stats:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                    {props.stats.map(printBaseStatsCB)}
+                    {props.pokemon.stats?.map(printBaseStatsCB)}
                 </ul>
                 </aside>
             </div>
-            
+
             <div>
                 <h3>Tera Type:</h3>
                     <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                        {props.types.map(printTeraTypesCB)}
+                        {props.pokemon.types?.map(printTeraTypesCB)}
                     </ul>
             </div>
             <br/>
