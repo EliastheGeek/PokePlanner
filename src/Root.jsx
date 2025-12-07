@@ -106,7 +106,7 @@ function makeRouter() {
                     </div>
                     <div className="pokeBotBox">
                         <b>PokéBot</b>
-                        <Details />
+                        <ChatInterface />
                     </div>
                 </div>),
     },

@@ -1,20 +1,22 @@
 import "/src/style.css"
 
 export function DetailsView(props) {//skicka in en pokemon singular
+
     function backToTeamACB(){
         window.location.hash = "#/team";
     }
     return (
     <div>
-        <button onClick={backToTeamACB}>Back to team builder</button>
+        <button className="pokeBotBox" onClick={backToTeamACB}>Back to team builder</button>
         <header>
             
             
             <h2>{props.pokemon.name}</h2>
+            <img src={props.pokemon.sprites?.front_default}/>
         </header>
-        <div class="detailsDish">
-            <div class="image_price">
-                <img className="detailsImage" src={props.sprites?.front_default}/>
+        <div>
+            <div>
+                
                 <aside>
                 <h3>Stats:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
