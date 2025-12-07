@@ -5,7 +5,7 @@ import { searchPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
 const initialState = {
-    team: [pokemonConst,],
+    team: [pokemonConst,{},{},{},{},{}],
     currentPokemonName: null, //för att söka pokemon
     //Promise-stuff
     searchParams: {},

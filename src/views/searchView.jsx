@@ -21,7 +21,7 @@ export default function Asynchronous() {
     setOpen(true);
     (async () => {
       setLoading(true);
-      await sleep(1e3); // For demo purposes.
+      //await sleep(1e3); // For demo purposes.
       setLoading(false);
 
       setOptions([...allPokemon]);
