@@ -36,7 +36,7 @@ export function LoginView(props){
                             type="password"
                             variant="outlined" 
                             fullWidth/>
-
+                        {props.loginError ?   <Typography variant="body2" color="error" align="center">Wrong email or password</Typography> : null }
                         <Button 
                             type="submit"
                             value="login"
