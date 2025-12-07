@@ -1,5 +1,7 @@
+import { API_URL } from "/src/backendConfig.js"
+
 export function prompt(team, query) {
-    return fetch("http://localhost:3001/api/chat", {
+    return fetch(`${API_URL}/api/chat`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
