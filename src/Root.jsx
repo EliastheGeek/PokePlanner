@@ -9,17 +9,6 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import {useSelector} from "react-redux"
 import "./style.css";
 
-export function Root(){
-    return (
-        <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatBot />
-        </div>
-    )
-}
-
-/*
-
 function makeRouter() {
   return createHashRouter([
     {
@@ -138,4 +127,3 @@ export function Root(){
         return <div><SuspenseView promise="notEmpty"/></div>
     }
 }
-    */
