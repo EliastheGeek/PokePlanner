@@ -1,17 +1,19 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
 import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
-import { searchPokemon } from "./pokemonSource";
-
+import { searchPokemon, showAllPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
 const initialState = {
     team: [pokemonConst,{},{},{},{},{}],
-    currentPokemonName: null, //för att söka pokemon
+    currentPokemonName: null,
+    //för att söka pokemon
+    open: false,
+    loading: false,
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
-    currentDishPromiseState: { promise: null, data: null, error: null },
+    showPokemonPromiseState: { promise: null, data: [], error: null },
 
     //Persistance
     hello: "hello",
@@ -40,7 +42,7 @@ const pokeSlice = createSlice({
     initialState: initialState,
     reducers: {
         addToTeam(state, action){
-            if(state.team.length()<teamMaxSize){state.team = [...state.team, action.payload];}
+            if(state.team.length<teamMaxSize){state.team = [...state.team, action.payload];}
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
@@ -58,6 +60,12 @@ const pokeSlice = createSlice({
         doSearch(state, action) {
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
+        },
+        showPokemon(state, action) {
+            state.showPokemonPromiseState = { promise: null, data: [], error: null };
+        },
+        setOpen(state, action) {
+            state.open = action.payload;
         },
         //Authentication
         setCurrentEmail(state, action){
@@ -132,6 +140,28 @@ const pokeSlice = createSlice({
             if (state.searchResultsPromiseState.promise !== promise) return;
             state.searchResultsPromiseState.error = error;
         },
+
+        showStarted(state, action) {
+            const promise = action.payload;
+            state.showPokemonPromiseState.promise = promise;
+            state.showPokemonPromiseState.data = [];
+            state.showPokemonPromiseState.error = null;
+            state.loading = true;
+        },
+
+        showResolved(state, action) {
+            const {promise, data} = action.payload;
+            if (state.showPokemonPromiseState.promise !== promise) return;
+            state.showPokemonPromiseState.data = data;
+            state.loading = false;
+        },
+
+        showRejected(state, action) {
+            const {promise, error} = action.payload;
+            if (state.showPokemonPromiseState.promise !== promise) return;
+            state.showPokemonPromiseState.error = error;
+            state.loading = false;
+        },
     }
 });
 
@@ -139,9 +169,14 @@ export const {
     addToTeam,
     removeFromTeam,
     currentPokemon,
+
+    //Search
     setSearchQuery,
-    setUser,
     doSearch,
+    showPokemon,
+    setOpen,
+
+    setUser,
     setReady,
     fillFirestore,
     setCurrentEmail,
@@ -150,6 +185,9 @@ export const {
     searchStarted,
     searchResolved,
     searchRejected,
+    showStarted,
+    showResolved,
+    showRejected,
 
     // Damage calculator
     setDamageAttackerName,
@@ -269,7 +307,20 @@ listenerMiddleware.startListening(
     }
 })
 
-window.store = store;
-window.promptStart = promptStart;
-window.promptSuccess = promptSuccess;
-window.promptError = promptError;
+listenerMiddleware.startListening(
+{
+    type: 'poke/showPokemon',
+    effect(action, store){
+        const promise = showAllPokemon();
+        store.dispatch(showStarted(promise))
+
+        if (!promise) return;
+        promise
+            .then((data) => {
+                store.dispatch(showResolved({promise,data}));
+            })
+            .catch((error) => {
+                store.dispatch(showRejected({promise,error}));
+            })
+    }
+})

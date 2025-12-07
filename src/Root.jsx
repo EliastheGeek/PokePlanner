@@ -1,4 +1,5 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
+import { Search } from "/src/presenters/searchPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
@@ -26,12 +27,20 @@ function makeRouter() {
     },
     {
       path: "/team",
-      element: (
-            <div className="layout-grid">
-                <Team />
-                <ChatBot />
-            </div>
-      ),
+      element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <Team />
+                                <Search />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatBot />
+                    </div>
+                </div>),
     },
     {
       path: "/pokebot",
