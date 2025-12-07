@@ -20,6 +20,7 @@ const initialState = {
     //Authentication
     currentEmail: null,
     currentPassword: null,
+    authError: null,
 
     // Damage calculator
     damageAttackerName: "",
@@ -64,6 +65,9 @@ const pokeSlice = createSlice({
 
         setCurrentPassword(state, action){
             state.currentPassword = action.payload;
+        },
+        setAuthError(state, action) {
+            state.authError = action.payload;
         },
 
         // Damage calculator
@@ -141,6 +145,7 @@ export const {
     fillFirestore,
     setCurrentEmail,
     setCurrentPassword,
+    setAuthError,
     searchStarted,
     searchResolved,
     searchRejected,
