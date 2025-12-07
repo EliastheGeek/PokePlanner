@@ -5,77 +5,40 @@ import { Team } from "/src/presenters/teamPresenter.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
 import {useSelector} from "react-redux"
 import "./style.css";
 
 function makeRouter() {
   return createHashRouter([
+{
+      path: "/",
+      element: (
+            <div className="layout-grid">
+                <Team />
+                <ChatInterface />
+            </div>
+      ),
+    },
     {
-        path: "/",
-        element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Team />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
-        children: [
-            {
-                path: "main",
-                element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Team />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
-            }
-        ]
+      path: "/login",
+      element: <Login />,
     },
     {
       path: "/team",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Team />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
+      element: <Team />,
     },
     {
       path: "/pokebot",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <ChatInterface />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
+      element: <ChatInterface />,
+    },
+    {
+      path: "/dmgcalc",
+      element: (
+        <div>
+            Damage calc
+        </div>
+      ),
     },
     {
       path: "/dmgcalc",
@@ -103,27 +66,14 @@ function makeRouter() {
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
-    
-    if(user===undefined) return <SuspenseView promise="notEmpty" />
-    if(user===null) return (
-            <div>
-                <div className="topMenuBar">
-                    <MenuBar />
-                </div>
-                <RouterProvider router={makeRouter()}/> 
-            </div>    
-        );
-    else 
-    {   
-        if (ready) return (
-            <div>
-                <div className="topMenuBar">
-                    <MenuBar />
-                </div>
-                <RouterProvider router={makeRouter()}/> 
-            </div>
-            
-        );
-        return <div><SuspenseView promise="notEmpty"/></div>
-    }
+
+    // Checks if user is underfined, then sees if persistance is done (ready?), true -> normal render, false -> suspensview.
+
+    return user === undefined ? (<SuspenseView promise="dummyPromise" />) :
+        (ready ? 
+            (<div>
+                <MenuBar />
+                <RouterProvider router={makeRouter()} />
+            </div>):
+            (<SuspenseView promise="dummyPromise" />));
 }

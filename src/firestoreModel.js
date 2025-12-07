@@ -54,7 +54,11 @@ export function connectToPersistence(store) {
         const userObj = user? {uid: user?.uid}:null;
         store.dispatch(setUser(userObj));
         // for A: use an action to set the 'user' property of the application state
-        if (userObj) loadUserData(userObj);
+       if (userObj) {
+            loadUserData(userObj);
+        } else {
+            store.dispatch(setReady(true));
+        }
     })
 
     function loadUserData(user) {
