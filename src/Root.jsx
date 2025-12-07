@@ -13,25 +13,85 @@ function makeRouter() {
   return createHashRouter([
     {
         path: "/",
-        element: <Team />,
+        element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <Team />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatInterface />
+                    </div>
+                </div>),
         children: [
             {
                 path: "main",
-                element: <Team />
+                element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <Team />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatInterface />
+                    </div>
+                </div>),
             }
         ]
     },
     {
       path: "/team",
-      element: <Team />,
+      element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <Team />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatInterface />
+                    </div>
+                </div>),
     },
     {
       path: "/pokebot",
-      element: <ChatInterface />,
+      element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <ChatInterface />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatInterface />
+                    </div>
+                </div>),
     },
     {
       path: "/dmgcalc",
-      element: <DamageCalculator />,
+      element: (<div className="horizontalFlexParent">
+                    <div className="mainAreaTest">
+                        <div>
+                            <div>
+                                <DamageCalculator />
+                            </div>
+                        </div>  
+                    </div>
+                    <div className="pokeBotBox">
+                        <b>PokéBot</b>
+                        <ChatInterface />
+                    </div>
+                </div>),
     },
     {
       path: "/login",
@@ -52,19 +112,7 @@ export function Root(){
                 <div className="topMenuBar">
                     <MenuBar />
                 </div>
-                <div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <RouterProvider router={makeRouter()}/> 
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>
+                <RouterProvider router={makeRouter()}/> 
             </div>
             
         );
