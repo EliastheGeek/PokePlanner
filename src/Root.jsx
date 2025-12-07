@@ -15,9 +15,16 @@ function makeRouter() {
 {
       path: "/",
       element: (
-            <div className="layout-grid">
-                <Team />
-                <ChatBot />
+            <div className="horizontalFlexParent">
+                <div className="mainAreaTest">
+                    <div>
+                        <Team />
+                        <Search />
+                    </div>
+                </div>
+                <div className="pokeBotBox">
+                    <ChatBot />
+                </div>
             </div>
       ),
     },
@@ -30,14 +37,11 @@ function makeRouter() {
       element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
-                            <div>
-                                <Team />
-                                <Search />
-                            </div>
-                        </div>  
+                            <Team />
+                            <Search />
+                        </div>
                     </div>
                     <div className="pokeBotBox">
-                        <b>PokéBot</b>
                         <ChatBot />
                     </div>
                 </div>),

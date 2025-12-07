@@ -51,7 +51,7 @@ export function ChatInterface(props) {
 
   return (
     <div className="flex h-full w-full flex-col border border-gray-400 rounded-lg">
-      
+      <b>PokéBot</b>
       <Conversation className="flex-1">
         <ConversationContent>
           {props.messages.map((msg) => (

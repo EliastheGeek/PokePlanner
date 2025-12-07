@@ -16,7 +16,6 @@
 
 .pokeBotBox {
   flex: 0.4;             /* 40% of width */
-  padding: 20px;         /* optional */
   box-sizing: border-box;
   overflow-y: auto;      /* useful for chat output */
 }
