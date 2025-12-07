@@ -6,7 +6,7 @@ import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import "./style.css";
 
 function makeRouter() {
@@ -56,7 +56,6 @@ function makeRouter() {
     },
   ]);
 }
-// Chat test //
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
