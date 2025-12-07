@@ -26,7 +26,12 @@ function makeRouter() {
     },
     {
       path: "/team",
-      element: <Team />,
+      element: (
+            <div className="layout-grid">
+                <Team />
+                <ChatInterface />
+            </div>
+      ),
     },
     {
       path: "/pokebot",
@@ -34,24 +39,13 @@ function makeRouter() {
     },
     {
       path: "/dmgcalc",
-      element: (
-        <div>
-            Damage calc
-        </div>
-      ),
-    },
-    {
-      path: "/dmgcalc",
       element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
-                            <div>
-                                <DamageCalculator />
-                            </div>
+                            <DamageCalculator />
                         </div>  
                     </div>
                     <div className="pokeBotBox">
-                        <b>PokéBot</b>
                         <ChatInterface />
                     </div>
                 </div>),
