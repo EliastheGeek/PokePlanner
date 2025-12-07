@@ -59,7 +59,7 @@ export function connectToPersistence(store) {
         } else {
             store.dispatch(setReady(true));
         }
-        // om user = null så setts ready till true
+        // om user = null så sätts ready till true
     })
 
     function loadUserData(user) {
