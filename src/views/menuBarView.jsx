@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
+import FaceIcon from '@mui/icons-material/Face';
 
 export default function MenuBarView(props) {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
@@ -77,7 +78,7 @@ export default function MenuBarView(props) {
           </Menu>
 
           {props.user ? 
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout</Button> :
+            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout<FaceIcon sx={{ ml:1 }} /></Button> :
             <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLoginMenuACB }>Login</Button>
           }
         </Toolbar>

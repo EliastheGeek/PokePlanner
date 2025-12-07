@@ -33,6 +33,10 @@ function makeRouter() {
       path: "/dmgcalc",
       element: <DamageCalculator />,
     },
+    {
+      path: "/login",
+      element: <Login />,
+    },
   ]);
 }
 // Chat test //
@@ -41,7 +45,6 @@ export function Root(){
     const ready = useSelector((state) => state.poke.ready);
     
     if(user===undefined) return <SuspenseView promise="notEmpty" />
-    if(user===null) return <Login/>
     else 
     {   
         if (ready) return (
