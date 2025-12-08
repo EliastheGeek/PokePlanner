@@ -18,7 +18,7 @@ export function SearchView(props) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Asynchronous"
+          label="Search Pokémon"
           slotProps={{
             input: {
               ...params.InputProps,
