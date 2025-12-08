@@ -63,10 +63,6 @@ function makeRouter() {
                     </div>
                 </div>),
     },
-    {
-      path: "/login",
-      element: <Login />,
-    },
   ]);
 }
 export function Root(){
