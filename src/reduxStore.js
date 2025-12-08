@@ -1,16 +1,18 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
 import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
-import { searchPokemon } from "./pokemonSource";
+import { searchPokemon, showAllPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
 const initialState = {
     team: [pokemonConst,],
     currentPokemonName: pokemonConst.name, //för att söka pokemon
+    open: false,
+    loading: false,
     //Promise-stuff
     searchParams: {},
     searchResultsPromiseState: { promise: null, data: null, error: null },
-    currentDishPromiseState: { promise: null, data: null, error: null },
+    showPokemonPromiseState: { promise: null, data: [], error: null },
 
     //Persistance
     hello: "hello",
@@ -20,6 +22,7 @@ const initialState = {
     //Authentication
     currentEmail: null,
     currentPassword: null,
+    authError: null,
 
     // Damage calculator
     damageAttackerName: "",
@@ -38,7 +41,7 @@ const pokeSlice = createSlice({
     initialState: initialState,
     reducers: {
         addToTeam(state, action){
-            if(state.team.length()<teamMaxSize){state.team = [...state.team, action.payload];}
+            if(state.team.length<teamMaxSize){state.team = [...state.team, action.payload];}
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
@@ -57,6 +60,12 @@ const pokeSlice = createSlice({
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
         },
+        showPokemon(state, action) {
+            state.showPokemonPromiseState = { promise: null, data: [], error: null };
+        },
+        setOpen(state, action) {
+            state.open = action.payload;
+        },
         //Authentication
         setCurrentEmail(state, action){
             state.currentEmail = action.payload;
@@ -64,6 +73,9 @@ const pokeSlice = createSlice({
 
         setCurrentPassword(state, action){
             state.currentPassword = action.payload;
+        },
+        setAuthError(state, action) {
+            state.authError = action.payload;
         },
 
         // Damage calculator
@@ -127,6 +139,28 @@ const pokeSlice = createSlice({
             if (state.searchResultsPromiseState.promise !== promise) return;
             state.searchResultsPromiseState.error = error;
         },
+
+        showStarted(state, action) {
+            const promise = action.payload;
+            state.showPokemonPromiseState.promise = promise;
+            state.showPokemonPromiseState.data = [];
+            state.showPokemonPromiseState.error = null;
+            state.loading = true;
+        },
+
+        showResolved(state, action) {
+            const {promise, data} = action.payload;
+            if (state.showPokemonPromiseState.promise !== promise) return;
+            state.showPokemonPromiseState.data = data;
+            state.loading = false;
+        },
+
+        showRejected(state, action) {
+            const {promise, error} = action.payload;
+            if (state.showPokemonPromiseState.promise !== promise) return;
+            state.showPokemonPromiseState.error = error;
+            state.loading = false;
+        },
     }
 });
 
@@ -134,16 +168,25 @@ export const {
     addToTeam,
     removeFromTeam,
     currentPokemon,
+
+    //Search
     setSearchQuery,
-    setUser,
     doSearch,
+    showPokemon,
+    setOpen,
+
+    setUser,
     setReady,
     fillFirestore,
     setCurrentEmail,
     setCurrentPassword,
+    setAuthError,
     searchStarted,
     searchResolved,
     searchRejected,
+    showStarted,
+    showResolved,
+    showRejected,
 
     // Damage calculator
     setDamageAttackerName,
@@ -165,6 +208,7 @@ const chatInitialState = {
     sessionId: null,
     sessionName: "",
     timeStamp: null,
+    includeTeam: true,
     messages: [],
     loading: false,
     error: null
@@ -174,6 +218,9 @@ const chatSlice = createSlice({
     name: "chat",
     initialState: chatInitialState,
     reducers: {
+        setIncludeTeam(state, action){
+            state.includeTeam = action.payload;
+        },
         promptStart(state, action) {
 
             const query = action.payload;
@@ -213,23 +260,15 @@ const chatSlice = createSlice({
         },
         addMessage(state, action){
             state.messages.push(action.payload);
-        },
-        resetChat(state) {
-            state.sessionId = null;
-            state.sessionName = "";
-            state.timeStamp = null;
-            state.messages = [];
-            state.loading = false;
-            state.error = null;
         }
     }
 })
 
 export const {
+    setIncludeTeam,
     promptStart,
     promptSuccess,
-    promptError,
-    resetChat
+    promptError
 } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
@@ -267,8 +306,20 @@ listenerMiddleware.startListening(
     }
 })
 
-window.store = store;
-window.promptStart = promptStart;
-window.promptSuccess = promptSuccess;
-window.promptError = promptError;
-window.resetChat = resetChat;
+listenerMiddleware.startListening(
+{
+    type: 'poke/showPokemon',
+    effect(action, store){
+        const promise = showAllPokemon();
+        store.dispatch(showStarted(promise))
+
+        if (!promise) return;
+        promise
+            .then((data) => {
+                store.dispatch(showResolved({promise,data}));
+            })
+            .catch((error) => {
+                store.dispatch(showRejected({promise,error}));
+            })
+    }
+})

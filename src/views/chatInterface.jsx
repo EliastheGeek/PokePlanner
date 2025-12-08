@@ -1,6 +1,4 @@
 import { useSelector, useDispatch } from "react-redux";
-import { resetChat } from "/src/reduxStore";
-import { doPromptThunk } from "../store/chatThunks";
 
 import {
   Conversation,
@@ -32,31 +30,31 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-export function ChatInterface() {
-  const dispatch = useDispatch();
+export function ChatInterface(props) {
 
-  const messages = useSelector((state) => state.chat.messages);
-  const loading = useSelector((state) => state.chat.loading);
-  const error = useSelector((state) => state.chat.error);
+  function promptACB(e){
+    e.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = event.target;
+    const form = e.target;
     const textarea = form.querySelector("textarea");
     const text = textarea?.value || "";
 
     if (!text) return;
 
-    dispatch(doPromptThunk(text));
+    props.onPromptNow(text);
     textarea.value = "";
-  };
+  }
+
+  function excludeTeamACB(e){
+    props.onToggleIncludeTeam(e.target.checked);
+  }
 
   return (
     <div className="flex h-full w-full flex-col border border-gray-400 rounded-lg">
-      
+      <b>PokéBot</b>
       <Conversation className="flex-1">
         <ConversationContent>
-          {messages.map((msg) => (
+          {props.messages.map((msg) => (
             <Message key={msg.id} from={msg.role}>
               <MessageContent>{msg.content}</MessageContent>
                 <MessageAvatar
@@ -69,7 +67,7 @@ export function ChatInterface() {
         <ConversationScrollButton />
       </Conversation>
 
-      {loading && (
+      {props.loading && (
         <div className="text-sm text-gray-500 px-4 py-2">
           <CircularProgress />
         </div>
@@ -77,11 +75,21 @@ export function ChatInterface() {
       <Box> 
         <Box>
           <FormGroup >
-            <FormControlLabel control={<Switch defaultChecked />} label="Include Team Object" sx={{ ml:0, fontSize: 8 }}/>
+          <FormControlLabel
+              control={
+                <Switch
+                  checked={props.includeTeam}
+                  onChange={excludeTeamACB}
+                />
+              }
+              label="Include Team Object"
+              sx={{ ml: 0, fontSize: 8 }}
+            />
           </FormGroup>
         </Box>
+
         <PromptInput 
-          onSubmit={handleSubmit}>
+          onSubmit={promptACB}>
           <Box sx={{
                     display: "flex",
                     alignItems: "center",
@@ -96,9 +104,9 @@ export function ChatInterface() {
         </PromptInput>
       </Box>
 
-      {error && (
+      {props.error && (
         <div className="text-red-600 text-sm px-4 py-2">
-          Error: {error}
+          Error: {props.error}
         </div>
       )}
     </div>

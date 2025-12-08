@@ -1,96 +1,66 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
+import { Search } from "/src/presenters/searchPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { Team } from "/src/presenters/teamPresenter.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
-import { ChatInterface } from "/src/views/chatInterface.jsx";
+import { ChatBot } from "/src/presenters/chatPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { Details } from "/src/presenters/detailsPresenter.jsx";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
 import {useSelector} from "react-redux"
 import "./style.css";
 
 function makeRouter() {
   return createHashRouter([
+{
+      path: "/",
+      element: (
+            <div className="horizontalFlexParent">
+                <div className="mainAreaTest">
+                    <div>
+                        <Team />
+                        <Search />
+                    </div>
+                </div>
+                <div className="pokeBotBox">
+                    <ChatBot />
+                </div>
+            </div>
+      ),
+    },
     {
-        path: "/",
-        element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Team />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
-        children: [
-            {
-                path: "main",
-                element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Team />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
-            }
-        ]
+      path: "/login",
+      element: <Login />,
     },
     {
       path: "/team",
       element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
-                            <div>
-                                <Team />
-                            </div>
-                        </div>  
+                            <Team />
+                            <Search />
+                        </div>
                     </div>
                     <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
+                        <ChatBot />
                     </div>
                 </div>),
     },
     {
       path: "/pokebot",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <ChatInterface />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
-                    </div>
-                </div>),
+      element: <ChatBot />,
     },
     {
       path: "/dmgcalc",
       element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
-                            <div>
-                                <DamageCalculator />
-                            </div>
+                            <DamageCalculator />
                         </div>  
                     </div>
                     <div className="pokeBotBox">
-                        <b>PokéBot</b>
-                        <ChatInterface />
+                        <ChatBot />
                     </div>
                 </div>),
     },
@@ -116,31 +86,17 @@ function makeRouter() {
     },
   ]);
 }
-// Chat test //
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
-    
-    if(user===undefined) return <SuspenseView promise="notEmpty" />
-    if(user===null) return (
-            <div>
-                <div className="topMenuBar">
-                    <MenuBar />
-                </div>
-                <RouterProvider router={makeRouter()}/> 
-            </div>    
-        );
-    else 
-    {   
-        if (ready) return (
-            <div>
-                <div className="topMenuBar">
-                    <MenuBar />
-                </div>
-                <RouterProvider router={makeRouter()}/> 
-            </div>
-            
-        );
-        return <div><SuspenseView promise="notEmpty"/></div>
-    }
+
+    // Checks if user is underfined, then sees if persistance is done (ready?), true -> normal render, false -> suspensview.
+
+    return user === undefined ? (<SuspenseView promise="dummyPromise" />) :
+        (ready ? 
+            (<div>
+                <MenuBar />
+                <RouterProvider router={makeRouter()} />
+            </div>):
+            (<SuspenseView promise="dummyPromise" />));
 }
