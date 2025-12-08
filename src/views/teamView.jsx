@@ -2,18 +2,15 @@ export function TeamView(props){
     const teamCopy = props.team;
     return (
         <div>
+            
             <table>
                 <tbody>
                     {teamCopy?.map(showTeamCB)}
                 </tbody>
             </table>                
-                 <button style={{float: "right"}} onClick={onAddToTeamACB}>Add to Team</button>
         </div>
     );
     
-    function onAddToTeamACB(evt){
-        props.onAddToTeam(props.currentPokemonId)//fetch ny pokemon
-    }
 
     function showTeamCB(pokemon){
             return <tr key={pokemon.id}>
@@ -25,3 +22,7 @@ export function TeamView(props){
                 function onRemoveFromTeamACB(evt){props.onRemoveFromTeam(pokemon)}
         }
 }
+/*    function onAddToTeamACB(evt){
+        props.onAddToTeam(props.currentPokemonId)//fetch ny pokemon
+    }
+*/
