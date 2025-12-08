@@ -23,6 +23,8 @@ Presenter layer for the chat. Communicates with the store state using ACBs, disp
 Thunk used to make the prompts more manageable. Communicates with the store through dispatch-methods. Also passes/receives the query/response to the prompt method that communicates with the backend.
 ### chatSource.js
 Fetches data (as JSON) from the backend server (OpenAI API).
+### backendConfig.js
+Contains the link to the backend-server
 ### pokemonSource.js
 Fetches data from pokeAPI with two different methods, searchPokemon and showAllPokemon. searchPokemon takes the pokemon’s name as input and fetches information about that particular pokemon. showAllPokemon fetches all available pokemon in the game as a list of elements with the attributes: name and url, where the url provides more information about the pokemon.
 ### pokeConst.js
