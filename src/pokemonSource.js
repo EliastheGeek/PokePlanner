@@ -1,12 +1,14 @@
 export function searchPokemon(searchParams) {//searchparams är pokemon namn
-    const url = "https://pokeapi.co/api/v2/pokemon/" + new URLSearchParams(searchParams);
+    const url = "https://pokeapi.co/api/v2/pokemon/" + searchParams;
+    console.log("Fetching from URL: ", url);
     const options = {
         method: "GET",
     };
     return fetch(url, options).then(responseACB).then(resultACB);
 
     function responseACB(response) {return response.json();}
-    function resultACB(result) {return result.results;}
+    function resultACB(result) { console.log("Search result: ", result);
+                                return result.results;}
 }
 
 export function showAllPokemon(){

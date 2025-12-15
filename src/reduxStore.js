@@ -7,6 +7,7 @@ const teamMaxSize = 6;
 const initialState = {
     team: [pokemonConst,],
     currentPokemonName: pokemonConst.name, //för att söka pokemon
+    currentPokemon: null,
     open: false,
     loading: false,
     //Promise-stuff
@@ -41,22 +42,26 @@ const pokeSlice = createSlice({
     initialState: initialState,
     reducers: {
         addToTeam(state, action){
-            if(state.team.length<teamMaxSize){state.team = [...state.team, action.payload];}
+            console.log("Adding to team: ", action.payload);
+            if(state.team.length<=teamMaxSize){state.team = [...state.team, action.payload];}
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
-                return pokemon.id !== action.payload.id;
+                return pokemon?.id !== action.payload.id;
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        currentPokemon(state,action){
-            state.currentPokemonName = action.payload.name;
+        setCurrentPokemon(state,action){
+            state.currentPokemon = action.payload;
+            searchResultsPromiseState = { promise: null, data: null, error: null };
         },
+
         //Search
          setSearchQuery(state, action) {
             state.searchParams.query = action.payload;
         },
         doSearch(state, action) {
+            console.log("Doing search with params: ", action.payload);
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
         },
@@ -65,6 +70,9 @@ const pokeSlice = createSlice({
         },
         setOpen(state, action) {
             state.open = action.payload;
+        },
+        setOptions(state, action) {
+            state.showPokemonPromiseState.data = action.payload;
         },
         //Authentication
         setCurrentEmail(state, action){
@@ -167,7 +175,7 @@ const pokeSlice = createSlice({
 export const {
     addToTeam,
     removeFromTeam,
-    currentPokemon,
+    setCurrentPokemon,
 
     //Search
     setSearchQuery,
@@ -291,10 +299,9 @@ listenerMiddleware.startListening(
     type: 'poke/doSearch',
     effect(action, store){  
         const params = action.payload;
-
+        if(!params) return;
         const promise = searchPokemon(params);
         store.dispatch(searchStarted(promise))
-
         if (!promise) return;
         promise
             .then((data) => {
@@ -302,9 +309,10 @@ listenerMiddleware.startListening(
             })
             .catch((error) => {
                 store.dispatch(searchRejected({promise,error}));
-            })
+            }).then(store.dispatch(addToTeam(store.getState().poke.searchResultsPromiseState.data))); 
     }
-})
+}
+)
 
 listenerMiddleware.startListening(
 {
