@@ -1,5 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
-import { toggleChatWindow } from "/src/reduxStore.js";
+import { useSelector } from "react-redux";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {
@@ -34,8 +33,11 @@ import Switch from '@mui/material/Switch';
 
 export function ChatInterface(props) {
 
-  const chatOpen = useSelector(state => state.chat.windowOpen);
-  const dispatch = useDispatch();
+  const preparedPrompts = props.preparedPrompts ?? [];
+
+  function promptPreparedPromptACB(query){
+    props.onPreparedPromptClick(query)
+  }
 
   function promptACB(e){
     e.preventDefault();
@@ -55,13 +57,14 @@ export function ChatInterface(props) {
   }
 
   function toggleChatACB() {
-    dispatch(toggleChatWindow());
+    props.onToggleChat();
   }
 
   return (
     <div className="flex h-full w-full flex-col rounded-lg">
       <div className="chatHeader">
         <button
+          type="button"
           className="minimizeBtn"
           onClick={toggleChatACB}
           aria-label="Minimize chat"
@@ -86,48 +89,70 @@ export function ChatInterface(props) {
         <ConversationScrollButton />
       </Conversation>
 
-      {props.loading && (
-        <div className="text-sm text-gray-500 px-4 py-2">
-          <CircularProgress />
-        </div>
-      )}
-      <Box> 
-        <Box>
-          <FormGroup >
-          <FormControlLabel
-              control={
-                <Switch
-                  checked={props.includeTeam}
-                  onChange={excludeTeamACB}
-                />
-              }
-              label="Include Team Object"
-              sx={{ ml: 0, fontSize: 8 }}
-            />
-          </FormGroup>
+      <div className="chatInputObjects">
+
+        {/* Floating prepared prompts */}
+        {preparedPrompts.length > 0 && (
+          <div className="preparedPromptContainer">
+            {preparedPrompts.map((q, i) => (
+              <button
+                key={i}
+                className="preparedPromptBubble"
+                onClick={() => promptPreparedPromptACB(q.query)}
+              >
+                {q.query}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {props.loading && (
+          <div className="text-sm text-gray-500 px-4 py-2">
+            <CircularProgress />
+          </div>
+        )}
+        <Box> 
+          <Box>
+            <FormGroup >
+            <FormControlLabel
+                control={
+                  <Switch
+                    checked={props.includeTeam}
+                    onChange={excludeTeamACB}
+                  />
+                }
+                label="Include Team Object"
+                sx={{ ml: 0, fontSize: 8 }}
+              />
+            </FormGroup>
+          </Box>
+
+          <PromptInput 
+            onSubmit={promptACB}>
+            <Box sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%"}}>
+                                      
+              <PromptInputTextarea placeholder="Ask me anything..."/>
+              <PromptInputToolbar>
+                  <PromptInputSubmit />
+              </PromptInputToolbar>
+            </Box>
+          </PromptInput>
         </Box>
 
-        <PromptInput 
-          onSubmit={promptACB}>
-          <Box sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "100%"}}>
-                                    
-            <PromptInputTextarea placeholder="Ask me anything..."/>
-            <PromptInputToolbar>
-                <PromptInputSubmit />
-            </PromptInputToolbar>
-          </Box>
-        </PromptInput>
-      </Box>
+        {props.error && (
+          <div className="text-red-600 text-sm px-4 py-2">
+            Error: {props.error}
+          </div>
+        )}
 
-      {props.error && (
-        <div className="text-red-600 text-sm px-4 py-2">
-          Error: {props.error}
-        </div>
-      )}
+
+      </div>
+
+      
     </div>
   );
 }

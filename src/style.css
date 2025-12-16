@@ -103,6 +103,39 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+.chatInputObjects {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------- */
+/* PREPARED PROMPT BUBBLES */
+/* ----------------------- */
+
+.preparedPromptContainer {
+  bottom: 72px;
+  left: 16px;
+  right: 16px;
+  padding: 16px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.preparedPromptBubble {
+  background: #f0f0f0;
+  border-radius: 16px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.preparedPromptBubble:hover {
+  background: #e0e0e0;
+}
+
 /* --------- */
 /* TEAM GRID */
 /* --------- */

@@ -209,6 +209,14 @@ const chatInitialState = {
     timeStamp: null,
     includeTeam: true,
     messages: [],
+    preparedPrompts: [
+        {location: "teamView", 
+         query: "What's the biggest weakness in my team?"},
+        {location: "teamView", 
+         query: "What's the best thing about my team?"},
+        {location: "teamView", 
+         query: "Something else"}
+    ],
     loading: false,
     windowOpen: true,
     error: null
@@ -257,9 +265,6 @@ const chatSlice = createSlice({
         promptError(state, action) {
             state.loading = false;
             state.error = action.payload;
-        },
-        addMessage(state, action){
-            state.messages.push(action.payload);
         },
         toggleChatWindow(state) {
             state.windowOpen = !state.windowOpen;
