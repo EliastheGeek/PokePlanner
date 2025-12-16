@@ -180,6 +180,14 @@
   background: #fafafa;
 }
 
+/* ---------- */
+/* SEARCH BOX */
+/* ---------- */
+
+.searchWrapper {
+  padding: 16px 0;
+}
+
 /* ---------------------- */
 /* CHAT INTERFACE STYLING */
 /* ---------------------- */

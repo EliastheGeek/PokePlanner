@@ -6,8 +6,7 @@ export function TeamView(props){
     const slots = [...team.slice(0, MAX_TEAM), ...emptySlots];
 
     return (
-        <div>
-
+        <div className="teamView">
             <div className="teamGrid">
                 {slots.map((pokemon, index) =>
                     pokemon ? (

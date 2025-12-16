@@ -6,32 +6,34 @@ import CircularProgress from '@mui/material/CircularProgress';
 export function SearchView(props) {
   
   return (
-    <Autocomplete
-      sx={{ width: 300 }}
-      open={props.open}
-      onOpen={props.handleOpen}
-      onClose={props.handleClose}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
-      getOptionLabel={(option) => option.name}
-      options={props.options}
-      loading={props.loading}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Search Pokémon"
-          slotProps={{
-            input: {
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {props.loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              ),
-            },
-          }}
-        />
-      )}
-    />
+    <div className="searchWrapper">
+      <Autocomplete
+        sx={{ width: 300 }}
+        open={props.open}
+        onOpen={props.handleOpen}
+        onClose={props.handleClose}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        getOptionLabel={(option) => option.name}
+        options={props.options}
+        loading={props.loading}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search Pokémon"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {props.loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              },
+            }}
+          />
+        )}
+      />
+    </div>
   );
 }
