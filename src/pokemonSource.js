@@ -3,8 +3,8 @@ export function searchPokemon(searchParams) {//searchparams är pokemon namn
     const options = {
         method: "GET",
     };
-    return fetch(url, options).then(responseACB).then(resultACB);
-
+    return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
+function errorACB(error){ console.log("Error in searchPokemon: ", error);}
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
 }

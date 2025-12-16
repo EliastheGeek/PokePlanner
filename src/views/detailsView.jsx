@@ -2,10 +2,36 @@ import "/src/style.css"
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-export function DetailsView(props) {//skicka in en pokemon singular
+import React, { useState, useEffect } from "react";
+export function DetailsView(props) {
     function backToTeamACB(){
         window.location.hash = "#/team";
     }
+    function previousPokemonACB(){
+      setPokemonIndex(prev => {
+        if (prev <= 0) return prev;
+        const newIndex = prev - 1;
+        console.log("Previous index: ", newIndex);
+        return newIndex;
+      });
+    }
+    function nextPokemonACB(){
+      setPokemonIndex(prev => {
+        const maxIndex = Math.min(6, props.team.length - 1);
+        if (prev >= maxIndex) return prev;
+        const newIndex = prev + 1;
+        console.log("Next index: ", newIndex);
+        return newIndex;
+      });
+    }
+
+    const initialIndex = props.team.findIndex(function findOneCB(team){return props.currentPokemonName === team.name;});
+    const [pokemonIndex, setPokemonIndex] = useState(initialIndex === -1 ? 0 : (initialIndex ?? 0));
+    useEffect(() => {
+      const idx = props.team?.findIndex(team => props.currentPokemonName === team.name);
+      setPokemonIndex(idx === -1 ? 0 : (idx ?? 0));
+    }, [props.currentPokemonName, props.team]);
+
     return (
     <div>
                                 <Box
@@ -18,20 +44,36 @@ export function DetailsView(props) {//skicka in en pokemon singular
                                         gap: 1,
                                     }}
                                 >
+                                  <span>Showing details for {pokemonIndex}</span>
         <button className="pokeBotBox" onClick={backToTeamACB}>Back to team builder</button>
-        <header>
+        <button className="pokeBotBox" onClick={previousPokemonACB} disabled={pokemonIndex<=0}>Previous</button>
+        <button className="pokeBotBox" onClick={nextPokemonACB} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</button>
+        {printStats(pokemonIndex)}
+        {MoveList(0)}
+        {MoveList(1)}
+        {MoveList(2)}
+        {MoveList(3)}
+        {AbilityList()}
+        </Box>
+    </div>
+    );
+
+    function printStats(index) {
+      if (!props.team || !props.team[index]) return null;
+     return ( 
+      <div>
+      <header>
             
             
-            <h2>{props.pokemon.name}</h2>
-            <img src={props.pokemon.sprites?.front_default}/>
+            <h2>{props.team[index].name}</h2>
+            <img src={props.team[index].sprites?.front_default}/>
         </header>
-        <div>
-            <div>
-                
+
+            <div> 
                 <aside>
                 <h3>Stats:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                    {props.pokemon.stats?.map(printBaseStatsCB)}
+                    {props.team[index].stats?.map(printBaseStatsCB)}
                 </ul>
                 </aside>
             </div>
@@ -39,15 +81,13 @@ export function DetailsView(props) {//skicka in en pokemon singular
             <div>
                 <h3>Tera Type:</h3>
                     <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                        {props.pokemon.types?.map(printTeraTypesCB)}
+                        {props.team[index].types?.map(printTeraTypesCB)}
                     </ul>    
             </div>
-        </div>
-        {MoveList()}
-        {AbilityList()}
-        </Box>
-    </div>
-    );
+
+        </div>);
+        }
+    
     function printBaseStatsCB(stats) {
         return <li key={stats.stat.name}>{stats.base_stat+" "+stats.stat.name}</li>;
     }
@@ -58,15 +98,18 @@ export function DetailsView(props) {//skicka in en pokemon singular
 
 //TODO, lista ut hur man får ut värdet man väljer från movelist 
 
-function MoveList() {
-
+function MoveList(slot) {
+  function addToMoveListCB(evt, value){ 
+    console.log("Selected move: ", value);
+    props.addMove(value, slot);
+  }
  return (
     <Autocomplete
       id="country-select-demo"
       sx={{ width: 200 }}
-      options={props.pokemon.moves}
+      options={props.team[pokemonIndex]?.actualMoves[slot] || props.team[pokemonIndex]?.moves || []}
       autoHighlight
-      getOptionLabel={(option) => option.move.name}
+      getOptionLabel={(option) => option.move?.name || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
@@ -76,10 +119,11 @@ function MoveList() {
             sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
             {...optionProps}
           >
-            {option.move.name}
+            {option.move?.name}
           </Box>
         );
       }}
+
       renderInput={(params) => (
         <TextField
           {...params}
@@ -101,9 +145,9 @@ function AbilityList() {
     <Autocomplete
       id="country-select-demo"
       sx={{ width: 200 }}
-      options={props.pokemon.abilities}
+      options={props.team[pokemonIndex]?.abilities || []}
       autoHighlight
-      getOptionLabel={(option) => option.ability.name}
+      getOptionLabel={(option) => option.ability?.name || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
@@ -113,7 +157,7 @@ function AbilityList() {
             sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
             {...optionProps}
           >
-            {option.ability.name}
+            {option.ability?.name}
           </Box>
         );
       }}

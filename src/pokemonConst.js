@@ -1,3 +1,5 @@
+import { act } from "react";
+
 export const pokemonConst = {  
    abilities: [
     {
@@ -19,6 +21,7 @@ export const pokemonConst = {
    ],
    held_item:null, //användare kan välja item själv
    id: 25, //pokedex id
+   actualMoves: [null,null,null,null],//moves som användaren valt till sin pokemon
    moves: [
     {
     move: {

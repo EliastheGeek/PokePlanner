@@ -49,6 +49,16 @@ const pokeSlice = createSlice({
                 state.team = [...state.team, pokemon];
             }
         },
+        addActualMove(state, action){
+            console.log("Adding actual move in redux store", action.payload);
+            const moveName = action.payload;
+            const pokemonIndex = state.team.findIndex(p => p.name === state.currentPokemonName);
+            if (pokemonIndex === -1) return;
+            state.team[pokemonIndex].actualMoves = team[pokemonIndex].filter(
+                            function filterCB(moves){ return moves.move.name !== moveName; }) || null;
+            
+
+        },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
                 return pokemon?.id !== action.payload.id;
@@ -176,6 +186,7 @@ const pokeSlice = createSlice({
 
 export const {
     addToTeam,
+    addActualMove,
     removeFromTeam,
     setCurrentPokemonName,
 

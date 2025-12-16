@@ -10,25 +10,27 @@ export function Search() {
     const open = useSelector((state) => state.poke.open);
     const loading = useSelector((state) => state.poke.loading);
     const showPokemonPromiseState = useSelector((state) => state.poke.showPokemonPromiseState);
-    const searchResultsPromiseState = useSelector((state) => state.poke.searchResultsPromiseState);
+    const teamLength = useSelector((state) => state.poke.team.lenghth);
     const handleOpen = () => {
         dispatch(setOpen(true));
         dispatch(showPokemon());
     };
 
     const handleClose = (param) => {
-        console.log("Selected Pokémon: ", param);
         dispatch(setOpen(false));
-        if(param!=0)
             searchHandlerACB(param)
-
+    };
+    const handleClick = (param) => {
+        console.log("Clicked Pokémon: ", param);
+        searchHandlerACB(param)
     };
     function searchHandlerACB(param) { dispatch(doPokeThunk(param)); }
-    function addPokemonToTeamACB(param){ dispatch(addToTeam(searchResultsPromiseState?.data)); }
     return  <SearchView open = {open} 
                         options = {showPokemonPromiseState.data} 
                         loading = {loading} 
                         handleOpen ={handleOpen} 
                         handleClose ={handleClose} 
+                        teamLength={teamLength} 
+                        handleClick={handleClick}
             />
 }
