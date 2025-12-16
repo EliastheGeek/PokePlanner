@@ -5,7 +5,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export function SearchView(props) {
   function closeEventACB(evt){
-    console.log(evt.target.value);
     if(evt.target.value!=0) { props.handleClose(evt.target.value);}
   }
   return (
@@ -19,14 +18,14 @@ export function SearchView(props) {
       options={props.options}
       loading={props.loading}
       renderInput={(params) => (
-        <TextField
+        <TextField onClick={closeEventACB}
           {...params}
           label="Search Pokémon"
           slotProps={{
             input: {
               ...params.InputProps,
               endAdornment: (
-                <React.Fragment>
+                <React.Fragment >
                   {props.loading ? <CircularProgress color="inherit" size={20} /> : null}
                   {params.InputProps.endAdornment}
                 </React.Fragment>

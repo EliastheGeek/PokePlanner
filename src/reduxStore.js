@@ -7,7 +7,6 @@ const teamMaxSize = 6;
 const initialState = {
     team: [pokemonConst,],
     currentPokemonName: pokemonConst.name, //för att söka pokemon
-    currentPokemon: null,
     open: false,
     loading: false,
     //Promise-stuff
@@ -42,8 +41,13 @@ const pokeSlice = createSlice({
     initialState: initialState,
     reducers: {
         addToTeam(state, action){
-            console.log("Adding to team: ", action.payload);
-            if(state.team.length<=teamMaxSize){state.team = [...state.team, action.payload];}
+            const pokemon = action.payload;
+            if (!pokemon) return;
+            // avoid duplicates
+            if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
+            if (state.team.length < teamMaxSize) {
+                state.team = [...state.team, pokemon];
+            }
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
@@ -51,9 +55,8 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        setCurrentPokemon(state,action){
-            state.currentPokemon = action.payload;
-            searchResultsPromiseState = { promise: null, data: null, error: null };
+        setCurrentPokemonName(state,action){
+            state.currentPokemonName = action.payload;
         },
 
         //Search
@@ -61,7 +64,6 @@ const pokeSlice = createSlice({
             state.searchParams.query = action.payload;
         },
         doSearch(state, action) {
-            console.log("Doing search with params: ", action.payload);
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
         },
@@ -175,7 +177,7 @@ const pokeSlice = createSlice({
 export const {
     addToTeam,
     removeFromTeam,
-    setCurrentPokemon,
+    setCurrentPokemonName,
 
     //Search
     setSearchQuery,
@@ -309,7 +311,7 @@ listenerMiddleware.startListening(
             })
             .catch((error) => {
                 store.dispatch(searchRejected({promise,error}));
-            }).then(store.dispatch(addToTeam(store.getState().poke.searchResultsPromiseState.data))); 
+            })
     }
 }
 )
@@ -331,3 +333,4 @@ listenerMiddleware.startListening(
             })
     }
 })
+

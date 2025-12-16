@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {SearchView} from "/src/views/searchView.jsx"
 import {setOpen, showPokemon} from "/src/reduxStore.js"
 import { addToTeam, doSearch } from "@/reduxStore";
+import { doPokeThunk } from "@/store/searchThunks";
 
 export function Search() {
     const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export function Search() {
             searchHandlerACB(param)
 
     };
-    function searchHandlerACB(param) { dispatch(doSearch(param)); }
+    function searchHandlerACB(param) { dispatch(doPokeThunk(param)); }
     function addPokemonToTeamACB(param){ dispatch(addToTeam(searchResultsPromiseState?.data)); }
     return  <SearchView open = {open} 
                         options = {showPokemonPromiseState.data} 

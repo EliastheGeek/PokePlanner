@@ -9,7 +9,8 @@ export function Details() {
         const  currentPokemonName = useSelector(
         (state) => state.poke.currentPokemonName
     );
-    team.filter(function keepOneCB(team){team.name === currentPokemonName})
-    const pokemon = team[0];
+
+    const teamCopy = team.filter(function keepOneCB(team){return currentPokemonName === team.name;});
+    const pokemon = teamCopy[0];
     return <DetailsView pokemon={pokemon}/>
 };

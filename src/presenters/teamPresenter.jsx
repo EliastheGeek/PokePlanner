@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { TeamView } from "/src/views/teamView.jsx";
-import {addToTeam,removeFromTeam} from "/src/reduxStore.js";
+import {addToTeam,removeFromTeam, setCurrentPokemonName} from "/src/reduxStore.js";
+
 
 export function Team(){
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export function Team(){
     function removeFromTeamACB(param){
         dispatch(removeFromTeam(param));
     }
-    function showDetailsACB(param){
-        dispatch(currentPokemon(param));
+    function showDetailsACB(name){
+        dispatch(setCurrentPokemonName(name));
     }
 };
