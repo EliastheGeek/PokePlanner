@@ -5,7 +5,7 @@ import { searchPokemon, showAllPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
 const initialState = {
-    team: [pokemonConst,pokemonConst, pokemonConst],
+    team: [pokemonConst,],
     currentPokemonName: pokemonConst.name, //för att söka pokemon
     open: false,
     loading: false,
@@ -52,8 +52,7 @@ const pokeSlice = createSlice({
         currentPokemon(state,action){
             state.currentPokemonName = action.payload.name;
         },
-        //Search
-         setSearchQuery(state, action) {
+        setSearchQuery(state, action) {
             state.searchParams.query = action.payload;
         },
         doSearch(state, action) {
@@ -211,6 +210,7 @@ const chatInitialState = {
     includeTeam: true,
     messages: [],
     loading: false,
+    windowOpen: true,
     error: null
 };
 
@@ -260,6 +260,9 @@ const chatSlice = createSlice({
         },
         addMessage(state, action){
             state.messages.push(action.payload);
+        },
+        toggleChatWindow(state) {
+            state.windowOpen = !state.windowOpen;
         }
     }
 })
@@ -268,7 +271,8 @@ export const {
     setIncludeTeam,
     promptStart,
     promptSuccess,
-    promptError
+    promptError,
+    toggleChatWindow
 } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();

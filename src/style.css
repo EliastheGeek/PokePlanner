@@ -1,19 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-.horizontalFlexParent {
-  display: flex;
-  flex-direction: row;
-  width: 100vw;   /* full page width */
-}
-
-.mainAreaTest {
-  flex: 0.6;
-  border: 2px solid #ccc;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
 /* --------- */
 /* MAIN PAGE */
 /* --------- */
@@ -29,32 +16,61 @@
 }
 
 .teamView {
-  flex: 0.6;
   border: 2px solid #ccc;
   padding: 20px;
   box-sizing: border-box;
+  transition: width 0.3s ease;
 }
 
-.pokeBotBox {
+.teamView.withChat {
+  flex: 0.6;
+}
+
+.teamView.fullWidth {
+  flex: 1.0;
+}
+
+.pokeBotBox{
   flex: 0.4;
   height: 100%;
   box-sizing: border-box;
   overflow-y: auto;
   display: flex;
-}
-
-.pokeBotBox{
   padding: 16px;
-  box-sizing: border-box;
   border: 2px solid #ccc;
-  overflow: hidden;
   background: white;
+  position: relative;
+  transition: width 0.3s ease;
 }
-
 
 .pokeBotBoxInner {
   width: 100%;
   box-sizing: border-box;
+}
+
+.minimizeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chatRestoreBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #333;
+  color: white;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* --------- */
@@ -64,29 +80,12 @@
 .teamGrid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* 3 cards per row */
-  grid-template-rows: repeat(2, auto);    /* 2 rows */
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
   gap: 20px;
   box-sizing: border-box;
   padding: 10px 0;
   justify-items: center;
-}
-
-.emptyCard {
-  width: 180px;
-  height: 260px;
-  padding: 16px;
-  border-radius: 16px;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  border: 2px dashed #cccccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #aaaaaa;
-  font-size: 18px;
-  font-weight: 500;
-  background: #fafafa;
 }
 
 /* ------------ */
@@ -158,6 +157,27 @@
   margin: 2px 0;
   font-size: 14px;
   color: #444;
+}
+
+/* -----------*/
+/* EMPTY CARD */
+/* ---------- */
+
+.emptyCard {
+  width: 180px;
+  height: 260px;
+  padding: 16px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 2px dashed #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaaaaa;
+  font-size: 18px;
+  font-weight: 500;
+  background: #fafafa;
 }
 
 /* ---------------------- */

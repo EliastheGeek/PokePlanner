@@ -1,20 +1,17 @@
 export function TeamView(props){
 
-    const teamCopy = props.team;
     const MAX_TEAM = 6;
-    const emptySlots = Array(MAX_TEAM - props.team.length).fill(null);
-    const slots = [...teamCopy, ...emptySlots]; 
+    const team = props.team ?? [];
+    const emptySlots = Array(MAX_TEAM - team.length).fill(null);
+    const slots = [...team.slice(0, MAX_TEAM), ...emptySlots];
 
     return (
         <div>
 
             <div className="teamGrid">
-                {teamCopy?.map(showTeamCB)}
-
                 {slots.map((pokemon, index) =>
                     pokemon ? (
-                    <showTeamCB
-                    />
+                      showTeamCB(pokemon)
                     ) : (
                     <div key={"empty-"+index} className="emptyCard">
                         <span>Empty</span>
@@ -30,13 +27,20 @@ export function TeamView(props){
 
     function showTeamCB(pokemon){
 
-        function onRemoveFromTeam(){}
-        function onClickPokemon(){}
+        function removeFromTeamACB(pokemon){
+          // TODO: Add so confirmation pop up appears
+          props.onRemoveFromTeam(pokemon);
+        }
+
+        function clickPokemonACB(pokemon){
+          props.onClickPokemon(pokemon);
+        }
+
         return (
             <div className="pokemonCard" key={pokemon.id}>
-              <button className="removeBtn" onClick={() => onRemoveFromTeam(pokemon)}>×</button>
+              <button className="removeBtn" onClick={() => removeFromTeamACB(pokemon)}>×</button>
         
-              <div className="imageWrapper" onClick={() => onClickPokemon(pokemon)}>
+              <div className="imageWrapper" onClick={clickPokemonACB}>
                 <img src={pokemon?.sprites?.front_default} alt={pokemon.name} />
               </div>
         
@@ -47,19 +51,5 @@ export function TeamView(props){
               </p>
             </div>
           );
-        /*
-            return <tr key={pokemon.id} className="teamCard">
-                     <td><button onClick = {onRemoveFromTeamACB}>x</button></td>
-                     <td><a href="#/details" onClick = {showMoreACB}>{<img src={pokemon?.sprites?.front_default}/> }</a></td>
-                     <td>{pokemon.name}</td>
-                     <td>ID: {pokemon.id}</td>
-                     <td>Type: {pokemon.types[0].type.name}</td>
-                   </tr>;
-            function showMoreACB(evt){props.onClickPokemon(pokemon);}//gå till detailview för pokemon
-                function onRemoveFromTeamACB(evt){props.onRemoveFromTeam(pokemon)}*/
         }
 }
-/*    function onAddToTeamACB(evt){
-        props.onAddToTeam(props.currentPokemonId)//fetch ny pokemon
-    }
-*/

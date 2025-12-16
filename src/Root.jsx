@@ -1,35 +1,25 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
-import { Search } from "/src/presenters/searchPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
-import { Team } from "/src/presenters/teamPresenter.jsx";
+import { MainLayout } from "/src/presenters/mainLayout.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatBot } from "/src/presenters/chatPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { Details } from "/src/presenters/detailsPresenter.jsx";
 import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import "./style.css";
 
 function makeRouter() {
-  return createHashRouter([
-{
-      path: "/",
-      element: (
-            <div className="horizontalFlexParentMain">
-                <div className="teamView">
-                    <div>
-                        <Team />
-                        <Search />
-                    </div>
-                </div>
-                <div className="pokeBotBox">
-                    <div className="pokeBotBoxInner">
-                        <ChatBot />
-                    </div>
-                </div>
+
+    return createHashRouter([
+    {
+        path: "/",
+        element: (
+            <div className="mainView">
+                <MainLayout />
             </div>
-      ),
+        ),
     },
     {
       path: "/login",
@@ -37,17 +27,11 @@ function makeRouter() {
     },
     {
       path: "/team",
-      element: (<div className="horizontalFlexParentMain">
-                    <div className="teamView">
-                        <Team />
-                        <Search />
-                    </div>
-                    <div className="pokeBotBox">
-                        <div className="pokeBotBoxInner">
-                            <ChatBot />
-                        </div>
-                    </div>
-                </div>),
+      element: (
+            <div className="mainView">
+                <MainLayout />
+            </div>
+        ),
     },
     {
       path: "/pokebot",
@@ -87,6 +71,7 @@ function makeRouter() {
     },
   ]);
 }
+
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);
