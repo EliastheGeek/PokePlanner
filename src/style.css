@@ -34,7 +34,7 @@
 .teamPanel {
   width: 100%;
   border: 2px solid #ccc;
-
+  border-radius: 16px;
   padding: 20px;
   box-sizing: border-box;
 
@@ -44,6 +44,10 @@
   overflow-y: auto;
 }
 
+/* ------- */
+/* POKEBOT */
+/* ------- */
+
 .pokeBotBox{
   flex: 0.4;
   height: 100%;
@@ -51,6 +55,7 @@
   overflow-y: auto;
   display: flex;
   border: 2px solid #ccc;
+  border-radius: 16px;
   padding: 20px;
   background: white;
   position: relative;
@@ -62,14 +67,25 @@
   box-sizing: border-box;
 }
 
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .minimizeBtn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
   background: transparent;
   border: none;
-  font-size: 18px;
+  font-size: 28px;
   cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.chatTitle {
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .chatRestoreBtn {

@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
+import { toggleChatWindow } from "/src/reduxStore.js";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {
   Conversation,
@@ -32,6 +34,9 @@ import Switch from '@mui/material/Switch';
 
 export function ChatInterface(props) {
 
+  const chatOpen = useSelector(state => state.chat.windowOpen);
+  const dispatch = useDispatch();
+
   function promptACB(e){
     e.preventDefault();
 
@@ -49,9 +54,23 @@ export function ChatInterface(props) {
     props.onToggleIncludeTeam(e.target.checked);
   }
 
+  function toggleChatACB() {
+    dispatch(toggleChatWindow());
+  }
+
   return (
     <div className="flex h-full w-full flex-col rounded-lg">
-      <b>PokéBot</b>
+      <div className="chatHeader">
+        <button
+          className="minimizeBtn"
+          onClick={toggleChatACB}
+          aria-label="Minimize chat"
+        >
+          <ExpandMoreIcon fontSize="large" />
+        </button>
+
+        <b className="chatTitle">PokéBot</b>
+      </div>
       <Conversation className="flex-1">
         <ConversationContent>
           {props.messages.map((msg) => (

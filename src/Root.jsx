@@ -34,10 +34,6 @@ function makeRouter() {
         ),
     },
     {
-      path: "/pokebot",
-      element: <ChatBot />,
-    },
-    {
       path: "/dmgcalc",
       element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">

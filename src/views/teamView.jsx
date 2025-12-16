@@ -13,7 +13,7 @@ export function TeamView(props){
                       showTeamCB(pokemon)
                     ) : (
                     <div key={"empty-"+index} className="emptyCard">
-                        <span>Empty</span>
+                        <span>+</span>
                     </div>
                     )
                 )}
@@ -44,7 +44,7 @@ export function TeamView(props){
               </div>
         
               <h2 className="pokeName">{pokemon.name}</h2>
-              <p className="pokeInfo">ID: {pokemon.id}</p>
+              <p className="pokeInfo"># {pokemon.id}</p>
               <p className="pokeInfo">
                 Type: {pokemon.types[0].type.name}
               </p>
