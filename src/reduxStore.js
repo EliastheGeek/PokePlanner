@@ -5,7 +5,7 @@ import { searchPokemon, showAllPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
 const initialState = {
-    team: [pokemonConst,],
+    team: [pokemonConst,pokemonConst, pokemonConst],
     currentPokemonName: pokemonConst.name, //för att söka pokemon
     open: false,
     loading: false,

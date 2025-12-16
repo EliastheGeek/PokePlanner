@@ -16,8 +16,8 @@ function makeRouter() {
 {
       path: "/",
       element: (
-            <div className="horizontalFlexParent">
-                <div className="mainAreaTest">
+            <div className="horizontalFlexParentMain">
+                <div className="teamView">
                     <div>
                         <Team />
                         <Search />
@@ -35,12 +35,10 @@ function makeRouter() {
     },
     {
       path: "/team",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <Team />
-                            <Search />
-                        </div>
+      element: (<div className="horizontalFlexParentMain">
+                    <div className="teamView">
+                        <Team />
+                        <Search />
                     </div>
                     <div className="pokeBotBox">
                         <ChatBot />
