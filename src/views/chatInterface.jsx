@@ -50,7 +50,7 @@ export function ChatInterface(props) {
   }
 
   return (
-    <div className="flex h-full w-full flex-col border border-gray-400 rounded-lg">
+    <div className="flex h-full w-full flex-col rounded-lg">
       <b>PokéBot</b>
       <Conversation className="flex-1">
         <ConversationContent>

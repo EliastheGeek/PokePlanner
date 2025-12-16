@@ -14,12 +14,6 @@
   box-sizing: border-box;
 }
 
-.pokeBotBox {
-  flex: 0.4;             /* 40% of width */
-  box-sizing: border-box;
-  overflow-y: auto;      /* useful for chat output */
-}
-
 /* --------- */
 /* MAIN PAGE */
 /* --------- */
@@ -31,18 +25,36 @@
   padding: 20px;
   width: 100%;
   box-sizing: border-box;
+  height: 60vh;
 }
 
 .teamView {
-  width: 60%;
+  flex: 0.6;
   border: 2px solid #ccc;
   padding: 20px;
-  /*box-sizing: border-box;*/
+  box-sizing: border-box;
 }
 
 .pokeBotBox {
-  width: 40%;
-  /*padding: 20px;*/
+  flex: 0.4;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+}
+
+.pokeBotBox{
+  padding: 16px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  overflow: hidden;
+  background: white;
+}
+
+
+.pokeBotBoxInner {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* --------- */
@@ -50,20 +62,19 @@
 /* --------- */
 
 .teamGrid {
-  width: 80%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);  /* 3 cards per row */
   grid-template-rows: repeat(2, auto);    /* 2 rows */
   gap: 20px;
-  /*padding: 20px;*/
   box-sizing: border-box;
   padding: 10px 0;
   justify-items: center;
 }
 
 .emptyCard {
-  width: 200px;
-  height: 300px;
+  width: 180px;
+  height: 260px;
   padding: 16px;
   border-radius: 16px;
   background: white;
@@ -83,8 +94,8 @@
 /* ------------ */
 
 .pokemonCard {
-  width: 200px;
-  height: 300px;
+  width: 180px;
+  height: 260px;
   padding: 16px;
   border-radius: 16px;
   background: white;

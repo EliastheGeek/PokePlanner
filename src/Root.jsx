@@ -24,7 +24,9 @@ function makeRouter() {
                     </div>
                 </div>
                 <div className="pokeBotBox">
-                    <ChatBot />
+                    <div className="pokeBotBoxInner">
+                        <ChatBot />
+                    </div>
                 </div>
             </div>
       ),
@@ -41,7 +43,9 @@ function makeRouter() {
                         <Search />
                     </div>
                     <div className="pokeBotBox">
-                        <ChatBot />
+                        <div className="pokeBotBoxInner">
+                            <ChatBot />
+                        </div>
                     </div>
                 </div>),
     },
