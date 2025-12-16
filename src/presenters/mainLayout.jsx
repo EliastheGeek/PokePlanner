@@ -16,8 +16,10 @@ export function MainLayout() {
   return (
     <div className="horizontalFlexParentMain">
       <div className={`teamView ${chatOpen ? "withChat" : "fullWidth"}`}>
-        <Team />
-        <Search />
+        <div className="teamPanel">
+          <Team />
+          <Search />
+        </div>
       </div>
 
       {chatOpen ? (

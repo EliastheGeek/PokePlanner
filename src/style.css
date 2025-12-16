@@ -5,22 +5,24 @@
 /* MAIN PAGE */
 /* --------- */
 
+.mainView {
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
 .horizontalFlexParentMain {
   display: flex;
   flex-direction: row;
   gap: 24px;
-  padding: 20px;
   width: 100%;
   box-sizing: border-box;
   height: 60vh;
 }
 
-.teamView {
-  border: 2px solid #ccc;
-  padding: 20px;
-  box-sizing: border-box;
-  transition: width 0.3s ease;
-}
+
 
 .teamView.withChat {
   flex: 0.6;
@@ -30,14 +32,27 @@
   flex: 1.0;
 }
 
+.teamPanel {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ccc;
+
+  padding: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .pokeBotBox{
   flex: 0.4;
   height: 100%;
   box-sizing: border-box;
   overflow-y: auto;
   display: flex;
-  padding: 16px;
   border: 2px solid #ccc;
+  padding: 20px;
   background: white;
   position: relative;
   transition: width 0.3s ease;
@@ -315,4 +330,10 @@
   grid-template-columns: 3fr 2fr;
   height: 80vh;
   margin: 0.5rem;
+}
+
+.mainView,
+.horizontalFlexParentMain,
+.teamView {
+  border: none !important;
 }
