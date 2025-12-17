@@ -73,9 +73,7 @@ const pokeSlice = createSlice({
         setCurrentPokemonName(state,action){
             state.currentPokemonName = action.payload;
         },
-
-        //Search
-         setSearchQuery(state, action) {
+        setSearchQuery(state, action) {
             state.searchParams.query = action.payload;
         },
         doSearch(state, action) {
@@ -236,7 +234,18 @@ const chatInitialState = {
     timeStamp: null,
     includeTeam: true,
     messages: [],
+    preparedPrompts: [
+        {context: "teamView", 
+         query: "What's the biggest weakness in my team?"},
+        {context: "teamView", 
+         query: "What's the best thing about my team?"},
+        {context: "teamView", 
+         query: "Something else"},
+        {context: "detailsView", 
+         query: "How do you like the attacks?"}
+    ],
     loading: false,
+    windowOpen: true,
     error: null
 };
 
@@ -284,8 +293,8 @@ const chatSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        addMessage(state, action){
-            state.messages.push(action.payload);
+        toggleChatWindow(state) {
+            state.windowOpen = !state.windowOpen;
         }
     }
 })
@@ -294,7 +303,8 @@ export const {
     setIncludeTeam,
     promptStart,
     promptSuccess,
-    promptError
+    promptError,
+    toggleChatWindow
 } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();

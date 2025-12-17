@@ -1,23 +1,297 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-.horizontalFlexParent {
+/* --------- */
+/* MAIN PAGE */
+/* --------- */
+
+.mainView {
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.horizontalFlexParentMain {
   display: flex;
   flex-direction: row;
-  width: 100vw;   /* full page width */
+  height: auto;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 80vh;
 }
 
-.mainAreaTest {
-  flex: 0.6;             /* 60% of width */
-  border: 2px solid #ccc;/* frame around main area */
-  padding: 20px;         /* optional spacing inside */
+.teamView.withChat {
+  flex: 0.6;
+}
+
+.teamView.fullWidth {
+  flex: 1.0;
+}
+
+.teamPanel {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+/* ------- */
+/* POKEBOT */
+/* ------- */
+
+.pokeBotBox{
+  flex: 0.4;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  border: 2px solid #ccc;
+  border-radius: 16px;
+  padding: 20px;
+  background: white;
+  position: relative;
+  transition: width 0.3s ease;
+}
+
+.pokeBotBoxInner {
+  width: 100%;
   box-sizing: border-box;
 }
 
-.pokeBotBox {
-  flex: 0.4;             /* 40% of width */
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.minimizeBtn {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.chatTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chatRestoreBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #333;
+  color: white;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.chatInputObjects {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------- */
+/* PREPARED PROMPT BUBBLES */
+/* ----------------------- */
+
+.preparedPromptContainer {
+  bottom: 72px;
+  left: 16px;
+  right: 16px;
+  padding: 16px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 10;
+}
+
+.preparedPromptBubble {
+  background: #f0f0f0;
+  border-radius: 16px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.preparedPromptBubble:hover {
+  background: #e0e0e0;
+}
+
+/* --------- */
+/* TEAM GRID */
+/* --------- */
+
+.teamGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 20px;
   box-sizing: border-box;
-  overflow-y: auto;      /* useful for chat output */
+  padding: 10px 0;
+  justify-items: center;
+}
+
+/* ------------ */
+/* POKEMON CARD */
+/* ------------ */
+
+.pokemonCard {
+  width: 180px;
+  height: 260px;
+  padding: 16px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+
+.pokemonCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.removeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: #ff4d4d;
+  color: white;
+  font-size: 16px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.removeBtn:hover {
+  background: #d90000;
+}
+
+.imageWrapper {
+  width: 120px;
+  height: 120px;
+  background: #f2f2f2;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: auto;
+}
+
+.pokeName {
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.pokeInfo {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+/* -----------*/
+/* EMPTY CARD */
+/* ---------- */
+
+.emptyCard {
+  width: 180px;
+  height: 260px;
+  padding: 16px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 2px dashed #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaaaaa;
+  font-size: 18px;
+  font-weight: 500;
+  background: #fafafa;
+}
+
+/* ---------- */
+/* SEARCH BOX */
+/* ---------- */
+
+.searchWrapper {
+  padding: 16px 0;
+}
+
+/* ------------ */
+/* DETAILS VIEW */
+/* ------------ */
+
+.mainDetailsView {
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.horizontalFlexParentMainDetails {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 80vh;
+}
+
+.detailsView.withChat {
+  flex: 0.6;
+}
+
+.detailsView.fullWidth {
+  flex: 1.0;
+}
+
+.detailsPanel {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
 }
 
 /* ---------------------- */
@@ -147,4 +421,13 @@
   grid-template-columns: 3fr 2fr;
   height: 80vh;
   margin: 0.5rem;
+}
+
+.mainView,
+.horizontalFlexParentMain,
+.teamView,
+.mainDetailsView,
+.horizontalFlexParentMainDetails,
+.detailsView {
+  border: none !important;
 }

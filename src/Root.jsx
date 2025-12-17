@@ -1,60 +1,41 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
-import { Search } from "/src/presenters/searchPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
-import { Team } from "/src/presenters/teamPresenter.jsx";
+import { MainLayout } from "/src/presenters/mainLayout.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatBot } from "/src/presenters/chatPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
-import { Details } from "/src/presenters/detailsPresenter.jsx";
+import { MainDetailsLayout } from "/src/presenters/mainDetailsLayout.jsx";
 import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import "./style.css";
 
 function makeRouter() {
-  return createHashRouter([
-{
-      path: "/",
-      element: (
-            <div className="horizontalFlexParent">
-                <div className="mainAreaTest">
-                    <div>
-                        <Search />
-                        <Team />
-                    </div>
-                </div>
-                <div className="pokeBotBox">
-                    <ChatBot />
-                </div>
-            </div>
-      ),
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "/team",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
 
-                            <Search />
-                            <Team />
-                        </div>
-                    </div>
-                    <div className="pokeBotBox">
-                        <ChatBot />
-                    </div>
-                </div>),
+    return createHashRouter([
+    {
+        path: "/",
+        element: (
+            <div className="mainView">
+                <MainLayout />
+            </div>
+        ),
     },
     {
-      path: "/pokebot",
-      element: <ChatBot />,
+        path: "/login",
+        element: <Login />,
     },
     {
-      path: "/dmgcalc",
-      element: (<div className="horizontalFlexParent">
+        path: "/team",
+        element: (
+            <div className="mainView">
+                <MainLayout />
+            </div>
+        ),
+    },
+    {
+        path: "/dmgcalc",
+        element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
                             <DamageCalculator />
@@ -66,26 +47,20 @@ function makeRouter() {
                 </div>),
     },
     {
-      path: "/details",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Details />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <ChatBot />
-                    </div>
-                </div>),
+        path: "/details",
+        element: (
+                <div className="mainDetailsView">
+                    <MainDetailsLayout />
+                </div>
+        ),
     },
     {
-      path: "/login",
-      element: <Login />,
+        path: "/login",
+        element: <Login />,
     },
   ]);
 }
+
 export function Root(){
     const user = useSelector((state) => state.poke.user);
     const ready = useSelector((state) => state.poke.ready);

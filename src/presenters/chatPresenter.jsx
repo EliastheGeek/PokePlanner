@@ -1,19 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ChatInterface } from "/src/views/chatInterface.jsx";
-import { promptStart, setIncludeTeam } from "/src/reduxStore.js";
+import { setIncludeTeam } from "/src/reduxStore.js";
 import { doPromptThunk } from "/src/store/chatThunks";
 
-export function ChatBot() {
+export function ChatBot(props) {
     const dispatch = useDispatch();
 
     const {
         includeTeam,
         messages,
+        preparedPrompts,
+        windowOpen,
         loading, 
         error
     } = useSelector((state) => state.chat);
 
     const team = useSelector((state) => state.poke);
+
+    const visiblePreparedPrompts = preparedPrompts.filter(
+        q => q.context === props.context
+    );
 
     return (
         <ChatInterface
@@ -22,12 +28,19 @@ export function ChatBot() {
             error={error}
             includeTeam={includeTeam}
             onToggleIncludeTeam={toggleIncludeTeamACB}
+            preparedPrompts={visiblePreparedPrompts}
+            onPreparedPromptClick={startPromptACB}
             onPromptNow={startPromptACB}
+            onToggleChat={toggleShowChatACB}
         />
     );
 
     function startPromptACB(query){
         dispatch(doPromptThunk(query));
+    }
+
+    function toggleShowChatACB(){
+        props.onToggleChatWindow();
     }
 
     function toggleIncludeTeamACB(){

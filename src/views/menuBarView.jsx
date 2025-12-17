@@ -73,7 +73,6 @@ export default function MenuBarView(props) {
           >
             <MenuItem onClick={handleNavigate('#/')}>Home</MenuItem>
             <MenuItem onClick={handleNavigate('#/team')}>TeamBuilder</MenuItem>
-            <MenuItem onClick={handleNavigate('#/pokebot')}>PokeBOT</MenuItem>
             <MenuItem onClick={handleNavigate('#/dmgcalc')}>Damage Calculator</MenuItem>
           </Menu>
 

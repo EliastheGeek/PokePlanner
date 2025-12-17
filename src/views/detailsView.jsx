@@ -13,9 +13,11 @@ const Input = styled(MuiInput)`width: 42px;`;
 
 
 export function DetailsView(props) {
+
     function backToTeamACB(){
         window.location.hash = "#/team";
     }
+
     function previousPokemonACB(){
       setPokemonIndex(prev => {
         if (prev <= 0) return prev;
@@ -24,6 +26,7 @@ export function DetailsView(props) {
         return newIndex;
       });
     }
+    
     function nextPokemonACB(){
       setPokemonIndex(prev => {
         const maxIndex = Math.min(6, props.team.length - 1);
@@ -34,30 +37,57 @@ export function DetailsView(props) {
       });
     }
 
-    const initialIndex = props.team.findIndex(function findOneCB(team){return props.currentPokemonName === team.name;});
-    const [pokemonIndex, setPokemonIndex] = useState(initialIndex === -1 ? 0 : (initialIndex ?? 0));
-    useEffect(() => {
-      const idx = props.team?.findIndex(team => props.currentPokemonName === team.name);
-      setPokemonIndex(idx === -1 ? 0 : (idx ?? 0));
-    }, [props.currentPokemonName, props.team]);
+    const initialIndex = props.team.findIndex(
+      function findOneCB(team){
+        return props.currentPokemonName === team.name;
+      }
+    );
+
+    const [pokemonIndex, setPokemonIndex] = useState(
+      initialIndex >= 0 ? initialIndex : 0
+    );
+
+    const pokemon = props.team?.[pokemonIndex];
+
     return (
     <div>
-                                <Box
-                                    sx={{
-                                        flex: 1,
-                                        borderLeft: "1px solid #e0e0e0",
-                                        pl: 2,
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: 1,
-                                    }}
-                                >
-                                  <span>Showing details for {pokemonIndex}</span>
-        <button className="pokeBotBox" onClick={backToTeamACB}>Back to team builder</button>
-        <button className="pokeBotBox" onClick={previousPokemonACB} disabled={pokemonIndex<=0}>Previous</button>
-        <button className="pokeBotBox" onClick={nextPokemonACB} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</button>
-        {printStats()}
+      <Box
+          sx={{
+            flex: 1,
+            borderLeft: "1px solid #e0e0e0",
+            pl: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
 
+        <button 
+          className="backToTeamViewBtn"
+          onClick={backToTeamACB}
+          >Back to team builder
+        </button>
+
+        <button 
+          className="prevPokeBtn"
+          onClick={previousPokemonACB} 
+          disabled={pokemonIndex<=0}
+          >Previous
+        </button>
+        
+        <button 
+          className="nextPokeBtn" 
+          onClick={nextPokemonACB} 
+          disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}
+          >Next
+        </button>
+
+        {printStats()}
+        {MoveList(0)}
+        {MoveList(1)}
+        {MoveList(2)}
+        {MoveList(3)}
+        {AbilityList()}
         </Box>
     </div>
     );
@@ -95,7 +125,7 @@ export function DetailsView(props) {
         {AbilityList()}
         {InputSlider()}
         </div>);
-        }
+      }
     
     function printBaseStatsCB(stats) {
         return <li key={stats.stat.name}>{stats.base_stat+" "+stats.stat.name}</li>;
@@ -116,7 +146,7 @@ function MoveList(slot,index) {
 
  return (
     <Autocomplete
-      id="country-select-demo"
+      id="move-select"
       sx={{ width: 200 }}
   
       options={props.team[index]?.moves || []}
@@ -157,11 +187,11 @@ function MoveList(slot,index) {
 }
 function AbilityList() {
 
- return (
+  return (
     <Autocomplete
-      id="country-select-demo"
+      id="ability-select"
       sx={{ width: 200 }}
-      options={props.team[pokemonIndex]?.abilities || []}
+      options={pokemon?.abilities ?? []}
       autoHighlight
       getOptionLabel={(option) => option.ability?.name || ""}
       renderOption={(props, option) => {
