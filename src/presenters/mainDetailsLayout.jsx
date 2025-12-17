@@ -23,7 +23,7 @@ export function MainDetailsLayout() {
 
       {chatOpen ? (
         <div className="pokeBotBox">
-          <ChatBot location="detailsView"
+          <ChatBot context="detailsView"
                    onToggleChatWindow={toggleChatACB}/>
         </div>
       ) : (

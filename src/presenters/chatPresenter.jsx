@@ -18,7 +18,7 @@ export function ChatBot(props) {
     const team = useSelector((state) => state.poke);
 
     const visiblePreparedPrompts = preparedPrompts.filter(
-        q => q.location === props.location
+        q => q.context === props.context
     );
 
     return (

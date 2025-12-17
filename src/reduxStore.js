@@ -230,13 +230,13 @@ const chatInitialState = {
     includeTeam: true,
     messages: [],
     preparedPrompts: [
-        {location: "teamView", 
+        {context: "teamView", 
          query: "What's the biggest weakness in my team?"},
-        {location: "teamView", 
+        {context: "teamView", 
          query: "What's the best thing about my team?"},
-        {location: "teamView", 
+        {context: "teamView", 
          query: "Something else"},
-        {location: "detailsView", 
+        {context: "detailsView", 
          query: "How do you like the attacks?"}
     ],
     loading: false,

@@ -25,7 +25,7 @@ export function MainLayout() {
 
       {chatOpen ? (
         <div className="pokeBotBox">
-          <ChatBot location="teamView"
+          <ChatBot context="teamView"
                    onToggleChatWindow={toggleChatACB}/>
         </div>
       ) : (
