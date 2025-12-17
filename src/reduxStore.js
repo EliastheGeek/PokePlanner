@@ -4,6 +4,12 @@ import { pokemonConst } from "./pokemonConst";
 import { searchPokemon } from "./pokemonSource";
 const teamMaxSize = 6;
 
+function clamp(n, lo, hi) {
+    const x = Number(n);
+    if (Number.isNaN(x)) return lo;
+    return Math.max(lo, Math.min(hi, x));
+}
+
 const initialState = {
     team: [pokemonConst,],
     currentPokemonName: null, //för att söka pokemon
@@ -25,10 +31,71 @@ const initialState = {
     damageAttackerName: "",
     damageDefenderName: "",
     damageMoveName: "",
+
+    // Attacker details
+    attackerLevel: 50,
+    attackerGender: "N",
+    attackerAbility: "",
+    attackerItem: "",
+    attackerNature: "",
+    attackerStatus: "",
+    attackerTeraType: "",
+    attackerIsTerastallized: false,
+    attackerType1Override: "",
+    attackerType2Override: "",
+    attackerEVs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+    attackerIVs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+    attackerBoosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+
+    //Defender Details
+    defenderLevel: 50,
+    defenderGender: "N",
+    defenderAbility: "",
+    defenderItem: "",
+    defenderNature: "",
+    defenderStatus: "",
+    defenderTeraType: "",
+    defenderIsTerastallized: false,
+    defenderType1Override: "",
+    defenderType2Override: "",
+    defenderEVs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+    defenderIVs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+    defenderBoosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+
+    //Field
+    damageTerrain: "",
     damageWeather: "",
     damageGameType: "Singles", // 'Singles' | 'Doubles'
+    damageMagicRoom: false,
+    damageWonderRoom: false,
+    damageGravity: false,
+    damageSoR: false,
+    damageBoR: false,
+    damageToR: false,
+    damageVoR: false,
+    //Attacker
+    attackerHelpingHand: false,
+    attackerTailwind: false,
+    attackerFlowerGift: false,
+    attackerPowerTrick: false,
+    damageSteelySpirit: false,
+    damagePowerSpot: false,
+    damageBattery: false,
+    //Defender
+    defenderHelpingHand: false,
+    defenderTailwind: false,
+    defenderFlowerGift: false,
+    defenderPowerTrick: false,
     damageReflect: false,
     damageLightScreen: false,
+    damageFriendGuard: false,
+    damageSR: false,
+    damageSpikes: 0,
+    damageProtected: false,
+    damageSeeded: false,
+    damageSaltCure: false,
+    damageForesight: false,
+    
     damageResult: null,
     damageError: null,  
 };
@@ -46,62 +113,124 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        currentPokemon(state,action){
-            state.currentPokemonName = action.payload.name;
-        },
+        currentPokemon(state,action){ state.currentPokemonName = action.payload.name; },
         //Search
-         setSearchQuery(state, action) {
-            state.searchParams.query = action.payload;
-        },
+        setSearchQuery(state, action) { state.searchParams.query = action.payload; },
         doSearch(state, action) {
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
         },
         //Authentication
-        setCurrentEmail(state, action){
-            state.currentEmail = action.payload;
-        },
-
-        setCurrentPassword(state, action){
-            state.currentPassword = action.payload;
-        },
+        setCurrentEmail(state, action){ state.currentEmail = action.payload; },
+        setCurrentPassword(state, action){ state.currentPassword = action.payload; },
 
         // Damage calculator
-        setDamageAttackerName(state, action) {
-            state.damageAttackerName = action.payload;
+        setDamageAttackerName(state, action) { state.damageAttackerName = action.payload; },
+        setDamageDefenderName(state, action) { state.damageDefenderName = action.payload; },
+        setDamageMoveName(state, action) { state.damageMoveName = action.payload; },
+        setDamageGameType(state, action) { state.damageGameType = action.payload; },
+
+        // Attacker details
+        setAttackerLevel(state, action) { state.attackerLevel = clamp(action.payload, 1, 100); },
+        setAttackerGender(state, action) { state.attackerGender = action.payload; },
+        setAttackerAbility(state, action) { state.attackerAbility = action.payload; },
+        setAttackerItem(state, action) { state.attackerItem = action.payload; },
+        setAttackerNature(state, action) { state.attackerNature = action.payload; },
+        setAttackerStatus(state, action) { state.attackerStatus = action.payload; },
+        setAttackerTeraType(state, action) { state.attackerTeraType = action.payload; },
+        setAttackerTerastallized(state, action) { state.attackerIsTerastallized = action.payload; },
+        setAttackerType1Override(state, action) { state.attackerType1Override = action.payload; },
+        setAttackerType2Override(state, action) { state.attackerType2Override = action.payload; },
+        
+        setAttackerEV(state, action) {
+            const { stat, value } = action.payload;
+            if (state.attackerEVs[stat] === undefined) return;
+            state.attackerEVs[stat] = clamp(value, 0, 252);
         },
-        setDamageDefenderName(state, action) {
-            state.damageDefenderName = action.payload;
+        
+        setAttackerIV(state, action) {
+            const { stat, value } = action.payload;
+            if (state.attackerIVs[stat] === undefined) return;
+            state.attackerIVs[stat] = clamp(value, 0, 31);
         },
-        setDamageMoveName(state, action) {
-            state.damageMoveName = action.payload;
+        
+        setAttackerBoost(state, action) {
+            const { stat, value } = action.payload;
+            if (state.attackerBoosts[stat] === undefined) return;
+            state.attackerBoosts[stat] = clamp(value, -6, 6);
         },
-        setDamageWeather(state, action) {
-            state.damageWeather = action.payload;
+        
+        //Defender Details
+        setDefenderLevel(state, action) { state.defenderLevel = clamp(action.payload, 1, 100); },
+        setDefenderGender(state, action) { state.defenderGender = action.payload; },
+        setDefenderAbility(state, action) { state.defenderAbility = action.payload; },
+        setDefenderItem(state, action) { state.defenderItem = action.payload; },
+        setDefenderNature(state, action) { state.defenderNature = action.payload; },
+        setDefenderStatus(state, action) { state.defenderStatus = action.payload; },
+        setDefenderTeraType(state, action) { state.defenderTeraType = action.payload; },
+        setDefenderTerastallized(state, action) { state.defenderIsTerastallized = action.payload; },
+        setDefenderType1Override(state, action) { state.defenderType1Override = action.payload; },
+        setDefenderType2Override(state, action) { state.defenderType2Override = action.payload; },
+        
+        setDefenderEV(state, action) {
+            const { stat, value } = action.payload;
+            if (state.defenderEVs[stat] === undefined) return;
+            state.defenderEVs[stat] = clamp(value, 0, 252);
         },
-        setDamageGameType(state, action) {
-            state.damageGameType = action.payload;
+        
+        setDefenderIV(state, action) {
+            const { stat, value } = action.payload;
+            if (state.defenderIVs[stat] === undefined) return;
+            state.defenderIVs[stat] = clamp(value, 0, 31);
         },
-        setDamageReflect(state, action) {
-            state.damageReflect = action.payload;
+        
+        setDefenderBoost(state, action) {
+            const { stat, value } = action.payload;
+            if (state.defenderBoosts[stat] === undefined) return;
+            state.defenderBoosts[stat] = clamp(value, -6, 6);
         },
-        setDamageLightScreen(state, action) {
-            state.damageLightScreen = action.payload;
-        },
-        setDamageResult(state, action) {
-            state.damageResult = action.payload;
-        },
-        setDamageError(state, action) {
-            state.damageError = action.payload;
-        },
+        
+        //Field
+        setDamageTerrain(state, action) { state.damageTerrain = action.payload; },
+        setDamageWeather(state, action) { state.damageWeather = action.payload; },
+        setDamageMR(state, action) { state.damageMagicRoom = action.payload; }, 
+        setDamageWR(state, action) { state.damageWonderRoom = action.payload; },
+        setDamageGravity(state, action) { state.damageGravity = action.payload; },
+        setDamageSoR(state, action) { state.damageSoR = action.payload; },
+        setDamageBoR(state, action) { state.damageBoR = action.payload; },
+        setDamageToR(state, action) { state.damageToR = action.payload; },
+        setDamageVoR(state, action) { state.damageVoR = action.payload; },
+        
+        //Atacker
+        setAttackerHH(state, action) { state.attackerHelpingHand = action.payload; },
+        setAttackerTailwind(state, action) { state.attackerTailwind = action.payload; },
+        setAttackerFG(state, action) { state.attackerFlowerGift = action.payload; },
+        setAttackerPT(state, action) { state.attackerPowerTrick = action.payload; },
+        setAttackerSS(state, action) { state.damageSteelySpirit = action.payload; },
+        setAttackerPS(state, action) { state.damagePowerSpot = action.payload; },
+        setAttackerBattery(state, action) { state.damageBattery = action.payload; },
+        
+        //Defender
+        setDefenderHH(state, action) { state.defenderHelpingHand = action.payload; },
+        setDefenderTailwind(state, action) { state.defenderTailwind = action.payload; },
+        setDefenderFG(state, action) { state.defenderFlowerGift = action.payload; },
+        setDefenderPT(state, action) { state.defenderPowerTrick = action.payload; },
+        setDamageReflect(state, action) { state.damageReflect = action.payload; },
+        setDamageLightScreen(state, action) { state.damageLightScreen = action.payload; },
+        setDamageFriendGuard(state, action) { state.damageFriendGuard = action.payload; },
+        setDamageSR(state, action) { state.damageSR = action.payload; },
+        setDamageSpikes(state, action) { state.damageSpikes = action.payload; },
+        setDamageProtected(state, action) { state.damageProtected = action.payload; },
+        setDamageSeeded(state, action) { state.damageSeeded = action.payload; },
+        setDamageSaltCure(state, action) { state.damageSaltCure = action.payload; },
+        setDamageForesight(state, action) { state.damageForesight = action.payload; },
+        setDamageResult(state, action) { state.damageResult = action.payload; },
+        setDamageError(state, action) { state.damageError = action.payload; },
 
         //Just for persistence
-        setUser(state, action) {
-            state.user = action.payload;
-        },
-        setReady(state, action) {
-            state.ready = action.payload;
-        },
+        setUser(state, action) { state.user = action.payload; },
+        setReady(state, action) { state.ready = action.payload; },
+        
         fillFirestore(state, action) {
             //(devComment) Lägg till flera variabler ifall fler sakker ska pushas till FireStore
             const hello = action.payload;
@@ -149,11 +278,74 @@ export const {
     setDamageAttackerName,
     setDamageDefenderName,
     setDamageMoveName,
-    setDamageWeather,
     setDamageGameType,
+    
+    //Attack details
+    setAttackerLevel,
+    setAttackerGender,
+    setAttackerAbility,
+    setAttackerItem,
+    setAttackerNature,
+    setAttackerStatus,
+    setAttackerTeraType,
+    setAttackerTerastallized,
+    setAttackerType1Override,
+    setAttackerType2Override,
+    setAttackerEV,
+    setAttackerIV,
+    setAttackerBoost,
+
+    //Defender details
+    setDefenderLevel,
+    setDefenderGender,
+    setDefenderAbility,
+    setDefenderItem,
+    setDefenderNature,
+    setDefenderStatus,
+    setDefenderTeraType,
+    setDefenderTerastallized,
+    setDefenderType1Override,
+    setDefenderType2Override,
+    setDefenderEV,
+    setDefenderIV,
+    setDefenderBoost,
+    
+    //Field
+    setDamageTerrain,
+    setDamageWeather,
+    setDamageMR,
+    setDamageWR,
+    setDamageGravity,
     setDamageReflect,
+    setDamageSoR,
+    setDamageBoR,
+    setDamageToR,
+    setDamageVoR,
+
+    //Attacker
+    setAttackerHH,
+    setAttackerTailwind,
+    setAttackerFG,
+    setAttackerPT,
+    setAttackerSS,
+    setAttackerPS,
+    setAttackerBattery,
+
+    //Defender
+    setDefenderHH,
+    setDefenderTailwind,
+    setDefenderFG,
+    setDefenderPT,
     setDamageLightScreen,
     setDamageResult,
+    setDamageFriendGuard,
+    setDamageSR,
+    setDamageSpikes,
+    setDamageProtected,
+    setDamageSeeded,
+    setDamageSaltCure,
+    setDamageForesight,
+
     setDamageError,
 } = pokeSlice.actions;
 

@@ -8,15 +8,14 @@
 }
 
 .mainAreaTest {
-  flex: 0.6;             /* 60% of width */
+  flex: 0.75;             /* 60% of width */
   border: 2px solid #ccc;/* frame around main area */
   padding: 20px;         /* optional spacing inside */
   box-sizing: border-box;
 }
 
 .pokeBotBox {
-  flex: 0.4;             /* 40% of width */
-  padding: 20px;         /* optional */
+  flex: 0.25;             /* 40% of width */
   box-sizing: border-box;
   overflow-y: auto;      /* useful for chat output */
 }
