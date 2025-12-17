@@ -123,11 +123,13 @@ export function DetailsView(props) {
 //TODO, lista ut hur man får ut värdet man väljer från movelist 
 
 function MoveList(slot) {
+
   function addToMoveListCB(evt, value){ 
     console.log("Selected move: ", value);
     props.addMove(value, slot);
   }
- return (
+  
+  return (
     <Autocomplete
       id="move-select"
       sx={{ width: 200 }}
