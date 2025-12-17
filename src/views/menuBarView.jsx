@@ -46,7 +46,7 @@ export default function MenuBarView(props) {
         elevation={1}
       >
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
+          <Typography className='appName' variant="h5" component="div" sx={{ flexGrow: 1 }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
           <Box className="defultMenu">
             <Tabs
               value={value}
@@ -85,8 +85,8 @@ export default function MenuBarView(props) {
             </Menu>
           </Box>
           {props.user ? 
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout<FaceIcon sx={{ ml:1 }} /></Button> :
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLoginMenuACB }>Login</Button>
+            <Button sx={{ minWidth: 110, backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout<FaceIcon sx={{ ml:1 }} /></Button> :
+            <Button sx={{ minWidth: 110, display: 'flex', backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLoginMenuACB }>Login</Button>
           }
         </Toolbar>
       </AppBar>
