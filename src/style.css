@@ -43,6 +43,24 @@
   gap: 16px;
   overflow-y: auto;
 }
+/* ------- */
+/* MENUBAR */
+/* ------- */
+.defultMenu{
+  display: block;
+  flex-direction: row;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.burgerMenu { display: none; }
+
+@media (max-width: 699px) {
+  .defultMenu { display: none; }
+  .burgerMenu { display: block; }
+}
 
 /* ------- */
 /* POKEBOT */
@@ -431,3 +449,4 @@
 .detailsView {
   border: none !important;
 }
+
