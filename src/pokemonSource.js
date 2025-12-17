@@ -11,8 +11,7 @@ function errorACB(error){ console.log("Error in searchPokemon: ", error);}
 
 export function showAllPokemon(){
     const url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1328";
-    const url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1328";
-        const options = {
+    const options = {
         method: "GET",
     };
     return fetch(url, options).then(responseACB).then(resultACB);

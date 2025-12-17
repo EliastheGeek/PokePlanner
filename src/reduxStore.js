@@ -149,6 +149,7 @@ const pokeSlice = createSlice({
         showPokemon(state, action) {state.showPokemonPromiseState = { promise: null, data: [], error: null };},
         setOpen(state, action) {state.open = action.payload;},
         setOptions(state, action) {state.showPokemonPromiseState.data = action.payload;},
+        
         //Authentication
         setCurrentEmail(state, action){state.currentEmail = action.payload;},
         setCurrentPassword(state, action){state.currentPassword = action.payload;},
