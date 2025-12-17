@@ -40,7 +40,7 @@ export function TeamView(props){
         }
 
         return (
-            <div className="pokemonCard" key={pokemon.id}>
+            <div className="pokemonCard" key={pokemon.id} title={`See details for ${pokemon.name}`}>
 
               <button 
                 className="removeBtn" 
