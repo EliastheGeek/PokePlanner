@@ -160,7 +160,7 @@
   height: 260px;
   padding: 16px;
   border-radius: 16px;
-  background: white;
+  background: rgb(241, 241, 241);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
@@ -241,6 +241,9 @@
   font-size: 18px;
   font-weight: 500;
   background: #fafafa;
+}
+.emptyCard:hover {
+  background: rgb(241, 241, 241);
 }
 
 /* ---------- */
