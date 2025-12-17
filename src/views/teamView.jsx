@@ -46,7 +46,7 @@ export function TeamView(props){
                 className="removeBtn" 
                 onClick={() => removeFromTeamACB(pokemon)}
               >
-                ×
+                X
               </button>
         
               <div
