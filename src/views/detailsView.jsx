@@ -83,11 +83,6 @@ export function DetailsView(props) {
         </button>
 
         {printStats()}
-        {MoveList(0)}
-        {MoveList(1)}
-        {MoveList(2)}
-        {MoveList(3)}
-        {AbilityList()}
         </Box>
     </div>
     );
@@ -119,6 +114,7 @@ export function DetailsView(props) {
                     </ul>    
             </div>
         {MoveList(0,pokemonIndex)}
+        {MoveInfo(0, pokemonIndex)}
         {MoveList(1,pokemonIndex)}
         {MoveList(2,pokemonIndex)}
         {MoveList(3,pokemonIndex)}
@@ -133,7 +129,22 @@ export function DetailsView(props) {
     function printTeraTypesCB(types) {
         return <li key={types.type.name}>{types.type.name}</li>;
     }
-
+    function MoveInfo(slot, index){
+      const moveData = props.team[index]?.moveInfo[slot];
+      console.log("Rendering move info for slot ", slot, " : ", moveData);
+      if (moveData===undefined || moveData==0) return <div>No move info loaded</div>;
+      return (
+        <div>
+          <h3>Move Info:</h3>
+          <p>{moveData.name}</p>
+          <p>Power: {moveData.power}</p>
+          <p>Accuracy: {moveData.accuracy}</p>
+          <p>Type: {moveData.type?.name}</p>
+          <p>Damage type: {moveData.damage_class?.name}</p>
+          <p>PP: {moveData.pp}</p>
+        </div>
+      );
+    }
 
 
 //addToMoveListACB får details sidan att byta vy till index 0 när man lägger till ett move
