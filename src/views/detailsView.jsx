@@ -3,6 +3,15 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import React, { useState, useEffect } from "react";
+
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Slider from '@mui/material/Slider';
+import MuiInput from '@mui/material/Input';
+const Input = styled(MuiInput)`width: 42px;`;
+
+
 export function DetailsView(props) {
     function backToTeamACB(){
         window.location.hash = "#/team";
@@ -31,7 +40,6 @@ export function DetailsView(props) {
       const idx = props.team?.findIndex(team => props.currentPokemonName === team.name);
       setPokemonIndex(idx === -1 ? 0 : (idx ?? 0));
     }, [props.currentPokemonName, props.team]);
-
     return (
     <div>
                                 <Box
@@ -48,32 +56,28 @@ export function DetailsView(props) {
         <button className="pokeBotBox" onClick={backToTeamACB}>Back to team builder</button>
         <button className="pokeBotBox" onClick={previousPokemonACB} disabled={pokemonIndex<=0}>Previous</button>
         <button className="pokeBotBox" onClick={nextPokemonACB} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</button>
-        {printStats(pokemonIndex)}
-        {MoveList(0)}
-        {MoveList(1)}
-        {MoveList(2)}
-        {MoveList(3)}
-        {AbilityList()}
+        {printStats()}
+
         </Box>
     </div>
     );
 
-    function printStats(index) {
-      if (!props.team || !props.team[index]) return null;
+    function printStats() {
+      if (!props.team || !props.team[pokemonIndex]) return null;
      return ( 
       <div>
       <header>
             
             
-            <h2>{props.team[index].name}</h2>
-            <img src={props.team[index].sprites?.front_default}/>
+            <h2>{props.team[pokemonIndex].name}</h2>
+            <img src={props.team[pokemonIndex].sprites?.front_default}/>
         </header>
 
             <div> 
                 <aside>
                 <h3>Stats:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                    {props.team[index].stats?.map(printBaseStatsCB)}
+                    {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
                 </ul>
                 </aside>
             </div>
@@ -81,10 +85,15 @@ export function DetailsView(props) {
             <div>
                 <h3>Tera Type:</h3>
                     <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                        {props.team[index].types?.map(printTeraTypesCB)}
+                        {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
                     </ul>    
             </div>
-
+        {MoveList(0,pokemonIndex)}
+        {MoveList(1,pokemonIndex)}
+        {MoveList(2,pokemonIndex)}
+        {MoveList(3,pokemonIndex)}
+        {AbilityList()}
+        {InputSlider()}
         </div>);
         }
     
@@ -96,19 +105,26 @@ export function DetailsView(props) {
     }
 
 
-//TODO, lista ut hur man får ut värdet man väljer från movelist 
 
-function MoveList(slot) {
-  function addToMoveListCB(evt, value){ 
-    console.log("Selected move: ", value);
-    props.addMove(value, slot);
+//addToMoveListACB får details sidan att byta vy till index 0 när man lägger till ett move
+function MoveList(slot,index) {
+  function addToMoveListACB(evt){ 
+    console.log("Selected move: ", evt.target.innerText, " for slot ", slot);
+    props.addMove(evt.target.innerText, slot, index);
+    console.log("After dispatching addMove", props.team[index].actualMoves, index); //Uppdateras ett steg för sent?
   }
+
  return (
     <Autocomplete
       id="country-select-demo"
       sx={{ width: 200 }}
-      options={props.team[pokemonIndex]?.actualMoves[slot] || props.team[pokemonIndex]?.moves || []}
+  
+      options={props.team[index]?.moves || []}
+      /*getOptionDisabled={(option) =>
+      option === props.team[index]?.moves[slot] }*/
       autoHighlight
+      onInputChange={addToMoveListACB}
+      onChange={addToMoveListACB}
       getOptionLabel={(option) => option.move?.name || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
@@ -174,6 +190,65 @@ function AbilityList() {
         />
       )}
     />
+  );
+}
+
+
+
+function InputSlider() {
+  const [value, setValue] = React.useState(30);
+
+  const handleSliderChange = (event, newValue) => {
+    setValue(newValue);
+    props.evChange(newValue);
+  };
+
+  const handleInputChange = (event) => {
+    setValue(event.target.value === '' ? 0 : Number(event.target.value));
+  };
+
+  const handleBlur = () => {
+    if (value < 0) {
+      setValue(0);
+    } else if (value > 255) {
+      setValue(255);
+    }
+  };
+
+  return (
+    <Box sx={{ width: 250 }}>
+      <Typography id="input-slider" gutterBottom>
+        EV
+      </Typography>
+      <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+        <Grid size="grow">
+          <Slider
+          defaultValue={0}
+            min={0}
+            max={255}
+            step={1}
+            value={typeof value === 'number' ? value : 0}
+            onChange={handleSliderChange}
+            aria-labelledby="input-slider"
+          />
+        </Grid>
+        <Grid>
+          <Input
+            value={value}
+            size="small"
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 1,
+              min: 0,
+              max: 255,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 }

@@ -2,6 +2,7 @@ import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/
 import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
 import { searchPokemon, showAllPokemon } from "./pokemonSource";
+import { act } from "react";
 const teamMaxSize = 6;
 
 const initialState = {
@@ -46,16 +47,20 @@ const pokeSlice = createSlice({
             // avoid duplicates
             if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
             if (state.team.length < teamMaxSize) {
+                pokemon.actualMoves = [null, null, null, null];
                 state.team = [...state.team, pokemon];
             }
         },
         addActualMove(state, action){
             console.log("Adding actual move in redux store", action.payload);
-            const moveName = action.payload;
-            const pokemonIndex = state.team.findIndex(p => p.name === state.currentPokemonName);
+            const moveName = action.payload.moveName;
+            const pokemonIndex = action.payload.pokemonIndex;
+            const slot =action.payload.slot
             if (pokemonIndex === -1) return;
-            state.team[pokemonIndex].actualMoves = team[pokemonIndex].filter(
-                            function filterCB(moves){ return moves.move.name !== moveName; }) || null;
+            const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
+            console.log("Pokemon index: ", state.team[pokemonIndex].moves);
+            console.log("Found move index: ", moveIndex);
+            state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
             
 
         },

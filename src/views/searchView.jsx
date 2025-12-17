@@ -17,9 +17,11 @@ export function SearchView(props) {
       onOpen={props.handleOpen}
       onClose={closeEventACB}
       onClick={clickEventACB}
-      onInputChange={clickEventACB}
+      onInputChange={closeEventACB}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       getOptionLabel={(option) => option.name}
+      getOptionDisabled={(option) =>
+      option === props.team[0].name }
       options={props.options}
       loading={props.loading}
       disabled={props.teamLength >= 6}

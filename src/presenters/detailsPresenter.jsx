@@ -9,7 +9,9 @@ export function Details() {
         const  currentPokemonName = useSelector(
         (state) => state.poke.currentPokemonName
     );
-    function addActualMoveACB(moveName, slot){ dispatch(addActualMove(moveName, slot)) }
+    function addActualMoveACB(moveName, slot, pokemonIndex){
+        const moveNSlot = {moveName:moveName, slot:slot, pokemonIndex:pokemonIndex}; 
+        dispatch(addActualMove(moveNSlot)) }
 
     return <DetailsView team={team} currentPokemonName={currentPokemonName} addMove={addActualMoveACB}/>
 };

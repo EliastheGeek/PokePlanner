@@ -10,7 +10,8 @@ export function Search() {
     const open = useSelector((state) => state.poke.open);
     const loading = useSelector((state) => state.poke.loading);
     const showPokemonPromiseState = useSelector((state) => state.poke.showPokemonPromiseState);
-    const teamLength = useSelector((state) => state.poke.team.lenghth);
+    const teamLength = useSelector((state) => state.poke.team.length);
+    const team = useSelector((state) => state.poke.team);
     const handleOpen = () => {
         dispatch(setOpen(true));
         dispatch(showPokemon());
@@ -30,6 +31,7 @@ export function Search() {
                         loading = {loading} 
                         handleOpen ={handleOpen} 
                         handleClose ={handleClose} 
+                        team={team}
                         teamLength={teamLength} 
                         handleClick={handleClick}
             />

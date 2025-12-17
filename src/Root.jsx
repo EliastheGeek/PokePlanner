@@ -19,8 +19,8 @@ function makeRouter() {
             <div className="horizontalFlexParent">
                 <div className="mainAreaTest">
                     <div>
-                        <Team />
                         <Search />
+                        <Team />
                     </div>
                 </div>
                 <div className="pokeBotBox">
@@ -38,8 +38,9 @@ function makeRouter() {
       element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
-                            <Team />
+
                             <Search />
+                            <Team />
                         </div>
                     </div>
                     <div className="pokeBotBox">
