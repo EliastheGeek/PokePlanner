@@ -54,9 +54,9 @@ export default function MenuBarView(props) {
               textColor="primary"
               indicatorColor="primary"
               aria-label="primary tabs example">
-              <Tab value="one" label="Item One" />
-              <Tab value="two" label="Item Two" />
-              <Tab value="three" label="Item Three" />
+              <Tab value="one" label="Home" onClick={handleNavigate('#/')}/>
+              <Tab value="two" label="Team Builder" onClick={handleNavigate('#/team')}/>
+              <Tab value="three" label="Damage Calculator" onClick={handleNavigate('#/dmgcalc')}/>
             </Tabs>
           </Box>
           <Box className="burgerMenu" >
