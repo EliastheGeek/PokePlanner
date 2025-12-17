@@ -251,6 +251,49 @@
   padding: 16px 0;
 }
 
+/* ------------ */
+/* DETAILS VIEW */
+/* ------------ */
+
+.mainDetailsView {
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.horizontalFlexParentMainDetails {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 80vh;
+}
+
+.detailsView.withChat {
+  flex: 0.6;
+}
+
+.detailsView.fullWidth {
+  flex: 1.0;
+}
+
+.detailsPanel {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
 /* ---------------------- */
 /* CHAT INTERFACE STYLING */
 /* ---------------------- */
@@ -382,6 +425,9 @@
 
 .mainView,
 .horizontalFlexParentMain,
-.teamView {
+.teamView,
+.mainDetailsView,
+.horizontalFlexParentMainDetails,
+.detailsView {
   border: none !important;
 }

@@ -5,7 +5,7 @@ import { MainLayout } from "/src/presenters/mainLayout.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatBot } from "/src/presenters/chatPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
-import { Details } from "/src/presenters/detailsPresenter.jsx";
+import { MainDetailsLayout } from "/src/presenters/mainDetailsLayout.jsx";
 import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
 import { useSelector } from "react-redux"
 import "./style.css";
@@ -22,20 +22,20 @@ function makeRouter() {
         ),
     },
     {
-      path: "/login",
-      element: <Login />,
+        path: "/login",
+        element: <Login />,
     },
     {
-      path: "/team",
-      element: (
+        path: "/team",
+        element: (
             <div className="mainView">
                 <MainLayout />
             </div>
         ),
     },
     {
-      path: "/dmgcalc",
-      element: (<div className="horizontalFlexParent">
+        path: "/dmgcalc",
+        element: (<div className="horizontalFlexParent">
                     <div className="mainAreaTest">
                         <div>
                             <DamageCalculator />
@@ -47,23 +47,16 @@ function makeRouter() {
                 </div>),
     },
     {
-      path: "/details",
-      element: (<div className="horizontalFlexParent">
-                    <div className="mainAreaTest">
-                        <div>
-                            <div>
-                                <Details />
-                            </div>
-                        </div>  
-                    </div>
-                    <div className="pokeBotBox">
-                        <ChatBot />
-                    </div>
-                </div>),
+        path: "/details",
+        element: (
+                <div className="mainDetailsView">
+                    <MainDetailsLayout />
+                </div>
+        ),
     },
     {
-      path: "/login",
-      element: <Login />,
+        path: "/login",
+        element: <Login />,
     },
   ]);
 }

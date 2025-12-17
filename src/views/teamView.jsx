@@ -31,16 +31,9 @@ export function TeamView(props){
           props.onRemoveFromTeam(pokemon);
         }
 
-        function showMoreACB(evt){props.onClickPokemon(pokemon?.name);}//gå till detailview för pokemon
-
-        /*
-            return <tr key={pokemon?.id} onClick = {showMoreACB}>
-                     <td><button onClick = {onRemoveFromTeamACB}>x</button></td>
-                     <td><a href="#/details" >{<img src={pokemon?.sprites?.front_default}/> }</a></td>
-                     <td>{pokemon?.name}</td>
-                   </tr>;
-            
-        }*/
+        function showMoreACB(evt){
+          props.onClickPokemon(pokemon?.name);
+        }
 
         function clickPokemonACB(pokemon){
           props.onClickPokemon(pokemon);
@@ -48,16 +41,28 @@ export function TeamView(props){
 
         return (
             <div className="pokemonCard" key={pokemon.id}>
-              <button className="removeBtn" onClick={() => removeFromTeamACB(pokemon)}>×</button>
+
+              <button 
+                className="removeBtn" 
+                onClick={() => removeFromTeamACB(pokemon)}
+              >
+                ×
+              </button>
         
-              <div className="imageWrapper" onClick={showMoreACB}>
-                <img src={pokemon?.sprites?.front_default} alt={pokemon.name} />
+              <div
+                className="imageWrapper"
+                onClick={() => showMoreACB(pokemon)}
+              >
+                <img
+                  src={pokemon?.sprites?.front_default}
+                  alt={pokemon.name}
+                />
               </div>
         
               <h2 className="pokeName">{pokemon.name}</h2>
               <p className="pokeInfo"># {pokemon.id}</p>
               <p className="pokeInfo">
-                Type: {pokemon.types[0].type.name}
+                Type: {pokemon.types?.[0].type.name}
               </p>
             </div>
           );
