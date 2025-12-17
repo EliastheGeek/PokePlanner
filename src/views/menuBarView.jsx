@@ -9,6 +9,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import FaceIcon from '@mui/icons-material/Face';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
 
 export default function MenuBarView(props) {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
@@ -27,6 +30,14 @@ export default function MenuBarView(props) {
     handleMenuClose();
   };
 
+
+  const [value, setValue] = React.useState('one');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -35,50 +46,47 @@ export default function MenuBarView(props) {
         elevation={1}
       >
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
-          <IconButton
-            size="large"
-            aria-label="menu"
-            onClick={handleMenuClick}
-            sx={{
-              mr: 1,
-              borderRadius: 1,
-              px: 1.5,
-              py: 0.5,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.08)',
-              },
-            }}
-          >
+          <Typography className='appName' variant="h5" component="div" sx={{ flexGrow: 1 }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
+          <Box className="defultMenu">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              textColor="primary"
+              indicatorColor="primary"
+              aria-label="primary tabs example">
+              <Tab value="one" label="Home" onClick={handleNavigate('#/')}/>
+              <Tab value="two" label="Team Builder" onClick={handleNavigate('#/team')}/>
+              <Tab value="three" label="Damage Calculator" onClick={handleNavigate('#/dmgcalc')}/>
+            </Tabs>
+          </Box>
+          <Box className="burgerMenu" >
+            <IconButton
+              size="large"
+              aria-label="menu"
+              onClick={handleMenuClick}
+              sx={{ mr: 1, borderRadius: 1, px: 1.5,
+                py: 0.5, display: 'flex', alignItems: 'center',
+                gap: 1, '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.08)', }, }}>
             <Typography variant="h6" component="div">
-              Menu
+                Menu
             </Typography>
             <MenuIcon />
-          </IconButton>
-          <Menu
-            anchorEl={menuAnchorEl}
-            open={menuOpen}
-            onClose={handleMenuClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuItem onClick={handleNavigate('#/')}>Home</MenuItem>
-            <MenuItem onClick={handleNavigate('#/team')}>TeamBuilder</MenuItem>
-            <MenuItem onClick={handleNavigate('#/dmgcalc')}>Damage Calculator</MenuItem>
-          </Menu>
+              </IconButton>
+            <Menu
+              anchorEl={menuAnchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right',}}
+              transformOrigin={{vertical: 'top',horizontal: 'right',}}>
 
+              <MenuItem onClick={handleNavigate('#/')}>Home</MenuItem>
+              <MenuItem onClick={handleNavigate('#/team')}>TeamBuilder</MenuItem>
+              <MenuItem onClick={handleNavigate('#/dmgcalc')}>Damage Calculator</MenuItem>
+            </Menu>
+          </Box>
           {props.user ? 
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout<FaceIcon sx={{ ml:1 }} /></Button> :
-            <Button sx={{ backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLoginMenuACB }>Login</Button>
+            <Button sx={{ minWidth: 110, backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLogoutACB }>Logout<FaceIcon sx={{ ml:1 }} /></Button> :
+            <Button sx={{ minWidth: 110, display: 'flex', backgroundColor: '#424242', color: '#fff', '&:hover': { backgroundColor: '#2e2e2e', }, }} onClick={ handleLoginMenuACB }>Login</Button>
           }
         </Toolbar>
       </AppBar>

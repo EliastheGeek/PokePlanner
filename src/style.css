@@ -11,6 +11,8 @@
   box-sizing: border-box;
   transition: width 0.3s ease;
   overflow: hidden;
+  background-color: #e2e2e2;
+  height: 100%;
 }
 
 .horizontalFlexParentMain {
@@ -42,6 +44,29 @@
   flex-direction: column;
   gap: 16px;
   overflow-y: auto;
+  background-color: #ffffff;
+}
+/* ------- */
+/* MENUBAR */
+/* ------- */
+.defultMenu{
+  display: block;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-right: 20px;
+  min-width: 410px;
+}
+
+
+.burgerMenu { display: none; }
+.appName { display: flex; }
+
+@media (max-width: 699px) {
+  .defultMenu { display: none; }
+  .appName { display: none; }
+  .burgerMenu { display: block; }
 }
 
 /* ------- */
@@ -434,3 +459,4 @@
 .detailsView {
   border: none !important;
 }
+
