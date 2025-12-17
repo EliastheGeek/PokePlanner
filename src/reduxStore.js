@@ -49,6 +49,7 @@ const pokeSlice = createSlice({
             if (state.team.length < teamMaxSize) {
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
+                pokemon.stats.bonusStats = [];
                 state.team = [...state.team, pokemon];
             }
         },
@@ -65,7 +66,7 @@ const pokeSlice = createSlice({
         },
         addMoveInfo(state, action){
             const results = action.payload.results;
-            console.log("Adding move info in redux store", results);
+           // console.log("Adding move info in redux store", results);
             const pokemonIndex = action.payload.index;
             const slot = action.payload.slot;
             if (pokemonIndex === -1) return;

@@ -1,4 +1,4 @@
-import { doSearch,addToTeam} from "/src/reduxStore.js";
+import { doSearch,addToTeam, addMoveInfo} from "/src/reduxStore.js";
 import { searchPokemon, searchMove } from "/src/pokemonSource.js";
 
 export function doPokeThunk(pokeQuery) {
@@ -11,8 +11,8 @@ export function doPokeThunk(pokeQuery) {
 }
 export function doMoveThunk(moveNSlot) {
     return async function (dispatch, getState) {
-        if(!moveNSlot.name) return;
-        const results = await searchMove(moveNSlot.name);
+        if(!moveNSlot.moveName) return;
+        const results = await searchMove(moveNSlot.moveName);
         const moveData = {results: results, index: moveNSlot.pokemonIndex, slot: moveNSlot.slot};
         dispatch(addMoveInfo(moveData));
     }

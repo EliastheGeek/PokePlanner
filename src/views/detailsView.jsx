@@ -48,7 +48,7 @@ export function DetailsView(props) {
     );
 
     const pokemon = props.team?.[pokemonIndex];
-
+    const maxEV = 252;
     return (
     <div>
       <Box
@@ -95,7 +95,7 @@ export function DetailsView(props) {
             
             
             <h2>{props.team[pokemonIndex].name}</h2>
-            <img src={props.team[pokemonIndex].sprites?.front_default}/>
+            <img src={props.team[pokemonIndex].sprites?.front_default} width={150}/>
         </header>
 
             <div> 
@@ -113,26 +113,25 @@ export function DetailsView(props) {
                         {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
                     </ul>    
             </div>
-        {MoveList(0,pokemonIndex)}
-        {MoveInfo(0, pokemonIndex)}
+        {MoveList(0,pokemonIndex)}    
         {MoveList(1,pokemonIndex)}
         {MoveList(2,pokemonIndex)}
         {MoveList(3,pokemonIndex)}
-        {AbilityList()}
-        {InputSlider()}
+              {AbilityList()}
+
         </div>);
       }
     
     function printBaseStatsCB(stats) {
-        return <li key={stats.stat.name}>{stats.base_stat+" "+stats.stat.name}</li>;
+        return <li key={stats.stat.name}>{stats.base_stat +" "/* + stats.bonusStats.stat*/ + stats.stat.name} 
+                       {InputSlider(stats.stat)}</li>;
     }
     function printTeraTypesCB(types) {
         return <li key={types.type.name}>{types.type.name}</li>;
     }
     function MoveInfo(slot, index){
       const moveData = props.team[index]?.moveInfo[slot];
-      console.log("Rendering move info for slot ", slot, " : ", moveData);
-      if (moveData===undefined || moveData==0) return <div>No move info loaded</div>;
+      if (moveData===null) return <div>No move info loaded</div>;
       return (
         <div>
           <h3>Move Info:</h3>
@@ -149,13 +148,12 @@ export function DetailsView(props) {
 
 //addToMoveListACB får details sidan att byta vy till index 0 när man lägger till ett move
 function MoveList(slot,index) {
-  function addToMoveListACB(evt){ 
-    console.log("Selected move: ", evt.target.innerText, " for slot ", slot);
+  function addToMoveListACB(evt){
     props.addMove(evt.target.innerText, slot, index);
-    console.log("After dispatching addMove", props.team[index].actualMoves, index); //Uppdateras ett steg för sent?
   }
 
  return (
+  <div>
     <Autocomplete
       id="move-select"
       sx={{ width: 200 }}
@@ -164,13 +162,15 @@ function MoveList(slot,index) {
       /*getOptionDisabled={(option) =>
       option === props.team[index]?.moves[slot] }*/
       autoHighlight
-      onInputChange={addToMoveListACB}
+
       onChange={addToMoveListACB}
       getOptionLabel={(option) => option.move?.name || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
+
           <Box
+          
             key={key}
             component="li"
             sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
@@ -178,6 +178,8 @@ function MoveList(slot,index) {
           >
             {option.move?.name}
           </Box>
+
+
         );
       }}
 
@@ -193,7 +195,9 @@ function MoveList(slot,index) {
           }}
         />
       )}
+          
     />
+    {MoveInfo(slot, index)} </div>
   );
 }
 function AbilityList() {
@@ -236,12 +240,12 @@ function AbilityList() {
 
 
 
-function InputSlider() {
-  const [value, setValue] = React.useState(30);
+function InputSlider(stat) {
+  const [value, setValue] = React.useState(0);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
-    props.evChange(newValue);
+    props.evChange(newValue,stat);
   };
 
   const handleInputChange = (event) => {
@@ -251,8 +255,8 @@ function InputSlider() {
   const handleBlur = () => {
     if (value < 0) {
       setValue(0);
-    } else if (value > 255) {
-      setValue(255);
+    } else if (value > maxEV) {
+      setValue(maxEV);
     }
   };
 
@@ -266,7 +270,7 @@ function InputSlider() {
           <Slider
           defaultValue={0}
             min={0}
-            max={255}
+            max={maxEV}
             step={1}
             value={typeof value === 'number' ? value : 0}
             onChange={handleSliderChange}
@@ -282,7 +286,7 @@ function InputSlider() {
             inputProps={{
               step: 1,
               min: 0,
-              max: 255,
+              max: maxEV,
               type: 'number',
               'aria-labelledby': 'input-slider',
             }}
@@ -292,4 +296,5 @@ function InputSlider() {
     </Box>
   );
 }
+
 }
