@@ -235,7 +235,9 @@ const chatInitialState = {
         {location: "teamView", 
          query: "What's the best thing about my team?"},
         {location: "teamView", 
-         query: "Something else"}
+         query: "Something else"},
+        {location: "detailsView", 
+         query: "How do you like the attacks?"}
     ],
     loading: false,
     windowOpen: true,
