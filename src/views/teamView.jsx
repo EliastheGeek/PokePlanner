@@ -62,9 +62,13 @@ export function TeamView(props){
               <h2 className="pokeName">{pokemon.name}</h2>
               <p className="pokeInfo"># {pokemon.id}</p>
               <p className="pokeInfo">
-                Type: {pokemon.types?.[0].type.name}
+                Type: {pokemon.types?.map(printTeraTypesCB)}
               </p>
             </div>
           );
         }
+        
+    function printTeraTypesCB(types) {
+        return <li key={types.type.name}>{types.type.name}</li>;
+    }
 }
