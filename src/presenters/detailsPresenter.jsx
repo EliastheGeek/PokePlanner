@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { DetailsView } from "/src/views/detailsView.jsx";
-
+import { addActualMove } from "/src/reduxStore.js";
 export function Details() {
     const dispatch = useDispatch();
         const team = useSelector(
@@ -9,7 +9,7 @@ export function Details() {
         const  currentPokemonName = useSelector(
         (state) => state.poke.currentPokemonName
     );
-    team.filter(function keepOneCB(team){team.name === currentPokemonName})
-    const pokemon = team[0];
-    return <DetailsView pokemon={pokemon}/>
+    function addActualMoveACB(moveName, slot){ dispatch(addActualMove(moveName, slot)) }
+
+    return <DetailsView team={team} currentPokemonName={currentPokemonName} addMove={addActualMoveACB}/>
 };

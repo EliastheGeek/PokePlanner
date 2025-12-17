@@ -41,16 +41,32 @@ const pokeSlice = createSlice({
     initialState: initialState,
     reducers: {
         addToTeam(state, action){
-            if(state.team.length<teamMaxSize){state.team = [...state.team, action.payload];}
+            const pokemon = action.payload;
+            if (!pokemon) return;
+            // avoid duplicates
+            if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
+            if (state.team.length < teamMaxSize) {
+                state.team = [...state.team, pokemon];
+            }
+        },
+        addActualMove(state, action){
+            console.log("Adding actual move in redux store", action.payload);
+            const moveName = action.payload;
+            const pokemonIndex = state.team.findIndex(p => p.name === state.currentPokemonName);
+            if (pokemonIndex === -1) return;
+            state.team[pokemonIndex].actualMoves = team[pokemonIndex].filter(
+                            function filterCB(moves){ return moves.move.name !== moveName; }) || null;
+            
+
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
-                return pokemon.id !== action.payload.id;
+                return pokemon?.id !== action.payload.id;
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        currentPokemon(state,action){
-            state.currentPokemonName = action.payload.name;
+        setCurrentPokemonName(state,action){
+            state.currentPokemonName = action.payload;
         },
         setSearchQuery(state, action) {
             state.searchParams.query = action.payload;
@@ -64,6 +80,9 @@ const pokeSlice = createSlice({
         },
         setOpen(state, action) {
             state.open = action.payload;
+        },
+        setOptions(state, action) {
+            state.showPokemonPromiseState.data = action.payload;
         },
         //Authentication
         setCurrentEmail(state, action){
@@ -165,8 +184,9 @@ const pokeSlice = createSlice({
 
 export const {
     addToTeam,
+    addActualMove,
     removeFromTeam,
-    currentPokemon,
+    setCurrentPokemonName,
 
     //Search
     setSearchQuery,
@@ -300,10 +320,9 @@ listenerMiddleware.startListening(
     type: 'poke/doSearch',
     effect(action, store){  
         const params = action.payload;
-
+        if(!params) return;
         const promise = searchPokemon(params);
         store.dispatch(searchStarted(promise))
-
         if (!promise) return;
         promise
             .then((data) => {
@@ -313,7 +332,8 @@ listenerMiddleware.startListening(
                 store.dispatch(searchRejected({promise,error}));
             })
     }
-})
+}
+)
 
 listenerMiddleware.startListening(
 {
@@ -332,3 +352,4 @@ listenerMiddleware.startListening(
             })
     }
 })
+
