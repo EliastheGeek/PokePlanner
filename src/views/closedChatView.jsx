@@ -1,3 +1,6 @@
+import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import pokeBotRight from "/src/assets/pokeBotRight.png";
+
 export function ClosedChatView(props) {
 
     function toggleChatACB() {
@@ -7,8 +10,7 @@ export function ClosedChatView(props) {
     const preparedPrompts = props.preparedPrompts ?? [];
 
     return (
-        <>
-          {/* 👇 Prepared prompts when chat is CLOSED */}
+        <div className='closedChatView'>
           {preparedPrompts.length > 0 && (
             <div className="preparedPromptClosedFloating">
               {preparedPrompts.map((q, i) => (
@@ -27,8 +29,9 @@ export function ClosedChatView(props) {
             className="chatRestoreBtn"
             onClick={toggleChatACB}
           >
-            💬
+            PokéBot
+            <img src={pokeBotRight} width={60}/>
           </button>
-        </>
+        </div>
     );
 }

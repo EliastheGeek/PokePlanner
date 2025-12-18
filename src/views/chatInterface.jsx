@@ -20,6 +20,8 @@ import {
   PromptInputToolbar,
 } from "@/components/ui/shadcn-io/ai/prompt-input";
 
+import pokeBotLeft from "/src/assets/pokeBotLeft.png";
+
 /*
 MUI
 */
@@ -65,11 +67,12 @@ export function ChatInterface(props) {
       <div className="chatHeader">
         <button
           type="button"
-          className="minimizeBtn"
+          className="minimizeBtn flex items-center gap-2"
           onClick={toggleChatACB}
           aria-label="Minimize chat"
         >
           <ExpandMoreIcon fontSize="large" />
+          <img src={pokeBotLeft} width={60} alt="PokeBot" />
         </button>
 
         <b className="chatTitle">PokéBot</b>
