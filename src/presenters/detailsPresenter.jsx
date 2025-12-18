@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setCurrentPokemonName } from "/src/reduxStore.js";
+import { addActualMove, setCurrentPokemonName, setEVstat } from "/src/reduxStore.js";
 import { doMoveThunk } from "/src/store/searchThunks.js";
 export function Details() {
 
@@ -18,6 +18,9 @@ export function Details() {
         dispatch(addActualMove(moveNSlot))
         dispatch(doMoveThunk(moveNSlot))
     }
-    function evChangeACB(pokemonIndex, statName, newValue){}
+    function evChangeACB(newValue, statName, pokemonIndex){
+        const evChangeInfo = {newValue:newValue, statName:statName, pokemonIndex:pokemonIndex};
+        dispatch(setEVstat(evChangeInfo));
+    }
     return <DetailsView team={team} currentPokemonName={currentPokemonName} addMove={addActualMoveACB} evChange={evChangeACB}/>;
 };

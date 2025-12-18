@@ -123,8 +123,8 @@ export function DetailsView(props) {
       }
     
     function printBaseStatsCB(stats) {
-        return <li key={stats.stat.name}>{stats.base_stat +" "/* + stats.bonusStats.stat*/ + stats.stat.name} 
-                       {InputSlider(stats.stat)}</li>;
+        return <li key={stats.stat.name}>{stats.base_stat +" + " /*+ stats.bonusStats.stat*/ + stats.stat.name} 
+                       {InputSlider(stats.stat.name)}</li>;
     }
     function printTeraTypesCB(types) {
         return <li key={types.type.name}>{types.type.name}</li>;
@@ -240,12 +240,12 @@ function AbilityList() {
 
 
 
-function InputSlider(stat) {
+function InputSlider(statName) {
   const [value, setValue] = React.useState(0);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
-    props.evChange(newValue,stat);
+    props.evChange(newValue,statName,pokemonIndex);
   };
 
   const handleInputChange = (event) => {

@@ -78,6 +78,16 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
+        setEVstat(state, action){
+            const pokemonIndex = action.payload.pokemonIndex;
+            const statName = action.payload.statName;
+            const newValue = action.payload.newValue;
+            if (pokemonIndex === -1) return;
+                const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ return stats.stat.name === statName; });
+            if (statIndex !== -1) {
+                state.team[pokemonIndex].stats[statIndex].bonusStats = newValue;
+            }
+        },
         setCurrentPokemonName(state,action){
             state.currentPokemonName = action.payload;
         },
@@ -201,6 +211,7 @@ export const {
     addMoveInfo,
     removeFromTeam,
     setCurrentPokemonName,
+    setEVstat,
 
     //Search
     setSearchQuery,
