@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setCurrentPokemonName, setEVstat, setAbility } from "/src/reduxStore.js";
+import { addActualMove, setCurrentPokemon, setEVstat, setAbility } from "/src/reduxStore.js";
 import { doMoveThunk } from "/src/store/searchThunks.js";
 
 export function Details() {
