@@ -25,13 +25,6 @@ export function MainLayout() {
     dispatch(toggleChatWindow());
   }
 
-  function runPreparedQueryACB(query) {
-    if (!chatOpen) {
-      dispatch(toggleChatWindow());
-    }
-    dispatch(doPromptThunk(query));
-  }
-
   return (
     <div className="horizontalFlexParentMain">
       <div className={`teamView ${chatOpen ? "withChat" : "fullWidth"}`}>

@@ -14,6 +14,8 @@ const Input = styled(MuiInput)`width: 42px;`;
 
 export function DetailsView(props) {
 
+    const { pokemon, pokemonIndex, team, onNext, onPrevious } = props;
+
     function backToTeamACB(){
         window.location.hash = "#/team";
     }
@@ -37,18 +39,8 @@ export function DetailsView(props) {
       });
     }
 
-    const initialIndex = props.team.findIndex(
-      function findOneCB(team){
-        return props.currentPokemonName === team.name;
-      }
-    );
-
-    const [pokemonIndex, setPokemonIndex] = useState(
-      initialIndex >= 0 ? initialIndex : 0
-    );
-
-    const pokemon = props.team?.[pokemonIndex];
     const maxEV = 252;
+
     return (
     <div>
       <Box
@@ -70,14 +62,14 @@ export function DetailsView(props) {
 
         <button 
           className="prevPokeBtn"
-          onClick={previousPokemonACB} 
+          onClick={onPrevious} 
           disabled={pokemonIndex<=0}
           >Previous
         </button>
         
         <button 
           className="nextPokeBtn" 
-          onClick={nextPokemonACB} 
+          onClick={onNext} 
           disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}
           >Next
         </button>
@@ -88,38 +80,44 @@ export function DetailsView(props) {
     );
 
     function printStats() {
-      if (!props.team || !props.team[pokemonIndex]) return null;
-     return ( 
-      <div>
-      <header>
-            
-            
-            <h2>{props.team[pokemonIndex].name}</h2>
-            <img src={props.team[pokemonIndex].sprites?.front_default} width={150}/>
-        </header>
+      return ( 
+        <div>
+          {!pokemon ? (
+            <div>No Pokémon selected</div>
+          ) : (
+          <div>
+            <header>
+              
+              
+              <h2>{pokemon.name}</h2>
+              <img src={pokemon.sprites?.front_default} width={150}/>
+            </header>
 
-            <div> 
-                <aside>
-                <h3>Stats:</h3>
-                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                    {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
-                </ul>
-                </aside>
-            </div>
+              <div> 
+                  <aside>
+                  <h3>Stats:</h3>
+                  <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                      {pokemon.stats?.map(printBaseStatsCB)}
+                  </ul>
+                  </aside>
+              </div>
 
-            <div>
-                <h3>Tera Type:</h3>
-                    <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                        {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
-                    </ul>    
-            </div>
-        {MoveList(0,pokemonIndex)}    
-        {MoveList(1,pokemonIndex)}
-        {MoveList(2,pokemonIndex)}
-        {MoveList(3,pokemonIndex)}
-              {AbilityList()}
+              <div>
+                  <h3>Tera Type:</h3>
+                      <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                          {pokemon.types?.map(printTeraTypesCB)}
+                      </ul>    
+              </div>
+                {MoveList(0,pokemonIndex)}    
+                {MoveList(1,pokemonIndex)}
+                {MoveList(2,pokemonIndex)}
+                {MoveList(3,pokemonIndex)}
+                {AbilityList()}
 
-        </div>);
+          </div>)}
+        </div>
+      );
+
       }
     
     function printBaseStatsCB(stats) {
