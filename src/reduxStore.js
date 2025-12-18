@@ -490,7 +490,7 @@ const chatSlice = createSlice({
             state.messages = [];
             state.loading = false;
             state.error = null;
-            state.includeTeam = false;
+            state.includeTeam = true;
         }
     }
 })
