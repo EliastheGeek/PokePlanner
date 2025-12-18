@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import React, { useState, useEffect } from "react";
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -54,26 +56,12 @@ export function DetailsView(props) {
             gap: 1,
           }}
         >
-
-        <button 
-          className="backToTeamViewBtn"
-          onClick={backToTeamACB}
-          >Back to team builder
-        </button>
-
-        <button 
-          className="prevPokeBtn"
-          onClick={onPrevious} 
-          disabled={pokemonIndex<=0}
-          >Previous
-        </button>
+        <ButtonGroup variant="outlined" aria-label="Basic button group">
+          <Button className="backToTeamViewBtn" onClick={backToTeamACB}>Back to team builder</Button>
+          <Button className="prevPokeBtn" onClick={previousPokemonACB} disabled={pokemonIndex<=0}>Previous</Button>
+          <Button className="nextPokeBtn" onClick={nextPokemonACB} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</Button>
+        </ButtonGroup>
         
-        <button 
-          className="nextPokeBtn" 
-          onClick={onNext} 
-          disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}
-          >Next
-        </button>
         </Box>
         <Box>
         {printStats()}
@@ -82,44 +70,43 @@ export function DetailsView(props) {
     );
 
     function printStats() {
-      return ( 
-        <div>
-          {!pokemon ? (
-            <div>No Pokémon selected</div>
-          ) : ( 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2}}>
-            <Box sx={{ display: "flex" }}> 
-              <h2>{props.team[pokemonIndex].name}</h2>
-              <img src={props.team[pokemonIndex].sprites?.front_default} width={150}/>
+      if (!props.team || !props.team[pokemonIndex]) return null;
+     return ( 
+          <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <h2 style={{ margin: 0 }}>{props.team[pokemonIndex].name}</h2>
+              <img
+                src={props.team[pokemonIndex].sprites?.front_default}
+                width={150}
+                alt={props.team[pokemonIndex].name}
+              />
             </Box>
-            <Box sx={{ display: "flex" }}>
-              <div> 
-                  <aside>
-                  <h3>Stats:</h3>
-                  <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                      {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
-                  </ul>
-                  </aside>
-              </div>
 
-              <div>
-                  <h3>Tera Type:</h3>
-                      <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                          {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
-                      </ul>    
-              </div>
-            </Box>
-            <Box sx={{ display: "flex" }}> 
-                {MoveList(0,pokemonIndex)}    
-                {MoveList(1,pokemonIndex)}
-                {MoveList(2,pokemonIndex)}
-                {MoveList(3,pokemonIndex)}
-                {AbilityList(pokemonIndex)}
-            </Box>
-          </Box>)}
-        </div>
-      );
+            <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
+              <Box component="aside">
+                <h3>Stats:</h3>
+                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                  {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
+                </ul>
+              </Box>
 
+              <Box>
+                <h3>Tera Type:</h3>
+                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                  {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
+                </ul>
+              </Box>
+            </Box>
+
+            <Box sx={{gridColumn: "1 / -1", display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
+              {MoveList(0, pokemonIndex)}
+              {MoveList(1, pokemonIndex)}
+              {MoveList(2, pokemonIndex)}
+              {MoveList(3, pokemonIndex)}
+              {AbilityList()}
+            </Box>
+          </Box>
+        );
       }
     
     function printBaseStatsCB(stats) {

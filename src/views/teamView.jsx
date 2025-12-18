@@ -27,6 +27,7 @@ export function TeamView(props){
                         <img 
                             src={pokeSilhouette}
                             width={80}/>
+                            <b>Add Pokemon +</b>
                     </div>
                     )
                 )}
