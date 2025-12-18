@@ -17,10 +17,7 @@ export function MainDetailsLayout() {
 
   const context = useSelector(state => state.chat.context);
   const chatOpen = useSelector(state => state.chat.windowOpen);
-  const preparedPrompts = useSelector(state =>
-    state.chat.preparedPrompts.filter(q => q.context === context)
-  );
-
+  const preparedPrompts = useSelector(state => state.chat.preparedPrompts);
   const visiblePreparedPrompts = preparedPrompts.filter(q => q.context === context);
 
   function toggleChatACB() {

@@ -145,7 +145,7 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        setCurrentPokemon(state,action){state.currentPokemonName = action.payload.name;},
+        setCurrentPokemon(state,action){state.currentPokemonName = action.payload;},
         setSearchQuery(state, action) {state.searchParams.query = action.payload;},
 
         doSearch(state, action) {
