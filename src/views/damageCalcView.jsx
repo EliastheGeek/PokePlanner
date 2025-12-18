@@ -18,6 +18,38 @@ export function DamageCalcView(props) {
     const weatherValue = props.weather && props.weather !== "" ? props.weather : "None";
     const terrainValue = props.terrain && props.terrain !== "" ? props.terrain : "None";
 
+    const NATURES = [
+        { name: "Hardy", plus: null, minus: null },
+        { name: "Lonely", plus: "Atk", minus: "Def" },
+        { name: "Brave", plus: "Atk", minus: "Spe" },
+        { name: "Adamant", plus: "Atk", minus: "SpA" },
+        { name: "Naughty", plus: "Atk", minus: "SpD" },
+
+        { name: "Bold", plus: "Def", minus: "Atk" },
+        { name: "Docile", plus: null, minus: null },
+        { name: "Relaxed", plus: "Def", minus: "Spe" },
+        { name: "Impish", plus: "Def", minus: "SpA" },
+        { name: "Lax", plus: "Def", minus: "SpD" },
+
+        { name: "Timid", plus: "Spe", minus: "Atk" },
+        { name: "Hasty", plus: "Spe", minus: "Def" },
+        { name: "Serious", plus: null, minus: null },
+        { name: "Jolly", plus: "Spe", minus: "SpA" },
+        { name: "Naive", plus: "Spe", minus: "SpD" },
+
+        { name: "Modest", plus: "SpA", minus: "Atk" },
+        { name: "Mild", plus: "SpA", minus: "Def" },
+        { name: "Quiet", plus: "SpA", minus: "Spe" },
+        { name: "Bashful", plus: null, minus: null },
+        { name: "Rash", plus: "SpA", minus: "SpD" },
+
+        { name: "Calm", plus: "SpD", minus: "Atk" },
+        { name: "Gentle", plus: "SpD", minus: "Def" },
+        { name: "Sassy", plus: "SpD", minus: "Spe" },
+        { name: "Careful", plus: "SpD", minus: "SpA" },
+        { name: "Quirky", plus: null, minus: null },
+    ];
+
     return (
         <form onSubmit={submitHandlerACB} style={{ height: "100%" }}>
             <Box
@@ -231,7 +263,22 @@ export function DamageCalcView(props) {
 
                             <TextField label="Ability" fullWidth value={props.attackerAbility} onChange={attackerAbilityChangeACB} />
                             <TextField label="Item" fullWidth value={props.attackerItem} onChange={attackerItemChangeACB} />
-                            <TextField label="Nature" fullWidth value={props.attackerNature} onChange={attackerNatureChangeACB} />
+                            
+
+                            
+                            <TextField 
+                                select
+                                label="Nature" 
+                                size="small" 
+                                value={props.attackerNature} 
+                                onChange={attackerNatureChangeACB} 
+                            >
+                                {NATURES.map((n) => (
+                                    <MenuItem key={n.name} value={n.name}>
+                                        {n.name}{n.plus ? ` (+${n.plus}, -${n.minus})` : ""}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
 
                             <TextField
                                 select
@@ -883,7 +930,20 @@ export function DamageCalcView(props) {
 
                             <TextField label="Ability" fullWidth value={props.defenderAbility} onChange={defenderAbilityChangeACB} />
                             <TextField label="Item" fullWidth value={props.defenderItem} onChange={defenderItemChangeACB} />
-                            <TextField label="Nature" fullWidth value={props.defenderNature} onChange={defenderNatureChangeACB} />
+                            
+                            <TextField
+                                select
+                                label="Nature" 
+                                size="small" 
+                                value={props.defenderNature} 
+                                onChange={defenderNatureChangeACB} 
+                            >
+                                {NATURES.map((n) => (
+                                    <MenuItem key={n.name} value={n.name}>
+                                        {n.name}{n.plus ? ` (+${n.plus}, -${n.minus})` : ""}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
 
                             <TextField
                                 select
