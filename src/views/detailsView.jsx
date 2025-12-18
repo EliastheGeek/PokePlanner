@@ -84,7 +84,7 @@ export function DetailsView(props) {
               {MoveList(1, pokemonIndex)}
               {MoveList(2, pokemonIndex)}
               {MoveList(3, pokemonIndex)}
-              {AbilityList()}
+              {AbilityList(pokemonIndex)}
             </Box>
           </Box>
         );

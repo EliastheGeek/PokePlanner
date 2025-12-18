@@ -146,7 +146,7 @@ const pokeSlice = createSlice({
         },
         setCurrentPokemon(state,action){state.currentPokemonName = action.payload;},
 
-        setEVstat(state, action){
+        setEVstat(state, action){ 
             const pokemonIndex = action.payload.pokemonIndex;
             const statName = action.payload.statName;
             const newValue = action.payload.newValue;
@@ -159,6 +159,7 @@ const pokeSlice = createSlice({
             }
         },
         setAbility(state, action){
+            console.log("setAbility called", action.payload);
             const pokemonIndex = action.payload.pokemonIndex;
             const abilityName = action.payload.abilityName;
             if (pokemonIndex === -1) return;
