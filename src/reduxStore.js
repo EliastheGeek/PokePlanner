@@ -160,6 +160,7 @@ const pokeSlice = createSlice({
         //Authentication
         setCurrentEmail(state, action){state.currentEmail = action.payload;},
         setCurrentPassword(state, action){state.currentPassword = action.payload;},
+        setAuthError(state, action) {state.authError = action.payload;},
 
         // Damage calculator
         setDamageAttackerName(state, action) { state.damageAttackerName = action.payload; },
