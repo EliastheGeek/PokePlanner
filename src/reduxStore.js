@@ -137,10 +137,9 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        currentPokemon(state,action){state.currentPokemonName = action.payload.name;},
-        //Search 
+        setCurrentPokemon(state,action){state.currentPokemonName = action.payload.name;},
         setSearchQuery(state, action) {state.searchParams.query = action.payload;},
-        
+
         doSearch(state, action) {
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
@@ -315,7 +314,7 @@ export const {
     addToTeam,
     addActualMove,
     removeFromTeam,
-    setCurrentPokemonName,
+    setCurrentPokemon,
 
     //Search
     setSearchQuery,

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setCurrentPokemonName } from "/src/reduxStore.js";
+import { addActualMove, setCurrentPokemon } from "/src/reduxStore.js";
 
 export function Details() {
 

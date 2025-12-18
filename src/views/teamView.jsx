@@ -39,11 +39,7 @@ export function TeamView(props){
           props.onRemoveFromTeam(pokemon);
         }
 
-        function showMoreACB(evt){
-          props.onClickPokemon(pokemon?.name);
-        }
-
-        function clickPokemonACB(pokemon){
+        function showMoreACB(pokemon){
           props.onClickPokemon(pokemon);
         }
 

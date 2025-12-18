@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { TeamView } from "/src/views/teamView.jsx";
-import {addToTeam,removeFromTeam, setCurrentPokemonName, setOpen, showPokemon} from "/src/reduxStore.js";
+import {addToTeam,removeFromTeam, setCurrentPokemon, setOpen, showPokemon} from "/src/reduxStore.js";
 
 export function Team(){
     const dispatch = useDispatch();
@@ -27,8 +27,9 @@ export function Team(){
         dispatch(removeFromTeam(param));
     }
 
-    function showDetailsACB(name){
-        dispatch(setCurrentPokemonName(name));
+    function showDetailsACB(pokemon){
+        console.log(pokemon);
+        dispatch(setCurrentPokemon(pokemon.name));
         navigate(`/details`);
     }
 };
