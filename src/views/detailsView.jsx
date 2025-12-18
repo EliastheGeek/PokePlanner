@@ -50,7 +50,7 @@ export function DetailsView(props) {
     </div>
     );
 
-    function printStats() {
+  function printStats() {
       if (!props.team || !pokemon) return null;
      return ( 
           <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
@@ -88,15 +88,17 @@ export function DetailsView(props) {
             </Box>
           </Box>
         );
-      }
+  }
     
     function printBaseStatsCB(stats) {
         return <li key={stats.stat.name}>{stats.base_stat +" + " + (stats.bonusStats?stats.bonusStats:0)+ " " + stats.stat.name} 
                        {InputSlider(stats.stat.name)}</li>;
     }
+
     function printTeraTypesCB(types) {
         return <li key={types.type.name}>{types.type.name}</li>;
     }
+
     function MoveInfo(slot, index){
       const moveData = props.team[index]?.moveInfo[slot];
       if (moveData===null) return <div>No move info loaded</div>;
@@ -116,6 +118,7 @@ export function DetailsView(props) {
 
 //addToMoveListACB får details sidan att byta vy till index 0 när man lägger till ett move
 function MoveList(slot,index) {
+
   function addToMoveListACB(evt){
     props.addMove(evt.target.innerText, slot, index);
   }
@@ -168,10 +171,12 @@ function MoveList(slot,index) {
     {MoveInfo(slot, index)} </div>
   );
 }
+
 function AbilityList(index) {
-function addToAbilityListACB(evt){
-  props.setAbility(evt.target.innerText, index);
-}
+
+  function addToAbilityListACB(evt){
+    props.setAbility(evt.target.innerText, index);
+  }
   return (
     <div> 
     <Autocomplete
@@ -207,7 +212,8 @@ function addToAbilityListACB(evt){
         />
       )}
     />
-    <div>Chosen ability: {pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name||<div>None</div>}</div>
+    <div>Chosen ability: {pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name}</div>
+    <div>Description: {pokemon?.abilities?.find(ab => ab.chosen)?.description||<div>No ability chosen</div>}</div>
     </div>
   );
 }

@@ -150,22 +150,27 @@ const pokeSlice = createSlice({
             const pokemonIndex = action.payload.pokemonIndex;
             const statName = action.payload.statName;
             const newValue = action.payload.newValue;
+
             if (pokemonIndex === -1) return;
-                const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ return stats.stat.name === statName; });
+                const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ 
+                    return stats.stat.name === statName; });
             if (statIndex !== -1) {
-                // store the whole number (rounded down) of newValue/4
                 const value = Math.floor(Number(newValue) / 4);
                 state.team[pokemonIndex].stats[statIndex].bonusStats = value;
             }
         },
         setAbility(state, action){
-            console.log("setAbility called", action.payload);
-            const pokemonIndex = action.payload.pokemonIndex;
-            const abilityName = action.payload.abilityName;
+            const results = action.payload.results;
+            const pokemonIndex = action.payload.index;
+            const abilityName = results.name;
+
             if (pokemonIndex === -1) return;
-            state.team[pokemonIndex].abilities.forEach(function resetChosenCB(abilities){ abilities.chosen = false; });
-            const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ return abilities.ability.name === abilityName; });
+            state.team[pokemonIndex].abilities.forEach(function resetChosenCB(abilities){ 
+                abilities.chosen = false; });
+            const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ 
+                return abilities.ability.name === abilityName; });
             state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
+            state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(entry => entry.language.name === "en")?.effect || "";
         },
         setCurrentPokemonName(state,action){
             state.currentPokemonName = action.payload;

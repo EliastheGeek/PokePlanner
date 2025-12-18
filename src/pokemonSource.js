@@ -1,3 +1,4 @@
+//TODO Baka ihop searches till en metod
 export function searchPokemon(searchParams) {//searchparams är pokemon namn
     const url = "https://pokeapi.co/api/v2/pokemon/" + searchParams;
     const options = {
@@ -16,6 +17,16 @@ export function searchMove(searchParams) {//searchparams är move namn
     };
     return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
     function errorACB(error){ console.log("Error in searchMove: ", error);}
+    function responseACB(response) {return response.json();}
+    function resultACB(result) { return result;}
+}
+export function searchAbility(searchParams) {//searchparams är ability namn
+    const url = "https://pokeapi.co/api/v2/ability/" + searchParams;
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
+    function errorACB(error){ console.log("Error in searchAbility: ", error);}
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
 }

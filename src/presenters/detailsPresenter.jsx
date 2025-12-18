@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { DetailsView } from "/src/views/detailsView.jsx";
 import { addActualMove, setCurrentPokemon, setEVstat, setAbility } from "/src/reduxStore.js";
-import { doMoveThunk } from "/src/store/searchThunks.js";
+import { doMoveThunk, doAbilityThunk } from "/src/store/searchThunks.js";
 
 export function Details() {
 
@@ -46,13 +46,13 @@ export function Details() {
         dispatch(doMoveThunk(moveNSlot))
     }
 
-    function evChangeACB(pokemonIndex, statName, newValue){
+    function evChangeACB(newValue, statName, pokemonIndex){
         const evChangeInfo = {newValue:newValue, statName:statName, pokemonIndex:pokemonIndex};
         dispatch(setEVstat(evChangeInfo));
     }
     function setAbilityACB(abilityName, pokemonIndex){
         const abilityInfo = {abilityName:abilityName, pokemonIndex:pokemonIndex};
-        dispatch(setAbility(abilityInfo));
+        dispatch(doAbilityThunk(abilityInfo));
     }
     useEffect(() => {
         if (team.length === 0) return;
