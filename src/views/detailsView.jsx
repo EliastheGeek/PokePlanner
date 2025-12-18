@@ -123,7 +123,7 @@ export function DetailsView(props) {
       }
     
     function printBaseStatsCB(stats) {
-        return <li key={stats.stat.name}>{stats.base_stat +" + " /*+ stats.bonusStats.stat*/ + stats.stat.name} 
+        return <li key={stats.stat.name}>{stats.base_stat +" + " + (stats.bonusStats?stats.bonusStats:0)+ " " + stats.stat.name} 
                        {InputSlider(stats.stat.name)}</li>;
     }
     function printTeraTypesCB(types) {
@@ -271,7 +271,7 @@ function InputSlider(statName) {
           defaultValue={0}
             min={0}
             max={maxEV}
-            step={1}
+            step={6}
             value={typeof value === 'number' ? value : 0}
             onChange={handleSliderChange}
             aria-labelledby="input-slider"

@@ -49,24 +49,22 @@ const pokeSlice = createSlice({
             if (state.team.length < teamMaxSize) {
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
-                pokemon.stats.bonusStats = [];
+                if (Array.isArray(pokemon.stats)) {
+                    pokemon.stats = pokemon.stats.map(s => ({ ...s, bonusStats: 0 }));
+                }
                 state.team = [...state.team, pokemon];
             }
         },
         addActualMove(state, action){
-        //    console.log("Adding actual move in redux store", action.payload);
             const moveName = action.payload.moveName;
             const pokemonIndex = action.payload.pokemonIndex;
             const slot =action.payload.slot
             if (pokemonIndex === -1) return;
             const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
-        //    console.log("Pokemon index: ", state.team[pokemonIndex].moves);
-        //    console.log("Found move index: ", moveIndex);
             state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
         },
         addMoveInfo(state, action){
             const results = action.payload.results;
-           // console.log("Adding move info in redux store", results);
             const pokemonIndex = action.payload.index;
             const slot = action.payload.slot;
             if (pokemonIndex === -1) return;
@@ -85,7 +83,9 @@ const pokeSlice = createSlice({
             if (pokemonIndex === -1) return;
                 const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ return stats.stat.name === statName; });
             if (statIndex !== -1) {
-                state.team[pokemonIndex].stats[statIndex].bonusStats = newValue;
+                // store the whole number (rounded down) of newValue/4
+                const value = Math.floor(Number(newValue) / 4);
+                state.team[pokemonIndex].stats[statIndex].bonusStats = value;
             }
         },
         setCurrentPokemonName(state,action){
