@@ -4,7 +4,18 @@ export function searchPokemon(searchParams) {//searchparams är pokemon namn
         method: "GET",
     };
     return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
-function errorACB(error){ console.log("Error in searchPokemon: ", error);}
+    function errorACB(error){ console.log("Error in searchPokemon: ", error);}
+    function responseACB(response) {return response.json();}
+    function resultACB(result) { return result;}
+}
+
+export function searchMove(searchParams) {//searchparams är move namn
+    const url = "https://pokeapi.co/api/v2/move/" + searchParams;
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
+    function errorACB(error){ console.log("Error in searchMove: ", error);}
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
 }

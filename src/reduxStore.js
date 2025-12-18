@@ -115,21 +115,29 @@ const pokeSlice = createSlice({
             if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
             if (state.team.length < teamMaxSize) {
                 pokemon.actualMoves = [null, null, null, null];
+                pokemon.moveInfo = [null, null, null, null];
+                pokemon.stats.bonusStats = [];
                 state.team = [...state.team, pokemon];
             }
         },
         addActualMove(state, action){
-            console.log("Adding actual move in redux store", action.payload);
+        //    console.log("Adding actual move in redux store", action.payload);
             const moveName = action.payload.moveName;
             const pokemonIndex = action.payload.pokemonIndex;
             const slot =action.payload.slot
             if (pokemonIndex === -1) return;
             const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
-            console.log("Pokemon index: ", state.team[pokemonIndex].moves);
-            console.log("Found move index: ", moveIndex);
+        //    console.log("Pokemon index: ", state.team[pokemonIndex].moves);
+        //    console.log("Found move index: ", moveIndex);
             state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
-            
-
+        },
+        addMoveInfo(state, action){
+            const results = action.payload.results;
+           // console.log("Adding move info in redux store", results);
+            const pokemonIndex = action.payload.index;
+            const slot = action.payload.slot;
+            if (pokemonIndex === -1) return;
+            state.team[pokemonIndex].moveInfo[slot] = results;
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
@@ -313,6 +321,7 @@ const pokeSlice = createSlice({
 export const {
     addToTeam,
     addActualMove,
+    addMoveInfo,
     removeFromTeam,
     setCurrentPokemon,
 
