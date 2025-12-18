@@ -133,9 +133,9 @@
   flex-direction: column;
 }
 
-/* ----------------------- */
-/* PREPARED PROMPT BUBBLES */
-/* ----------------------- */
+/* ----------------------------------------- */
+/* PREPARED PROMPT BUBBLES (OPEN CHAT WINDOW)*/
+/* ----------------------------------------- */
 
 .preparedPromptContainer {
   bottom: 72px;
@@ -159,6 +159,42 @@
 
 .preparedPromptBubble:hover {
   background: #e0e0e0;
+}
+
+/* ------------------------------------------- */
+/* PREPARED PROMPT BUBBLES (CLOSED CHAT WINDOW)*/
+/* ------------------------------------------- */
+
+.preparedPromptClosedFloating {
+  position: fixed;
+  right: 20px;
+  bottom: 80px; /* ABOVE the chat bubble button */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 20;
+}
+
+.preparedPromptClosedBubble {
+  background: #3a3a3a;
+  color: #f5f5f5; 
+
+  border-radius: 16px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  max-width: 260px;
+  text-align: left;
+}
+
+.preparedPromptClosedBubble:hover {
+  background: #171717;
+  transform: translateY(-1px);
+}
+
+.preparedPromptClosedBubble:active {
+  background: #0a0a0a;
 }
 
 /* --------- */

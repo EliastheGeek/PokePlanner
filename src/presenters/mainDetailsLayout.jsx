@@ -3,10 +3,15 @@ import { toggleChatWindow } from "/src/reduxStore.js";
 
 import { Details } from "/src/presenters/detailsPresenter.jsx";
 import { ChatBot } from "/src/presenters/chatPresenter.jsx";
+import { ClosedChat } from "/src/presenters/closedChatPresenter.jsx";
 
 export function MainDetailsLayout() {
   
   const chatOpen = useSelector(state => state.chat.windowOpen);
+  const preparedPrompts = useSelector(state =>
+    state.chat.preparedPrompts.filter(q => q.context === "detailsView")
+  );
+
   const dispatch = useDispatch();
 
   function toggleChatACB() {
@@ -23,13 +28,14 @@ export function MainDetailsLayout() {
 
       {chatOpen ? (
         <div className="pokeBotBox">
-          <ChatBot context="detailsView"
+          <ChatBot preparedPrompts={preparedPrompts}
                    onToggleChatWindow={toggleChatACB}/>
         </div>
       ) : (
-        <button className="chatRestoreBtn" onClick={toggleChatACB}>
-          💬
-        </button>
+        <div className="closedPokeBot">
+          <ClosedChat preparedPrompts={preparedPrompts}
+                      onToggleChatWindow={toggleChatACB}/>
+        </div>
       )}
     </div>
   );

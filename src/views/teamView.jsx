@@ -1,9 +1,14 @@
+import pokeSilhouette from "/src/assets/pokesilhouette.png";
+
 export function TeamView(props){
 
     const MAX_TEAM = 6;
     const team = props.team ?? [];
     const emptySlots = Array(MAX_TEAM - team.length).fill(null);
     const slots = [...team.slice(0, MAX_TEAM), ...emptySlots];
+    
+
+
     function closeACB(evt) {
         // Handle right-click / context menu to close the view
         evt.preventDefault();
@@ -20,7 +25,7 @@ export function TeamView(props){
                     ) : (
                     <div key={"empty-"+index} className="emptyCard" onClick={props.handleOpen} >
                         <img 
-                            src="https://wallpapers.com/images/hd/pikachu-silhouette-graphic-i5uu8u595s8iqius.jpg"
+                            src={pokeSilhouette}
                             width={80}/>
                     </div>
                     )

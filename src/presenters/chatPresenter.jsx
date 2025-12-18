@@ -9,17 +9,12 @@ export function ChatBot(props) {
     const {
         includeTeam,
         messages,
-        preparedPrompts,
         windowOpen,
         loading, 
         error
     } = useSelector((state) => state.chat);
 
     const team = useSelector((state) => state.poke);
-
-    const visiblePreparedPrompts = preparedPrompts.filter(
-        q => q.context === props.context
-    );
 
     return (
         <ChatInterface
@@ -28,7 +23,7 @@ export function ChatBot(props) {
             error={error}
             includeTeam={includeTeam}
             onToggleIncludeTeam={toggleIncludeTeamACB}
-            preparedPrompts={visiblePreparedPrompts}
+            preparedPrompts={props.preparedPrompts}
             onPreparedPromptClick={startPromptACB}
             onPromptNow={startPromptACB}
             onToggleChat={toggleShowChatACB}
