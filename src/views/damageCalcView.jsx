@@ -277,12 +277,13 @@ export function DamageCalcView(props) {
                                     { key: "spd", label: "Sp. Def", boost: true },
                                     { key: "spe", label: "Speed", boost: true },
                                 ].map((row) => (
-                                    <Box sx={{ display: "contents" }}>
-                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                    <Box key={"aBox"+row.key} sx={{ display: "contents" }}>
+                                        <Typography key={"aLabel"+row.key} variant="body2" sx={{ fontWeight: 600 }}>
                                             {row.label}
                                         </Typography>
 
                                         <TextField
+                                            key={"aEV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.attackerIVs?.[row.key] ?? 31}
@@ -292,6 +293,7 @@ export function DamageCalcView(props) {
                                         />
 
                                         <TextField
+                                            key={"aIV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.attackerEVs?.[row.key] ?? 0}
@@ -302,6 +304,7 @@ export function DamageCalcView(props) {
 
                                         {row.boost? (
                                             <TextField
+                                                key={"aBoosts"+row.key}
                                                 select
                                                 size="small"
                                                 value={props.attackerBoosts?.[row.key] ?? 0}
@@ -926,12 +929,13 @@ export function DamageCalcView(props) {
                                     { key: "spd", label: "Sp. Def", boost: true },
                                     { key: "spe", label: "Speed", boost: true },
                                 ].map((row) => (
-                                    <Box sx={{ display: "contents" }}>
-                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                    <Box key={"dBox"+row.key} sx={{ display: "contents" }}>
+                                        <Typography key={"dLabel"+row.key} variant="body2" sx={{ fontWeight: 600 }}>
                                             {row.label}
                                         </Typography>
 
                                         <TextField
+                                            key={"dEV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.defenderIVs?.[row.key] ?? 31}
@@ -941,6 +945,7 @@ export function DamageCalcView(props) {
                                         />
 
                                         <TextField
+                                            key={"dIV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.defenderEVs?.[row.key] ?? 0}
@@ -951,6 +956,7 @@ export function DamageCalcView(props) {
 
                                         {row.boost? (
                                             <TextField
+                                                key={"dBoosts"+row.key}
                                                 select
                                                 size="small"
                                                 value={props.defenderBoosts?.[row.key] ?? 0}
