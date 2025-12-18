@@ -23,25 +23,6 @@ export function DetailsView(props) {
         window.location.hash = "#/team";
     }
 
-    function previousPokemonACB(){
-      setPokemonIndex(prev => {
-        if (prev <= 0) return prev;
-        const newIndex = prev - 1;
-        console.log("Previous index: ", newIndex);
-        return newIndex;
-      });
-    }
-    
-    function nextPokemonACB(){
-      setPokemonIndex(prev => {
-        const maxIndex = Math.min(6, props.team.length - 1);
-        if (prev >= maxIndex) return prev;
-        const newIndex = prev + 1;
-        console.log("Next index: ", newIndex);
-        return newIndex;
-      });
-    }
-
     const maxEV = 252;
 
     return (
@@ -58,8 +39,8 @@ export function DetailsView(props) {
         >
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button className="backToTeamViewBtn" onClick={backToTeamACB}>Back to team builder</Button>
-          <Button className="prevPokeBtn" onClick={previousPokemonACB} disabled={pokemonIndex<=0}>Previous</Button>
-          <Button className="nextPokeBtn" onClick={nextPokemonACB} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</Button>
+          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}>Previous</Button>
+          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</Button>
         </ButtonGroup>
         
         </Box>
@@ -70,15 +51,15 @@ export function DetailsView(props) {
     );
 
     function printStats() {
-      if (!props.team || !props.team[pokemonIndex]) return null;
+      if (!props.team || !pokemon) return null;
      return ( 
           <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <h2 style={{ margin: 0 }}>{props.team[pokemonIndex].name}</h2>
+              <h2 style={{ margin: 0 }}>{pokemon.name}</h2>
               <img
-                src={props.team[pokemonIndex].sprites?.front_default}
+                src={pokemon.sprites?.front_default}
                 width={150}
-                alt={props.team[pokemonIndex].name}
+                alt={pokemon.name}
               />
             </Box>
 
@@ -86,14 +67,14 @@ export function DetailsView(props) {
               <Box component="aside">
                 <h3>Stats:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                  {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
+                  {pokemon.stats?.map(printBaseStatsCB)}
                 </ul>
               </Box>
 
               <Box>
                 <h3>Tera Type:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                  {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
+                  {pokemon.types?.map(printTeraTypesCB)}
                 </ul>
               </Box>
             </Box>
