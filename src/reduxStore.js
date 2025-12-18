@@ -114,26 +114,25 @@ const pokeSlice = createSlice({
             // avoid duplicates
             if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
             if (state.team.length < teamMaxSize) {
+                /*Initialize actualMoves, moveInfo and bonusStats attributes */
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
-                pokemon.stats.bonusStats = [];
+                if (Array.isArray(pokemon.stats)) {
+                    pokemon.stats = pokemon.stats.map(s => ({ ...s, bonusStats: 0 }));
+                }
                 state.team = [...state.team, pokemon];
             }
         },
         addActualMove(state, action){
-        //    console.log("Adding actual move in redux store", action.payload);
             const moveName = action.payload.moveName;
             const pokemonIndex = action.payload.pokemonIndex;
             const slot =action.payload.slot
             if (pokemonIndex === -1) return;
             const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
-        //    console.log("Pokemon index: ", state.team[pokemonIndex].moves);
-        //    console.log("Found move index: ", moveIndex);
             state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
         },
         addMoveInfo(state, action){
             const results = action.payload.results;
-           // console.log("Adding move info in redux store", results);
             const pokemonIndex = action.payload.index;
             const slot = action.payload.slot;
             if (pokemonIndex === -1) return;
@@ -146,8 +145,33 @@ const pokeSlice = createSlice({
             state.team = state.team.filter(keepPokemonCB);
         },
         setCurrentPokemon(state,action){state.currentPokemonName = action.payload;},
-        setSearchQuery(state, action) {state.searchParams.query = action.payload;},
 
+        setEVstat(state, action){
+            const pokemonIndex = action.payload.pokemonIndex;
+            const statName = action.payload.statName;
+            const newValue = action.payload.newValue;
+            if (pokemonIndex === -1) return;
+                const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ return stats.stat.name === statName; });
+            if (statIndex !== -1) {
+                // store the whole number (rounded down) of newValue/4
+                const value = Math.floor(Number(newValue) / 4);
+                state.team[pokemonIndex].stats[statIndex].bonusStats = value;
+            }
+        },
+        setAbility(state, action){
+            const pokemonIndex = action.payload.pokemonIndex;
+            const abilityName = action.payload.abilityName;
+            if (pokemonIndex === -1) return;
+            state.team[pokemonIndex].abilities.forEach(function resetChosenCB(abilities){ abilities.chosen = false; });
+            const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ return abilities.ability.name === abilityName; });
+            state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
+        },
+        setCurrentPokemonName(state,action){
+            state.currentPokemonName = action.payload;
+        },
+        setSearchQuery(state, action) {
+            state.searchParams.query = action.payload;
+        },
         doSearch(state, action) {
             state.searchParams = action.payload;
             state.searchResultsPromiseState = { promise: null, data: null, error: null };
@@ -325,6 +349,9 @@ export const {
     addMoveInfo,
     removeFromTeam,
     setCurrentPokemon,
+    setAbility,
+    setCurrentPokemonName,
+    setEVstat,
 
     //Search
     setSearchQuery,

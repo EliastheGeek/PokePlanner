@@ -114,7 +114,7 @@ export function DetailsView(props) {
                 {MoveList(1,pokemonIndex)}
                 {MoveList(2,pokemonIndex)}
                 {MoveList(3,pokemonIndex)}
-                      {AbilityList()}
+                {AbilityList(pokemonIndex)}
             </Box>
           </Box>)}
         </div>
@@ -123,8 +123,8 @@ export function DetailsView(props) {
       }
     
     function printBaseStatsCB(stats) {
-        return <li key={stats.stat.name}>{stats.base_stat +" "/* + stats.bonusStats.stat*/ + stats.stat.name} 
-                       {InputSlider(stats.stat)}</li>;
+        return <li key={stats.stat.name}>{stats.base_stat +" + " + (stats.bonusStats?stats.bonusStats:0)+ " " + stats.stat.name} 
+                       {InputSlider(stats.stat.name)}</li>;
     }
     function printTeraTypesCB(types) {
         return <li key={types.type.name}>{types.type.name}</li>;
@@ -200,14 +200,18 @@ function MoveList(slot,index) {
     {MoveInfo(slot, index)} </div>
   );
 }
-function AbilityList() {
-
+function AbilityList(index) {
+function addToAbilityListACB(evt){
+  props.setAbility(evt.target.innerText, index);
+}
   return (
+    <div> 
     <Autocomplete
       id="ability-select"
       sx={{ width: 200 }}
       options={pokemon?.abilities ?? []}
       autoHighlight
+      onChange={addToAbilityListACB}
       getOptionLabel={(option) => option.ability?.name || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
@@ -235,17 +239,19 @@ function AbilityList() {
         />
       )}
     />
+    <div>Chosen ability: {pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name||<div>None</div>}</div>
+    </div>
   );
 }
 
 
 
-function InputSlider(stat) {
+function InputSlider(statName) {
   const [value, setValue] = React.useState(0);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
-    props.evChange(newValue,stat);
+    props.evChange(newValue,statName,pokemonIndex);
   };
 
   const handleInputChange = (event) => {
@@ -271,7 +277,7 @@ function InputSlider(stat) {
           defaultValue={0}
             min={0}
             max={maxEV}
-            step={1}
+            step={6}
             value={typeof value === 'number' ? value : 0}
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
