@@ -4,6 +4,7 @@ export function searchPokemon(searchParams) {//searchparams är pokemon namn
         method: "GET",
     };
     return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
+
     function errorACB(error){ console.log("Error in searchPokemon: ", error);}
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
@@ -15,13 +16,47 @@ export function searchMove(searchParams) {//searchparams är move namn
         method: "GET",
     };
     return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
-    function errorACB(error){ console.log("Error in searchMove: ", error);}
+    function errorACB(error){ console.log("Error in searchPokemon: ", error);}
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
 }
 
 export function showAllPokemon(){
     const url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1328";
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB);
+
+    function responseACB(response) {return response.json();}
+    function resultACB(result) {return result.results;}
+}
+//TODO 
+
+export function showAllMoves(){
+    const url = "https://pokeapi.co/api/v2/move/?offset=0&limit=100000";
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB);
+
+    function responseACB(response) {return response.json();}
+    function resultACB(result) {return result.results;}
+}
+
+export function showAllItems(){
+    const url = "https://pokeapi.co/api/v2/item/?offset=0&limit=100000";
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB);
+
+    function responseACB(response) {return response.json();}
+    function resultACB(result) {return result.results;}
+}
+
+export function showAllAbilities(){
+    const url = "https://pokeapi.co/api/v2/ability/?offset=0&limit=100000";
     const options = {
         method: "GET",
     };
