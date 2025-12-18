@@ -5,7 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import React, { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-
+import pokeSilhouetteMini from "/src/assets/pokesilhouetteMini.png";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -26,8 +26,9 @@ export function DetailsView(props) {
     const maxEV = 252;
 
     return (
-    <div>
+    <div className="detailsNavigationBox">
       <Box
+        
           sx={{
             flex: 1,
             borderLeft: "1px solid #e0e0e0",
@@ -39,8 +40,8 @@ export function DetailsView(props) {
         >
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button className="backToTeamViewBtn" onClick={backToTeamACB}>Back to team builder</Button>
-          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}>Previous</Button>
-          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next</Button>
+          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}><img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/> Previous</Button>
+          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next <img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
         </ButtonGroup>
         
         </Box>
@@ -72,9 +73,9 @@ export function DetailsView(props) {
               </Box>
 
               <Box>
-                <h3>Tera Type:</h3>
+                <h3>Type:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                  {pokemon.types?.map(printTeraTypesCB)}
+                  {pokemon.types?.map(printTypesCB)}
                 </ul>
               </Box>
             </Box>
@@ -95,7 +96,7 @@ export function DetailsView(props) {
                        {InputSlider(stats.stat.name)}</li>;
     }
 
-    function printTeraTypesCB(types) {
+    function printTypesCB(types) {
         return <li key={types.type.name}>{types.type.name}</li>;
     }
 
