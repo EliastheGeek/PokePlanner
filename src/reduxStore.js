@@ -430,6 +430,7 @@ const chatInitialState = {
         {context: "detailsView", 
          query: "How do you like the attacks?"}
     ],
+    context: null,
     loading: false,
     windowOpen: true,
     error: null
@@ -441,6 +442,9 @@ const chatSlice = createSlice({
     reducers: {
         setIncludeTeam(state, action){
             state.includeTeam = action.payload;
+        },
+        setChatContext(state, action) {
+            state.context = action.payload;
         },
         promptStart(state, action) {
 
@@ -481,16 +485,24 @@ const chatSlice = createSlice({
         },
         toggleChatWindow(state) {
             state.windowOpen = !state.windowOpen;
+        },
+        resetChat(state) {
+            state.messages = [];
+            state.loading = false;
+            state.error = null;
+            state.includeTeam = false;
         }
     }
 })
 
 export const {
     setIncludeTeam,
+    setChatContext,
     promptStart,
     promptSuccess,
     promptError,
-    toggleChatWindow
+    toggleChatWindow,
+    resetChat
 } = chatSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
