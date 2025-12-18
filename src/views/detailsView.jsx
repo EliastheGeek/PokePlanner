@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
+import { display } from "@smogon/calc/dist/desc";
 const Input = styled(MuiInput)`width: 42px;`;
 
 
@@ -81,7 +82,8 @@ export function DetailsView(props) {
           disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}
           >Next
         </button>
-
+        </Box>
+        <Box>
         {printStats()}
         </Box>
     </div>
@@ -90,36 +92,36 @@ export function DetailsView(props) {
     function printStats() {
       if (!props.team || !props.team[pokemonIndex]) return null;
      return ( 
-      <div>
-      <header>
-            
-            
-            <h2>{props.team[pokemonIndex].name}</h2>
-            <img src={props.team[pokemonIndex].sprites?.front_default} width={150}/>
-        </header>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2}}>
+        <Box sx={{ display: "flex" }}> 
+          <h2>{props.team[pokemonIndex].name}</h2>
+          <img src={props.team[pokemonIndex].sprites?.front_default} width={150}/>
+        </Box>
+        <Box sx={{ display: "flex" }}>
+          <div> 
+              <aside>
+              <h3>Stats:</h3>
+              <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                  {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
+              </ul>
+              </aside>
+          </div>
 
-            <div> 
-                <aside>
-                <h3>Stats:</h3>
-                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                    {props.team[pokemonIndex].stats?.map(printBaseStatsCB)}
-                </ul>
-                </aside>
-            </div>
-
-            <div>
-                <h3>Tera Type:</h3>
-                    <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                        {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
-                    </ul>    
-            </div>
-        {MoveList(0,pokemonIndex)}    
-        {MoveList(1,pokemonIndex)}
-        {MoveList(2,pokemonIndex)}
-        {MoveList(3,pokemonIndex)}
-              {AbilityList()}
-
-        </div>);
+          <div>
+              <h3>Tera Type:</h3>
+                  <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                      {props.team[pokemonIndex].types?.map(printTeraTypesCB)}
+                  </ul>    
+          </div>
+        </Box>
+        <Box sx={{ display: "flex" }}> 
+            {MoveList(0,pokemonIndex)}    
+            {MoveList(1,pokemonIndex)}
+            {MoveList(2,pokemonIndex)}
+            {MoveList(3,pokemonIndex)}
+                  {AbilityList()}
+        </Box>
+      </Box>);
       }
     
     function printBaseStatsCB(stats) {
