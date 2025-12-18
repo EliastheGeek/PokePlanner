@@ -7,8 +7,6 @@ import {
     //Attacker
     setAttackerLevel,
     setAttackerGender,
-    setAttackerGenderOptions,
-    setAttackerFormOptions,
     setAttackerAbility,
     setAttackerItem,
     setAttackerNature,
@@ -23,8 +21,6 @@ import {
     //Defender
     setDefenderLevel,
     setDefenderGender,
-    setDefenderGenderOptions,
-    setDefenderFormOptions,
     setDefenderAbility,
     setDefenderItem,
     setDefenderNature,
