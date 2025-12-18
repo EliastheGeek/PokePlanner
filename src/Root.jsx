@@ -1,5 +1,6 @@
 import { Summary } from "/src/presenters/summaryPresenter.jsx";
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
+import { Landing } from "/src/presenters/landingPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";
 import { MainLayout } from "/src/presenters/mainLayout.jsx";
 import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
@@ -17,7 +18,7 @@ function makeRouter() {
         path: "/",
         element: (
             <div className="mainView">
-                <MainLayout />
+                <Landing />
             </div>
         ),
     },
@@ -70,7 +71,9 @@ export function Root(){
     return user === undefined ? (<SuspenseView promise="dummyPromise" />) :
         (ready ? 
             (<div>
-                <MenuBar />
+                <header className="menuHeader">
+                    <MenuBar />
+                </header>
                 <RouterProvider router={makeRouter()} />
             </div>):
             (<SuspenseView promise="dummyPromise" />));
