@@ -117,7 +117,7 @@ export function DetailsView(props) {
         {MoveList(1,pokemonIndex)}
         {MoveList(2,pokemonIndex)}
         {MoveList(3,pokemonIndex)}
-              {AbilityList()}
+        {AbilityList(pokemonIndex)}
 
         </div>);
       }
@@ -200,14 +200,18 @@ function MoveList(slot,index) {
     {MoveInfo(slot, index)} </div>
   );
 }
-function AbilityList() {
-
+function AbilityList(index) {
+function addToAbilityListACB(evt){
+  props.setAbility(evt.target.innerText, index);
+}
   return (
+    <div> 
     <Autocomplete
       id="ability-select"
       sx={{ width: 200 }}
       options={pokemon?.abilities ?? []}
       autoHighlight
+      onChange={addToAbilityListACB}
       getOptionLabel={(option) => option.ability?.name || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
@@ -235,6 +239,8 @@ function AbilityList() {
         />
       )}
     />
+    <div>Chosen ability: {pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name||<div>None</div>}</div>
+    </div>
   );
 }
 

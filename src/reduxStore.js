@@ -47,6 +47,7 @@ const pokeSlice = createSlice({
             // avoid duplicates
             if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
             if (state.team.length < teamMaxSize) {
+                /*Initialize actualMoves, moveInfo and bonusStats attributes */
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
                 if (Array.isArray(pokemon.stats)) {
@@ -87,6 +88,14 @@ const pokeSlice = createSlice({
                 const value = Math.floor(Number(newValue) / 4);
                 state.team[pokemonIndex].stats[statIndex].bonusStats = value;
             }
+        },
+        setAbility(state, action){
+            const pokemonIndex = action.payload.pokemonIndex;
+            const abilityName = action.payload.abilityName;
+            if (pokemonIndex === -1) return;
+            state.team[pokemonIndex].abilities.forEach(function resetChosenCB(abilities){ abilities.chosen = false; });
+            const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ return abilities.ability.name === abilityName; });
+            state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
         },
         setCurrentPokemonName(state,action){
             state.currentPokemonName = action.payload;
@@ -210,6 +219,7 @@ export const {
     addActualMove,
     addMoveInfo,
     removeFromTeam,
+    setAbility,
     setCurrentPokemonName,
     setEVstat,
 
