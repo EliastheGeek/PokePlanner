@@ -1,10 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import { DamageCalcView } from "/src/views/damageCalcView.jsx";
+import { formatPokeName, natureMultiplier, stageMultiplier, calcStatFromBase } from "/src/utilities.js"
 import {
     setDamageAttackerName,
     setDamageDefenderName,
     setDamageMoveName,
+    setDamageIsCrit,
+
+    //Promises
+    showPokemon,
+    showMoves,
+    showItems,
+    showAbilities,
     //Attacker
+    setAttackerCurrentHP,
     setAttackerLevel,
     setAttackerGender,
     setAttackerAbility,
@@ -19,6 +28,7 @@ import {
     setAttackerIV,
     setAttackerBoost,
     //Defender
+    setDefenderCurrentHP,
     setDefenderLevel,
     setDefenderGender,
     setDefenderAbility,
@@ -76,16 +86,21 @@ import { calculate, Pokemon, Move, Field } from "@smogon/calc";
 export function DamageCalculator() {
     const dispatch = useDispatch();
 
+    const gen = 9;
+
     const {
         damageAttackerName,
         damageDefenderName,
         damageMoveName,
+        damageIsCrit,
+        //Promises
+        showPokemonPromiseState, showMovesPromiseState, showItemsPromiseState, showAbilitiesPromiseState,
         //Attacker details
-        attackerLevel, attackerGender, attackerAbility, attackerItem, attackerNature, 
+        attackerCurrentHP, attackerLevel, attackerGender, attackerAbility, attackerItem, attackerNature, 
         attackerStatus, attackerTeraType, attackerIsTerastallized, attackerType1Override, 
         attackerType2Override, attackerEVs, attackerIVs, attackerBoosts,
         //Defender details
-        defenderLevel, defenderGender, defenderAbility, defenderItem, defenderNature, 
+        defenderCurrentHP, defenderLevel, defenderGender, defenderAbility, defenderItem, defenderNature, 
         defenderStatus, defenderTeraType, defenderIsTerastallized, defenderType1Override, 
         defenderType2Override, defenderEVs, defenderIVs, defenderBoosts,
         //Field
@@ -103,12 +118,41 @@ export function DamageCalculator() {
         damageError,
     } = useSelector((state) => state.poke);
 
+    const speciesOptions = (showPokemonPromiseState.data ?? []).map(x => x.name);
+    const moveOptions = (showMovesPromiseState.data ?? []).map(x => formatPokeName(x.name));
+    const itemOptions = (showItemsPromiseState.data ?? []).map(x => formatPokeName(x.name));
+    const abilityOptions = (showAbilitiesPromiseState.data ?? []).map(x => formatPokeName(x.name));
+
+    const attackerStatDisplay = buildStatDisplay(gen, damageAttackerName, {
+        level: attackerLevel,
+        nature: attackerNature,
+        evs: attackerEVs,
+        ivs: attackerIVs,
+        boosts: attackerBoosts,
+    });
+
+    const defenderStatDisplay = buildStatDisplay(gen, damageDefenderName, {
+        level: defenderLevel,
+        nature: defenderNature,
+        evs: defenderEVs,
+        ivs: defenderIVs,
+        boosts: defenderBoosts,
+    });
+
+
     return (
         <DamageCalcView
             attackerName={damageAttackerName}
             defenderName={damageDefenderName}
             moveName={damageMoveName}
+            isCrit={damageIsCrit}
+
+            speciesOptions={speciesOptions}
+            moveOptions={moveOptions}
+            itemOptions={itemOptions}
+            abilityOptions={abilityOptions}
             //Attacker details
+            attackerCurrentHP={attackerCurrentHP}
             attackerLevel={attackerLevel}
             attackerGender={attackerGender}
             attackerAbility={attackerAbility}
@@ -122,7 +166,10 @@ export function DamageCalculator() {
             attackerEVs={attackerEVs}
             attackerIVs={attackerIVs}
             attackerBoosts={attackerBoosts}
+            attackerBaseStats={attackerStatDisplay?.baseStats}
+            attackerFinalStats={attackerStatDisplay?.finalStats}
             //Defender details
+            defenderCurrentHP={defenderCurrentHP}
             defenderLevel={defenderLevel}
             defenderGender={defenderGender}
             defenderAbility={defenderAbility}
@@ -136,6 +183,8 @@ export function DamageCalculator() {
             defenderEVs={defenderEVs}
             defenderIVs={defenderIVs}
             defenderBoosts={defenderBoosts}
+            defenderBaseStats={defenderStatDisplay?.baseStats}
+            defenderFinalStats={defenderStatDisplay?.finalStats}
             //Field
             terrain={damageTerrain}
             weather={damageWeather}
@@ -176,7 +225,15 @@ export function DamageCalculator() {
             onAttackerNameChange={(param) => dispatch(setDamageAttackerName(param))}
             onDefenderNameChange={(param) => dispatch(setDamageDefenderName(param))}
             onMoveNameChange={(param) => dispatch(setDamageMoveName(param))}
+            onCritChange={(v) => dispatch(setDamageIsCrit(v))}
+            
+            //Promises
+            onSpeciesOpen={ensureSpeciesLoadedACB}
+            onMoveOpen={ensureMovesLoadedACB}
+            onItemOpen={ensureItemsLoadedACB}
+            onAbilityOpen={ensureAbilitiesLoadedACB}
             //Attacker details
+            onAttackerCurrentHPChange={(v) => dispatch(setAttackerCurrentHP(v))}
             onAttackerLevelChange={(param)=>dispatch(setAttackerLevel(param))}
             onAttackerGenderChange={(param)=>dispatch(setAttackerGender(param))}
             onAttackerAbilityChange={(param)=>dispatch(setAttackerAbility(param))}
@@ -191,6 +248,7 @@ export function DamageCalculator() {
             onAttackerIVChange={(stat,value)=>dispatch(setAttackerIV({stat,value}))}
             onAttackerBoostChange={(stat,value)=>dispatch(setAttackerBoost({stat,value}))}
             //Defender details
+            onDefenderCurrentHPChange={(v) => dispatch(setDefenderCurrentHP(v))}
             onDefenderLevelChange={(param)=>dispatch(setDefenderLevel(param))}
             onDefenderGenderChange={(param)=>dispatch(setDefenderGender(param))}
             onDefenderAbilityChange={(param)=>dispatch(setDefenderAbility(param))}
@@ -252,10 +310,17 @@ export function DamageCalculator() {
                 throw new Error("Please fill in attacker, defender and move.");
             }
 
+            const attackerMaxHP = attackerStatDisplay?.finalStats?.hp;
+            const defenderMaxHP = defenderStatDisplay?.finalStats?.hp;
+
+            const attackerCurHP = Math.max(0, Math.min(attackerMaxHP, Math.floor(attackerCurrentHP)))
+            const defenderCurHP = Math.max(0, Math.min(defenderMaxHP, Math.floor(defenderCurrentHP)))
+            
             const attackerTypesOverride = [attackerType1Override, attackerType2Override].filter(Boolean);
             const defenderTypesOverride = [defenderType1Override, defenderType2Override].filter(Boolean);
 
             const attacker = new Pokemon(gen, damageAttackerName, {
+                curHP: attackerCurHP,
                 level: attackerLevel,
                 gender: attackerGender === "N" ? undefined : attackerGender,
                 ability: attackerAbility || undefined,
@@ -272,6 +337,7 @@ export function DamageCalculator() {
             });
 
             const defender = new Pokemon(gen, damageDefenderName, {
+                curHP: attackerCurHP,
                 level: defenderLevel,
                 gender: defenderGender === "N" ? undefined : defenderGender,
                 ability: defenderAbility || undefined,
@@ -287,7 +353,7 @@ export function DamageCalculator() {
                 ...(defenderTypesOverride.length ? { types: defenderTypesOverride } : {}),
             });
 
-            const move = new Move(gen, damageMoveName);
+            const move = new Move(gen, damageMoveName, {isCrit: damageIsCrit});
 
             const field = new Field({
                 gameType: damageGameType === "Doubles" ? "Doubles" : "Singles",
@@ -353,5 +419,80 @@ export function DamageCalculator() {
                     : "Something went wrong during calculation."
             ));
         }
+    }
+
+    function ensureSpeciesLoadedACB() {
+        if (
+            !showPokemonPromiseState?.promise &&
+            (!showPokemonPromiseState?.data || showPokemonPromiseState.data.length === 0) &&
+            !showPokemonPromiseState?.error
+        ) {
+            dispatch(showPokemon());
+        }
+    }
+
+    function ensureMovesLoadedACB() {
+        if (
+            !showMovesPromiseState?.promise &&
+            (!showMovesPromiseState?.data || showMovesPromiseState.data.length === 0) &&
+            !showMovesPromiseState?.error
+        ) {
+            dispatch(showMoves());
+        }
+    }
+
+    function ensureItemsLoadedACB() {
+        if (
+            !showItemsPromiseState?.promise &&
+            (!showItemsPromiseState?.data || showItemsPromiseState.data.length === 0) &&
+            !showItemsPromiseState?.error
+        ) {
+            dispatch(showItems());
+        }
+    }
+
+    function ensureAbilitiesLoadedACB() {
+        if (
+            !showAbilitiesPromiseState?.promise &&
+            (!showAbilitiesPromiseState?.data || showAbilitiesPromiseState.data.length === 0) &&
+            !showAbilitiesPromiseState?.error
+        ) {
+            dispatch(showAbilities());
+        }
+    }
+
+    function buildStatDisplay(gen, speciesName, { level, nature, evs, ivs, boosts }) {
+        if (!speciesName) return null;
+        let p;
+        try {
+            p = new Pokemon(gen, speciesName);
+        } 
+        catch (e) {
+            return null;
+        }
+        const baseStats = p?.species?.baseStats ?? p?.baseStats;
+
+        const keys = ["hp", "atk", "def", "spa", "spd", "spe"];
+        const finalStats = {};
+
+        for (const k of keys) {
+            const raw = calcStatFromBase({
+                base: baseStats[k],
+                iv: ivs?.[k],
+                ev: evs?.[k],
+                level,
+                natureMult: natureMultiplier(nature, k),
+                isHP: k === "hp",
+            });
+
+            const boosted = k === "hp"
+            ? raw
+            : Math.floor(raw * stageMultiplier(boosts?.[k]));
+        
+            finalStats[k] = boosted;
+        }
+
+        if (p?.species?.name === "Shedinja") finalStats.hp = 1;
+        return { baseStats, finalStats };
     }
 }
