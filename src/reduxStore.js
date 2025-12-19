@@ -122,6 +122,7 @@ const pokeSlice = createSlice({
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
                 pokemon.held_item = null;
+                pokemon.level = 1;
                 if (Array.isArray(pokemon.stats)) {
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
@@ -156,7 +157,11 @@ const pokeSlice = createSlice({
         setOptions(state, action) {state.showPokemonPromiseState.data = action.payload;},
         
         setCurrentPokemon(state,action){state.currentPokemonName = action.payload;},
-
+        setLevel(state, action){
+            const pokemonIndex = action.payload.pokemonIndex;
+            const level = action.payload.level;
+            state.team[pokemonIndex].level = level;
+        },
         setEVstat(state, action){ 
             const pokemonIndex = action.payload.pokemonIndex;
             const statName = action.payload.statName;
@@ -400,6 +405,7 @@ export const {
     addMoveInfo,
     setAbility,
     setItem,
+    setLevel,
     setIVstat,
     setEVstat,
 

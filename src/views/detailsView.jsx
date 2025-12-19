@@ -64,7 +64,10 @@ export function DetailsView(props) {
      return ( 
           <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <h2 style={{ margin: 0 }}>{pokemon.name}</h2>
+              
+              <h2 style={{ margin: 0 }}>{pokemon.name} Level: {pokemon.level}
+                {LevelInput()}
+              </h2>
               <img
                 src={pokemon.sprites?.front_default}
                 width={150}
@@ -72,36 +75,42 @@ export function DetailsView(props) {
               />
                          <Box>
                 <h3>Type:</h3>
+                
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
                   {pokemon.types?.map(printTypesCB)}
                 </ul>
+                  <Box component="aside">
+                  <h3>Stats:</h3>
+                  <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                    {pokemon.stats?.map(printBaseStatsCB)}
+                </ul>
+                
               </Box>
-              
-            </Box>
+              {SearchItem()}
+              </Box>
               {MoveList(0, pokemonIndex)}
               {MoveList(1, pokemonIndex)}
               {MoveList(2, pokemonIndex)}
               {MoveList(3, pokemonIndex)}
-              {SearchItem()}
+              <Box>{AbilityList(pokemonIndex)}</Box>
+            </Box>
+
+
             <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
               
-              <Box component="aside">
-                <h3>Stats:</h3>
-                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                  {pokemon.stats?.map(printBaseStatsCB)}
-                </ul>
-              </Box>
+
 
    
             
             </Box>
 
-              {AbilityList(pokemonIndex)}
+              
             <Box sx={{gridColumn: "1 / -1", display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
 
               
               
             </Box>
+          
           </Box>
         );
   }
@@ -109,14 +118,15 @@ export function DetailsView(props) {
     function printBaseStatsCB(stats) { //nature saknas
       function calculateTotalStat(stats) {
         if(stats?.stat.name ==='hp'){
-          const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value) )) + 10+100;
+
+          const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value)*pokemon.level)/100) + 10+pokemon.level;
           return total||stats.base_stat;
         }
-        const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value) )) + 5;
+        const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value)*pokemon.level)/100) + 5;
         console.log("Total stat for ", stats.stat.name, " is ", total);
         return total||stats.base_stat;
       }
-        return <li key={stats.stat.name}>{(calculateTotalStat(stats)>0?calculateTotalStat(stats):stats.base_stat)  + " " + stats.stat.name} 
+        return <li key={stats.stat.name}>{calculateTotalStat(stats)  + " " + stats.stat.name} 
                        {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
     }
 
@@ -151,7 +161,7 @@ function MoveList(slot,index) {
  return (
   <div>
     <Autocomplete
-      id="move-select"
+      id="move-select"              
       sx={{ width: 200 }}
   
       options={props.team[index]?.moves || []}
@@ -248,7 +258,7 @@ function IVInput(statName){
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? 0 : Number(event.target.value));
-    console.log("IV change: ", event.target.value);
+
     props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);
   };
     const handleBlur = () => {
@@ -276,7 +286,39 @@ function IVInput(statName){
           IV
         </Grid>);
 }
+function LevelInput(){
+  const [value, setValue] = React.useState(1);
 
+  const handleInputChange = (event) => {
+    setValue(event.target.value === '' ? 1 : Number(event.target.value));
+
+    props.setLevel(event.target.value === '' ? 1 : Number(event.target.value), pokemonIndex);
+  };
+    const handleBlur = () => {
+    if (value < 1) {
+      setValue(1);
+    } else if (value > 100) {
+      setValue(100);
+    }
+  };
+  return (<Grid>
+    
+          <Input
+            value={value}
+            size="small"          
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 1,
+              min: 1,
+              max: 100,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+
+        </Grid>);
+}
 
 function InputSlider(statName) {
   const [value, setValue] = React.useState(0);

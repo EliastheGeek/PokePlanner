@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setOpen, setCurrentPokemon, setEVstat, setIVstat,setAbility, showItems } from "/src/reduxStore.js";
+import { addActualMove, setOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setLevel, showItems } from "/src/reduxStore.js";
 import { doMoveThunk, doAbilityThunk, doItemThunk } from "/src/store/searchThunks.js";
 
 
@@ -63,6 +63,10 @@ export function Details() {
         dispatch(doItemThunk(itemInfo));
         dispatch(setOpen(false))
     }
+    function setLevelACB(level, pokemonIndex){
+        const levelInfo = {level:level, pokemonIndex:pokemonIndex}
+        dispatch(setLevel(levelInfo));
+    }
 
     useEffect(() => {
         if (team.length === 0) return;
@@ -87,5 +91,6 @@ export function Details() {
                         evChange={evChangeACB}
                         setAbility={setAbilityACB}
                         onItemSelect={setItemACB}
-                        ivChange={ivChangeACB}/>;
+                        ivChange={ivChangeACB}
+                        setLevel={setLevelACB}/>;
 };
