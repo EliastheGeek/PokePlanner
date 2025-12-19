@@ -54,6 +54,7 @@
   gap: 16px;
   overflow-y: auto;
   background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 /* ------- */
 /* MENUBAR */
@@ -86,10 +87,24 @@
 .landingPage {
   background-color: #ffffff;
   width: 80%;
-  margin: 0 auto;      
-  padding: 24px;        
+  margin: 0 auto;
+  padding: 24px;
   border-radius: 12px;
   box-sizing: border-box;
+  border: 2px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;   
+  justify-content: center;
+  text-align: center;
+  gap: 2; 
+}
+
+.landingPageText{
+  margin-top: 20px;
+
 }
 
 @media (max-width: 600px) {
@@ -117,6 +132,7 @@
   position: relative;
   transition: width 0.3s ease;
   min-width: 230px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .pokeBotBoxInner {
@@ -195,6 +211,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+
 }
 
 .preparedPromptClosedBubble {
@@ -209,6 +226,7 @@
   font-weight: bold;
   max-width: 260px;
   text-align: left;
+
 }
 
 .preparedPromptClosedBubble:hover {
@@ -358,6 +376,12 @@
 .searchWrapper {
   padding: 16px 0;
 }
+
+/* ----------- */
+/* DAMAGE CALC */
+/* ----------- */
+
+
 
 /* ------------ */
 /* DETAILS VIEW */

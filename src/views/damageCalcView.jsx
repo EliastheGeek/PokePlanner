@@ -67,6 +67,7 @@ export function DamageCalcView(props) {
                     flexDirection: "column",
                     height: "100%",
                     gap: 2,
+                    mb: "20px",
                 }}
             >
                 <Typography variant="h5" textAlign="center">
@@ -495,7 +496,7 @@ export function DamageCalcView(props) {
                         </CardContent>
                     </Card>
 
-                    <Card sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                    <Card  sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                         <CardContent
                             sx={{
                                 display: "flex",
@@ -504,7 +505,7 @@ export function DamageCalcView(props) {
                             }}
                         >
 
-                            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                            <Box  sx={{ display: "flex", justifyContent: "center" }}>
                                 <div>
                                     <Typography variant="subtitle1" textAlign="center">
                                         Field

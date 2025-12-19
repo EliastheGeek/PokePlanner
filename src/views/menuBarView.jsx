@@ -54,7 +54,7 @@ export default function MenuBarView(props) {
               textColor="primary"
               indicatorColor="primary"
               aria-label="primary tabs example">
-              <Tab value="one" label="Home" onClick={handleNavigate('#/')}/>
+              <Tab value="one" label="Get Started" onClick={handleNavigate('#/')}/>
               <Tab value="two" label="Team Builder" onClick={handleNavigate('#/team')}/>
               <Tab value="three" label="Damage Calculator" onClick={handleNavigate('#/dmgcalc')}/>
             </Tabs>
@@ -79,7 +79,7 @@ export default function MenuBarView(props) {
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right',}}
               transformOrigin={{vertical: 'top',horizontal: 'right',}}>
 
-              <MenuItem onClick={handleNavigate('#/')}>Home</MenuItem>
+              <MenuItem onClick={handleNavigate('#/')}>Get Started</MenuItem>
               <MenuItem onClick={handleNavigate('#/team')}>TeamBuilder</MenuItem>
               <MenuItem onClick={handleNavigate('#/dmgcalc')}>Damage Calculator</MenuItem>
             </Menu>
