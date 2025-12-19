@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { display } from "@smogon/calc/dist/desc";
+import { formatPokeName } from "/src/utilities.js"
 const Input = styled(MuiInput)`width: 42px;`;
 
 
@@ -46,7 +47,7 @@ export function DetailsView(props) {
         
         </Box>
         <Box>
-        {printStats()}
+          {printStats()}
         </Box>
     </div>
     );
@@ -56,11 +57,11 @@ export function DetailsView(props) {
      return ( 
           <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <h2 style={{ margin: 0 }}>{pokemon.name}</h2>
+              <h2 style={{ margin: 0 }}>{formatPokeName(pokemon.name)}</h2>
               <img
                 src={pokemon.sprites?.front_default}
                 width={150}
-                alt={pokemon.name}
+                alt={formatPokeName(pokemon.name)}
               />
             </Box>
 
@@ -106,7 +107,7 @@ export function DetailsView(props) {
       return (
         <div>
           <h3>Move Info:</h3>
-          <p>{moveData.name}</p>
+          <p>{formatPokeName(moveData.name)}</p>
           <p>Power: {moveData.power}</p>
           <p>Accuracy: {moveData.accuracy}</p>
           <p>Type: {moveData.type?.name}</p>
@@ -120,8 +121,9 @@ export function DetailsView(props) {
 //addToMoveListACB får details sidan att byta vy till index 0 när man lägger till ett move
 function MoveList(slot,index) {
 
-  function addToMoveListACB(evt){
-    props.addMove(evt.target.innerText, slot, index);
+  function addToMoveListACB(evt, option){
+    if (!option) return; 
+    props.addMove(option.move.name, slot, index);
   }
 
  return (
@@ -136,38 +138,22 @@ function MoveList(slot,index) {
       autoHighlight
 
       onChange={addToMoveListACB}
-      getOptionLabel={(option) => option.move?.name || ""}
+      getOptionLabel={(option) => formatPokeName(option.move?.name) || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
 
-          <Box
-          
+          <Box          
             key={key}
             component="li"
             sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
             {...optionProps}
           >
-            {option.move?.name}
+            {formatPokeName(option.move?.name)}
           </Box>
-
-
         );
       }}
-
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Move"
-          slotProps={{
-            htmlInput: {
-              ...params.inputProps,
-              autoComplete: 'new-password', // disable autocomplete and autofill
-            },
-          }}
-        />
-      )}
-          
+      renderInput={(params) => (<TextField {...params} label="Move"/>)}
     />
     {MoveInfo(slot, index)} </div>
   );
@@ -175,8 +161,9 @@ function MoveList(slot,index) {
 
 function AbilityList(index) {
 
-  function addToAbilityListACB(evt){
-    props.setAbility(evt.target.innerText, index);
+  function addToAbilityListACB(evt, option){
+    if (!option) return; 
+    props.setAbility(option.ability.name, index);
   }
   return (
     <div> 
@@ -186,7 +173,7 @@ function AbilityList(index) {
       options={pokemon?.abilities ?? []}
       autoHighlight
       onChange={addToAbilityListACB}
-      getOptionLabel={(option) => option.ability?.name || ""}
+      getOptionLabel={(option) => formatPokeName(option.ability?.name) || ""}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
@@ -196,24 +183,13 @@ function AbilityList(index) {
             sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
             {...optionProps}
           >
-            {option.ability?.name}
+            {formatPokeName(option.ability?.name)}
           </Box>
         );
       }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Ability"
-          slotProps={{
-            htmlInput: {
-              ...params.inputProps,
-              autoComplete: 'new-password', // disable autocomplete and autofill
-            },
-          }}
-        />
-      )}
+      renderInput={(params) => ( <TextField {...params} label="Ability"/> )}
     />
-    <div>Chosen ability: {pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name}</div>
+    <div>Chosen ability: {formatPokeName(pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name)}</div>
     <div>Description: {pokemon?.abilities?.find(ab => ab.chosen)?.description||<div>No ability chosen</div>}</div>
     </div>
   );
