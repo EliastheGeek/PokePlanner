@@ -31,7 +31,7 @@
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
-  height: 80vh;
+  height: 100vh;
 }
 
 .teamView.withChat {
@@ -403,7 +403,7 @@
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
-  height: 80vh;
+  height: 100vh;
 }
 
 .detailsView.withChat {
