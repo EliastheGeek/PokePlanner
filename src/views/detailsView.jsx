@@ -304,7 +304,7 @@ function SearchItem() {
   return (
     <div className="searchWrapper">
       <Autocomplete
-        sx={{ width: 300 }}
+        sx={{ width: 200 }}
         open={props.open}
         onOpen={props.handleOpen}
         onClose={props.handleClose}

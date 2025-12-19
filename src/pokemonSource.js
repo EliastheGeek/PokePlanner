@@ -79,7 +79,6 @@ export function showAllItems(){
             seen.add(name);
             return true;
         });
-        console.log(`Filtered items: ${uniqueResults.length} unique out of ${itemResults.results.length}`);
         return { ...itemResults, results: uniqueResults };
     }
     const url = "https://pokeapi.co/api/v2/item/?offset=0&limit=100000";

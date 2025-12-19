@@ -29,7 +29,6 @@ export function doItemThunk(itemInfo) {
 
     return async function (dispatch, getState) {
         if(!itemInfo.itemName) return;
-        
         const results = await searchItem(itemInfo.itemName);
         const itemData = {results: results, index: itemInfo.pokemonIndex};
         dispatch(setItem(itemData));
