@@ -502,15 +502,11 @@ const chatInitialState = {
             append: "team"},
         {
             context: "teamView", 
-            query: "What's the best thing about my team?",
-            append: "team"},
-        {
-            context: "teamView", 
-            query: "Something else",
+            query: "How can I improve my team?",
             append: "team"},
         {
             context: "detailsView", 
-            query: "How do you like the attacks?",
+            query: "How can I improve this pokemon?",
             append: "pokemon"}
     ],
     context: null,

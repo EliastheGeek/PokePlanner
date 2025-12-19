@@ -20,6 +20,8 @@ export function stripPokemon(pokemon){
         types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
         abilities: (pokemon?.abilities ?? []).map(a => a.ability.name).filter(Boolean),
 
+        held_item: pokemon?.held_item ?? null,
+
         moveInfo: stripMoveInfo(pokemon?.moveInfo) ?? [],
         stats: pokemon?.stats ?? [],
         
