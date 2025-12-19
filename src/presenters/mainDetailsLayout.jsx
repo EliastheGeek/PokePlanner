@@ -34,12 +34,12 @@ export function MainDetailsLayout() {
 
       {chatOpen ? (
         <div className="pokeBotBox">
-          <ChatBot preparedPrompts={preparedPrompts}
+          <ChatBot preparedPrompts={visiblePreparedPrompts}
                    onToggleChatWindow={toggleChatACB}/>
         </div>
       ) : (
         <div className="closedPokeBot">
-          <ClosedChat preparedPrompts={preparedPrompts}
+          <ClosedChat preparedPrompts={visiblePreparedPrompts}
                       onToggleChatWindow={toggleChatACB}/>
         </div>
       )}
