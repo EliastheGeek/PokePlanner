@@ -3,6 +3,8 @@ import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
 import { searchPokemon, showAllPokemon, showAllMoves, showAllItems, showAllAbilities } from "./pokemonSource";
 import { act } from "react";
+import { stripTeam } from "/src/objectStripper";
+
 const teamMaxSize = 6;
 
 function clamp(n, lo, hi) {
@@ -23,7 +25,6 @@ const initialState = {
     showMovesPromiseState: { promise: null, data: [], error: null },
     showItemsPromiseState: { promise: null, data: [], error: null },
     showAbilitiesPromiseState: { promise: null, data: [], error: null },
-
 
     //Persistance
     hello: "hello",
@@ -495,14 +496,22 @@ const chatInitialState = {
     includeTeam: true,
     messages: [],
     preparedPrompts: [
-        {context: "teamView", 
-         query: "What's the biggest weakness in my team?"},
-        {context: "teamView", 
-         query: "What's the best thing about my team?"},
-        {context: "teamView", 
-         query: "Something else"},
-        {context: "detailsView", 
-         query: "How do you like the attacks?"}
+        {
+            context: "teamView", 
+            query: "What's the biggest weakness in my team?",
+            append: "team"},
+        {
+            context: "teamView", 
+            query: "What's the best thing about my team?",
+            append: "team"},
+        {
+            context: "teamView", 
+            query: "Something else",
+            append: "team"},
+        {
+            context: "detailsView", 
+            query: "How do you like the attacks?",
+            append: "pokemon"}
     ],
     context: null,
     loading: false,
@@ -669,3 +678,5 @@ listenerMiddleware.startListening({
             .catch((error) => store.dispatch(abilitiesRejected({ promise, error })));
     },
 });
+
+window.store = store;

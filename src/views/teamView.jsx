@@ -41,7 +41,6 @@ export function TeamView(props){
     function showTeamCB(pokemon){
 
         function removeFromTeamACB(pokemon){
-          // TODO: Add so confirmation pop up appears
           props.onRemoveFromTeam(pokemon);
         }
 
