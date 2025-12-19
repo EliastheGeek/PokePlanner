@@ -678,5 +678,3 @@ listenerMiddleware.startListening({
             .catch((error) => store.dispatch(abilitiesRejected({ promise, error })));
     },
 });
-
-window.store = store;
