@@ -121,6 +121,7 @@ const pokeSlice = createSlice({
                 /*Initialize actualMoves, moveInfo and bonusStats attributes */
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
+                pokemon.held_item = null;
                 if (Array.isArray(pokemon.stats)) {
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, bonusStats: 0 }));
                 }
@@ -160,7 +161,7 @@ const pokeSlice = createSlice({
             const statName = action.payload.statName;
             const newValue = action.payload.newValue;
 
-            if (pokemonIndex === -1) return;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
                 const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ 
                     return stats.stat.name === statName; });
             if (statIndex !== -1) {
@@ -173,13 +174,19 @@ const pokeSlice = createSlice({
             const pokemonIndex = action.payload.index;
             const abilityName = results.name;
 
-            if (pokemonIndex === -1) return;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
             state.team[pokemonIndex].abilities.forEach(function resetChosenCB(abilities){ 
                 abilities.chosen = false; });
             const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ 
                 return abilities.ability.name === abilityName; });
             state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
             state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(entry => entry.language.name === "en")?.effect || "";
+        },
+        setItem(state, action){
+            const results = action.payload.results;
+            const pokemonIndex = action.payload.index;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
+            state.team[pokemonIndex].held_item = results;
         },
         setCurrentPokemonName(state,action){
             state.currentPokemonName = action.payload;
@@ -381,6 +388,7 @@ export const {
     removeFromTeam,
     setCurrentPokemon,
     setAbility,
+    setItem,
     setCurrentPokemonName,
     setEVstat,
 

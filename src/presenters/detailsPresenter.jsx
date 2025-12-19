@@ -1,26 +1,26 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setCurrentPokemon, setEVstat, setAbility } from "/src/reduxStore.js";
-import { doMoveThunk, doAbilityThunk } from "/src/store/searchThunks.js";
+import { addActualMove, setOpen, setCurrentPokemon, setEVstat, setAbility, showItems } from "/src/reduxStore.js";
+import { doMoveThunk, doAbilityThunk, doItemThunk } from "/src/store/searchThunks.js";
+
 
 export function Details() {
 
     const dispatch = useDispatch();
-
-    const team = useSelector(
-        (state) => state.poke.team
-    );
-
-    const currentPokemonName = useSelector(
-        (state) => state.poke.currentPokemonName
-    );
-
-    const pokemonIndex = team.findIndex(
-        p => p?.name === currentPokemonName
-    );
-
+    const loading = useSelector((state) => state.poke.loading);
+    const open = useSelector((state) => state.poke.open);
+    const team = useSelector((state) => state.poke.team);
+    const currentPokemonName = useSelector((state) => state.poke.currentPokemonName);
+    const pokemonIndex = team.findIndex(p => p?.name === currentPokemonName);
+    const showItemsPromiseState = useSelector((state) => state.poke.showItemsPromiseState);
     const pokemon = pokemonIndex >= 0 ? team[pokemonIndex] : null;
+
+     const handleOpen = () => {
+        dispatch(setOpen(true));
+        dispatch(showItems());
+    };
+    const handleClose = (param) => {dispatch(setOpen(false));};
 
     function nextPokemonACB() {
         if (pokemonIndex < 0) return;
@@ -54,6 +54,12 @@ export function Details() {
         const abilityInfo = {abilityName:abilityName, pokemonIndex:pokemonIndex};
         dispatch(doAbilityThunk(abilityInfo));
     }
+    function setItemACB(item, pokemonIndex){
+        const itemInfo = {itemName:item.name, pokemonIndex:pokemonIndex};
+        dispatch(doItemThunk(itemInfo));
+        dispatch(setOpen(false))
+    }
+
     useEffect(() => {
         if (team.length === 0) return;
 
@@ -62,12 +68,19 @@ export function Details() {
         }
     }, [team, pokemonIndex, dispatch]);
 
+
     return <DetailsView team={team} 
+                        handleOpen={handleOpen}
+                        handleClose={handleClose}
+                        open={open}
+                        loading={loading}
+                        options={showItemsPromiseState.data}
                         pokemon={pokemon}
                         pokemonIndex={pokemonIndex}
                         onNext={nextPokemonACB}
                         onPrevious={previousPokemonACB}
                         addMove={addActualMoveACB} 
                         evChange={evChangeACB}
-                        setAbility={setAbilityACB}/>;
+                        setAbility={setAbilityACB}
+                        onItemSelect={setItemACB}/>;
 };

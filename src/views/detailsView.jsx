@@ -12,6 +12,10 @@ import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { display } from "@smogon/calc/dist/desc";
+
+import CircularProgress from '@mui/material/CircularProgress';
+import { render } from "katex";
+
 const Input = styled(MuiInput)`width: 42px;`;
 
 
@@ -40,8 +44,10 @@ export function DetailsView(props) {
         >
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button className="backToTeamViewBtn" onClick={backToTeamACB}>Back to team builder</Button>
-          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}><img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/> Previous</Button>
-          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next <img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
+          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}>
+            <img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/>Previous</Button>
+          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>
+            Next<img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
         </ButtonGroup>
         
         </Box>
@@ -86,6 +92,7 @@ export function DetailsView(props) {
               {MoveList(2, pokemonIndex)}
               {MoveList(3, pokemonIndex)}
               {AbilityList(pokemonIndex)}
+              {SearchItem()}
             </Box>
           </Box>
         );
@@ -262,6 +269,7 @@ function InputSlider(statName) {
           <Input
             value={value}
             size="small"
+            readOnly={true}            
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
@@ -275,6 +283,65 @@ function InputSlider(statName) {
         </Grid>
       </Grid>
     </Box>
+  );
+}
+
+function renderSelectedItem(pokemonIndex) {
+    const selectedItem = props.team[pokemonIndex]?.held_item;
+    if (!selectedItem) {
+      return <div>No item selected</div>;
+    } else {
+      return (
+        <div><h3>Selected Item:</h3>
+          <div><p>{selectedItem.name}</p><img src={selectedItem.sprites?.default} alt={selectedItem.name} width={50}/></div>
+          <p>{selectedItem.effect_entries[0]?.effect || 'No description available'}</p>
+        </div>
+      );
+    }
+}
+function SearchItem() {
+
+  return (
+    <div className="searchWrapper">
+      <Autocomplete
+        sx={{ width: 300 }}
+        open={props.open}
+        onOpen={props.handleOpen}
+        onClose={props.handleClose}
+
+        onChange={(event, option) => {
+          if (option) {
+            props.onItemSelect(option,pokemonIndex);
+          }
+        }}
+
+        isOptionEqualToValue={(option, value) => 
+          option.id === value.id
+        }
+        getOptionLabel={(option) => option.name}
+        options={props.options}
+        loading={props.loading}
+
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search Item"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {props.loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              },
+            }}
+          />
+        )}
+      />
+      {renderSelectedItem(pokemonIndex)}
+    </div>
   );
 }
 
