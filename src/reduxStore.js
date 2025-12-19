@@ -1,17 +1,11 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
-import { formatTimestamp } from "/src/utilities";
+import { formatTimestamp, clamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
 import { searchPokemon, showAllPokemon, showAllMoves, showAllItems, showAllAbilities } from "./pokemonSource";
 import { act } from "react";
 import { stripTeam } from "/src/objectStripper";
 
 const teamMaxSize = 6;
-
-function clamp(n, lo, hi) {
-    const x = Number(n);
-    if (Number.isNaN(x)) return lo;
-    return Math.max(lo, Math.min(hi, x));
-}
 
 const initialState = {
     team: [pokemonConst,],
@@ -40,8 +34,10 @@ const initialState = {
     damageAttackerName: "",
     damageDefenderName: "",
     damageMoveName: "",
+    damageIsCrit: false,
 
     // Attacker details
+    attackerCurrentHP: null,
     attackerLevel: 50,
     attackerGender: "N",
     attackerAbility: "",
@@ -57,6 +53,7 @@ const initialState = {
     attackerBoosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
 
     //Defender Details
+    defenderCurrentHP: null,
     defenderLevel: 50,
     defenderGender: "N",
     defenderAbility: "",
@@ -222,9 +219,11 @@ const pokeSlice = createSlice({
         setDamageAttackerName(state, action) { state.damageAttackerName = action.payload; },
         setDamageDefenderName(state, action) { state.damageDefenderName = action.payload; },
         setDamageMoveName(state, action) { state.damageMoveName = action.payload; },
+        setDamageIsCrit(state, action) { state.damageIsCrit = action.payload; },
         setDamageGameType(state, action) { state.damageGameType = action.payload; },
 
         // Attacker details
+        setAttackerCurrentHP(state, action) { state.attackerCurrentHP = clamp(action.payload, 0, 9999); },
         setAttackerLevel(state, action) { state.attackerLevel = clamp(action.payload, 1, 100); },
         setAttackerGender(state, action) { state.attackerGender = action.payload; },
         setAttackerAbility(state, action) { state.attackerAbility = action.payload; },
@@ -255,6 +254,7 @@ const pokeSlice = createSlice({
         },
         
         //Defender Details
+        setDefenderCurrentHP(state, action) { state.defenderCurrentHP = clamp(action.payload, 0, 9999); },
         setDefenderLevel(state, action) { state.defenderLevel = clamp(action.payload, 1, 100); },
         setDefenderGender(state, action) { state.defenderGender = action.payload; },
         setDefenderAbility(state, action) { state.defenderAbility = action.payload; },
@@ -414,9 +414,11 @@ export const {
     setDamageAttackerName,
     setDamageDefenderName,
     setDamageMoveName,
+    setDamageIsCrit,
     setDamageGameType,
     
     //Attack details
+    setAttackerCurrentHP,
     setAttackerLevel,
     setAttackerGender,
     setAttackerAbility,
@@ -432,6 +434,7 @@ export const {
     setAttackerBoost,
 
     //Defender details
+    setDefenderCurrentHP,
     setDefenderLevel,
     setDefenderGender,
     setDefenderAbility,
@@ -623,12 +626,8 @@ listenerMiddleware.startListening(
 
         if (!promise) return;
         promise
-            .then((data) => {
-                store.dispatch(showResolved({promise,data}));
-            })
-            .catch((error) => {
-                store.dispatch(showRejected({promise,error}));
-            })
+            .then((data) => {store.dispatch(showResolved({promise,data}));})
+            .catch((error) => {store.dispatch(showRejected({promise,error}));})
     }
 })
 

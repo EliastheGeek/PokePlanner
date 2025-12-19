@@ -1,18 +1,21 @@
 import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Card,
-  CardContent,
-  ToggleButton,
-  ToggleButtonGroup,
-  Select,
-  MenuItem,
-  Switch,
+    Box,
+    TextField,
+    Button,
+    Typography,
+    Card,
+    CardContent,
+    ToggleButton,
+    ToggleButtonGroup,
+    Select,
+    MenuItem,
+    Switch,
+    Autocomplete,
+    LinearProgress 
 } from "@mui/material";
 
-import NumberField from '/src/components/ui/NumberField.tsx';
+import {clamp} from "/src/utilities.js"
+import NumberField from "/src/components/ui/NumberField.tsx";
 
 export function DamageCalcView(props) {
     const weatherValue = props.weather && props.weather !== "" ? props.weather : "None";
@@ -49,6 +52,12 @@ export function DamageCalcView(props) {
         { name: "Careful", plus: "SpD", minus: "SpA" },
         { name: "Quirky", plus: null, minus: null },
     ];
+
+    const attackerRenderedHP = clamp((props.attackerCurrentHP ?? props.attackerFinalStats?.hp), 0, props.attackerFinalStats?.hp);
+    const attackerHPPercent = Math.round((attackerRenderedHP/props.attackerFinalStats?.hp)*100);
+
+    const defenderRenderedHP = clamp((props.defenderCurrentHP ?? props.defenderFinalStats?.hp), 0, props.defenderFinalStats?.hp);
+    const defenderHPPercent = Math.round((defenderRenderedHP/props.defenderFinalStats?.hp)*100);
 
     return (
         <form onSubmit={submitHandlerACB} style={{ height: "100%" }}>
@@ -119,22 +128,92 @@ export function DamageCalcView(props) {
                             }}
                         >
                             <Typography variant="subtitle1">Pokémon 1 (Attacker)</Typography>
-
-                            <TextField
-                                label="Species"
-                                variant="outlined"
-                                fullWidth
-                                value={props.attackerName}
-                                onChange={attackerChangeACB}
+                            
+                            <Autocomplete
+                                freeSolo
+                                options={props.speciesOptions ?? []}
+                                inputValue={props.attackerName}
+                                onInputChange={attackerChangeACB}
+                                onOpen={props.onSpeciesOpen}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Species"
+                                        variant="outlined"
+                                        fullWidth
+                                        onFocus={props.onSpeciesOpen}
+                                    />
+                                )}
                             />
 
-                            <TextField
-                                label="Move"
-                                variant="outlined"
-                                fullWidth
-                                value={props.moveName}
-                                onChange={moveChangeACB}
-                            />
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: -1, mb: -1 }}>
+                                The format for some of the suggested names do not work with the calculator.
+                            </Typography>
+
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                                    <Typography variant="body2">Current HP</Typography>
+
+                                    <TextField
+                                        type="number"
+                                        size="small"
+                                        sx={{ width: 70 }}
+                                        value={attackerRenderedHP}
+                                        onChange={attackerCurHPChangeACB}
+                                        inputProps={{ min: 0, max: props.attackerFinalStats?.hp ?? undefined, style: { textAlign: "center" } }}
+                                    />
+
+                                    <Typography variant="body2">/{props.attackerFinalStats?.hp ?? "—"}</Typography>
+
+                                    <Typography variant="body2">(</Typography>
+                                    <TextField
+                                        type="number"
+                                        size="small"
+                                        sx={{ width: 70 }}
+                                        value={attackerHPPercent}
+                                        onChange={attackerHPPercentChangeACB}
+                                        disabled={props.attackerFinalStats?.hp == null}
+                                        inputProps={{ min: 0, max: 100, style: { textAlign: "center" } }}
+                                    />
+                                    <Typography variant="body2">%)</Typography>
+                                </Box>
+
+                                <Typography variant="body2">Health</Typography>
+                                <LinearProgress
+                                    variant="determinate"
+                                    value={((attackerRenderedHP / props.attackerFinalStats?.hp) * 100) ?? 100}
+                                    color="success"
+                                    sx={{
+                                    height: 10,
+                                    borderRadius: 1,
+                                    border: "1px solid #000",
+                                    bgcolor: "grey.200",
+                                    "& .MuiLinearProgress-bar": { borderRadius: 1 },
+                                    }}
+                                />
+                            </Box>
+
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Autocomplete
+                                    options={props.moveOptions ?? []}
+                                    inputValue={props.moveName}
+                                    onInputChange={moveChangeACB}
+                                    onOpen={props.onMoveOpen}
+                                    renderInput={(params) => (
+                                        <TextField {...params} label="Move" variant="outlined" fullWidth onFocus={props.onMoveOpen} />
+                                    )}
+                                    size="small"
+                                    sx={{width: 200}}
+                                />
+                                <Typography variant="body2" sx={{ fontWeight: 600, paddingX: 1 }}>
+                                    Crit
+                                </Typography>
+                                <Switch
+                                    checked={props.isCrit}
+                                    onChange={critToggleACB}
+                                    size="small"
+                                />
+                            </Box>
 
                             <Box sx={{ display: "flex", }}>
                                 <TextField
@@ -144,7 +223,8 @@ export function DamageCalcView(props) {
                                     fullWidth
                                     value={props.attackerType1Override || ""}
                                     onChange={attackerType1OverrideChangeACB}
-                                    
+                                    sx={{ width: 128 }}
+                                    size="small"
                                 >
                                     <MenuItem value="Normal" sx={{ textTransform: "none" }}>Normal</MenuItem>
                                     <MenuItem value="Fire" sx={{ textTransform: "none" }}>Fire</MenuItem>
@@ -175,6 +255,8 @@ export function DamageCalcView(props) {
                                     fullWidth
                                     value={props.attackerType2Override || ""}
                                     onChange={attackerType2OverrideChangeACB}
+                                    sx={{ width: 128 }}
+                                    size="small"
                                 >
                                     <MenuItem value="" sx={{ textTransform: "none" }}>None</MenuItem>
                                     <MenuItem value="Normal" sx={{ textTransform: "none" }}>Normal</MenuItem>
@@ -212,6 +294,7 @@ export function DamageCalcView(props) {
                                     sx={{ width: 128 }}
                                     value={props.attackerTeraType}
                                     onChange={attackerTeraTypeChangeACB}
+                                    size="small"
                                 >
                                     <MenuItem value="Normal" sx={{ textTransform: "none" }}>Normal</MenuItem>
                                     <MenuItem value="Fire" sx={{ textTransform: "none" }}>Fire</MenuItem>
@@ -261,11 +344,28 @@ export function DamageCalcView(props) {
                                 <MenuItem value="N">N</MenuItem>
                             </TextField>
 
-                            <TextField label="Ability" fullWidth value={props.attackerAbility} onChange={attackerAbilityChangeACB} />
-                            <TextField label="Item" fullWidth value={props.attackerItem} onChange={attackerItemChangeACB} />
-                            
+                            <Autocomplete
+                                options={props.abilityOptions ?? []}
+                                inputValue={props.attackerAbility}
+                                onInputChange={attackerAbilityChangeACB}
+                                onOpen={props.onAbilityOpen}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Ability" variant="outlined" fullWidth onFocus={props.onAbilityOpen} />
+                                )}
+                                size="small"
+                            />
 
-                            
+                            <Autocomplete
+                                options={props.itemOptions ?? []}
+                                inputValue={props.attackerItem}
+                                onInputChange={attackerItemChangeACB}
+                                onOpen={props.onItemOpen}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Item" variant="outlined" fullWidth onFocus={props.onItemOpen} />
+                                )}
+                                size="small"
+                            />
+                             
                             <TextField 
                                 select
                                 label="Nature" 
@@ -299,13 +399,16 @@ export function DamageCalcView(props) {
                             <Box
                                 sx={{
                                     display: "grid",
-                                    gridTemplateColumns: "90px 64px 72px 72px",
+                                    gridTemplateColumns: "90px 48px 64px 72px 72px 56px",
                                     alignItems: "center",
                                     columnGap: 1,
                                     rowGap: 1,
                                 }}
                             >
                                 <Box />
+                                <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
+                                    Base
+                                </Typography>
                                 <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
                                     IVs
                                 </Typography>
@@ -314,6 +417,9 @@ export function DamageCalcView(props) {
                                 </Typography>
                                 <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
                                     Boost
+                                </Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
+                                    Total
                                 </Typography>
 
                                 {[
@@ -329,8 +435,16 @@ export function DamageCalcView(props) {
                                             {row.label}
                                         </Typography>
 
+                                        <Typography
+                                            key={"aBase"+row.key}
+                                            variant="body2"
+                                            sx={{ fontWeight: 600, textAlign: "center" }}
+                                        >
+                                            {props.attackerBaseStats?.[row.key]}
+                                        </Typography>
+
                                         <TextField
-                                            key={"aEV"+row.key}
+                                            key={"aIV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.attackerIVs?.[row.key] ?? 31}
@@ -340,12 +454,12 @@ export function DamageCalcView(props) {
                                         />
 
                                         <TextField
-                                            key={"aIV"+row.key}
+                                            key={"aEV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.attackerEVs?.[row.key] ?? 0}
                                             onChange={attackerEVChangeACB(row.key)}
-                                            inputProps={{ min: 0, max: 252 }}
+                                            inputProps={{ min: 0, max: 252, step: 4 }}
                                             sx={{width: 72,}}
                                         />
 
@@ -367,13 +481,20 @@ export function DamageCalcView(props) {
                                         ) : (
                                             <Box />
                                         )}
+
+                                        <Typography
+                                            key={"aFinal"+row.key}
+                                            variant="body2"
+                                            sx={{ fontWeight: 700, textAlign: "center" }}
+                                        >
+                                            {props.attackerFinalStats?.[row.key]}
+                                        </Typography>
                                     </Box>
                                 ))}
                             </Box>
                         </CardContent>
                     </Card>
 
-                    {/* Field (middle box with buttons) */}
                     <Card sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                         <CardContent
                             sx={{
@@ -794,13 +915,68 @@ export function DamageCalcView(props) {
                         >
                             <Typography variant="subtitle1">Pokémon 2 (Defender)</Typography>
 
-                            <TextField
-                                label="Species"
-                                variant="outlined"
-                                fullWidth
-                                value={props.defenderName}
-                                onChange={defenderChangeACB}
+                            <Autocomplete
+                                freeSolo
+                                options={props.speciesOptions ?? []}
+                                inputValue={props.defenderName}
+                                onInputChange={defenderChangeACB}
+                                onOpen={props.onSpeciesOpen}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Species"
+                                        variant="outlined"
+                                        fullWidth
+                                        onFocus={props.onSpeciesOpen}
+                                    />
+                                )}
                             />
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: -1, mb: -1 }}>
+                                The format for some of the suggested names do not work with the calculator.
+                            </Typography>
+
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                                    <Typography variant="body2">Current HP</Typography>
+
+                                    <TextField
+                                        type="number"
+                                        size="small"
+                                        sx={{ width: 70 }}
+                                        value={defenderRenderedHP}
+                                        onChange={defenderCurHPChangeACB}
+                                        inputProps={{ min: 0, max: props.defenderFinalStats?.hp ?? undefined, style: { textAlign: "center" } }}
+                                    />
+
+                                    <Typography variant="body2">/{props.defenderFinalStats?.hp ?? "—"}</Typography>
+
+                                    <Typography variant="body2">(</Typography>
+                                    <TextField
+                                        type="number"
+                                        size="small"
+                                        sx={{ width: 70 }}
+                                        value={defenderHPPercent}
+                                        onChange={defenderHPPercentChangeACB}
+                                        disabled={props.defenderFinalStats?.hp == null}
+                                        inputProps={{ min: 0, max: 100, style: { textAlign: "center" } }}
+                                    />
+                                    <Typography variant="body2">%)</Typography>
+                                </Box>
+
+                                <Typography variant="body2">Health</Typography>
+                                <LinearProgress
+                                    variant="determinate"
+                                    value={((defenderRenderedHP / props.defenderFinalStats?.hp) * 100) ?? 100}
+                                    color="success"
+                                    sx={{
+                                    height: 10,
+                                    borderRadius: 1,
+                                    border: "1px solid #000",
+                                    bgcolor: "grey.200",
+                                    "& .MuiLinearProgress-bar": { borderRadius: 1 },
+                                    }}
+                                />
+                            </Box>
 
                             <Box sx={{ display: "flex", }}>
                                 <TextField
@@ -810,6 +986,8 @@ export function DamageCalcView(props) {
                                     fullWidth
                                     value={props.defenderType1Override || ""}
                                     onChange={defenderType1OverrideChangeACB}
+                                    sx={{ width: 128 }}
+                                    size="small"
                                     
                                 >
                                     <MenuItem value="Normal" sx={{ textTransform: "none" }}>Normal</MenuItem>
@@ -841,6 +1019,8 @@ export function DamageCalcView(props) {
                                     fullWidth
                                     value={props.defenderType2Override || ""}
                                     onChange={defenderType2OverrideChangeACB}
+                                    sx={{ width: 128 }}
+                                    size="small"
                                 >
                                     <MenuItem value="" sx={{ textTransform: "none" }}>None</MenuItem>
                                     <MenuItem value="Normal" sx={{ textTransform: "none" }}>Normal</MenuItem>
@@ -876,6 +1056,7 @@ export function DamageCalcView(props) {
                                     label="Tera type"
                                     variant="outlined"
                                     sx={{ width: 128 }}
+                                    size="small"
                                     value={props.defenderTeraType}
                                     onChange={defenderTeraTypeChangeACB}
                                 >
@@ -914,6 +1095,7 @@ export function DamageCalcView(props) {
                                 value={props.defenderLevel}
                                 onChange={defenderLevelChangeACB}
                                 inputProps={{ min: 1, max: 100 }}
+                                size="small"
                             />
 
                             <TextField
@@ -927,10 +1109,30 @@ export function DamageCalcView(props) {
                                 <MenuItem value="F">F</MenuItem>
                                 <MenuItem value="N">N</MenuItem>
                             </TextField>
-
-                            <TextField label="Ability" fullWidth value={props.defenderAbility} onChange={defenderAbilityChangeACB} />
-                            <TextField label="Item" fullWidth value={props.defenderItem} onChange={defenderItemChangeACB} />
                             
+                            <Autocomplete
+                                freeSolo
+                                options={props.abilityOptions ?? []}
+                                inputValue={props.defenderAbility}
+                                onInputChange={defenderAbilityChangeACB}
+                                onOpen={props.onAbilityOpen}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Ability" variant="outlined" fullWidth onFocus={props.onAbilityOpen} />
+                                )}
+                                size="small"
+                            />
+
+                            <Autocomplete
+                                options={props.itemOptions ?? []}
+                                inputValue={props.defenderItem.replace("-", " ")}
+                                onInputChange={defenderItemChangeACB}
+                                onOpen={props.onItemOpen}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Item" variant="outlined" fullWidth onFocus={props.onItemOpen} />
+                                )}
+                                size="small"
+                            />
+
                             <TextField
                                 select
                                 label="Nature" 
@@ -964,13 +1166,16 @@ export function DamageCalcView(props) {
                             <Box
                                 sx={{
                                     display: "grid",
-                                    gridTemplateColumns: "90px 64px 72px 72px",
+                                    gridTemplateColumns: "90px 48px 64px 72px 72px 56px",
                                     alignItems: "center",
                                     columnGap: 1,
                                     rowGap: 1,
                                 }}
                             >
                                 <Box />
+                                <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
+                                    Base
+                                </Typography>
                                 <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
                                     IVs
                                 </Typography>
@@ -979,6 +1184,9 @@ export function DamageCalcView(props) {
                                 </Typography>
                                 <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
                                     Boost
+                                </Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 700, textAlign: "center" }}>
+                                    Total
                                 </Typography>
 
                                 {[
@@ -994,8 +1202,16 @@ export function DamageCalcView(props) {
                                             {row.label}
                                         </Typography>
 
+                                        <Typography
+                                            key={"dBase"+row.key}
+                                            variant="body2"
+                                            sx={{ fontWeight: 600, textAlign: "center" }}
+                                        >
+                                            {props.defenderBaseStats?.[row.key]}
+                                        </Typography>
+
                                         <TextField
-                                            key={"dEV"+row.key}
+                                            key={"dIV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.defenderIVs?.[row.key] ?? 31}
@@ -1005,12 +1221,12 @@ export function DamageCalcView(props) {
                                         />
 
                                         <TextField
-                                            key={"dIV"+row.key}
+                                            key={"dEV"+row.key}
                                             type="number"
                                             size="small"
                                             value={props.defenderEVs?.[row.key] ?? 0}
                                             onChange={defenderEVChangeACB(row.key)}
-                                            inputProps={{ min: 0, max: 252 }}
+                                            inputProps={{ min: 0, max: 252, step: 4 }}
                                             sx={{width: 72,}}
                                         />
 
@@ -1032,6 +1248,13 @@ export function DamageCalcView(props) {
                                         ) : (
                                             <Box />
                                         )}
+                                        <Typography
+                                            key={"dFinal"+row.key}
+                                            variant="body2"
+                                            sx={{ fontWeight: 700, textAlign: "center" }}
+                                        >
+                                            {props.defenderFinalStats?.[row.key]}
+                                        </Typography>
                                     </Box>
                                 ))}
                             </Box>
@@ -1049,50 +1272,56 @@ export function DamageCalcView(props) {
     }
 
     //Attacker
-    function attackerChangeACB(e) {props.onAttackerNameChange(e.target.value);}
-    function moveChangeACB(e) {props.onMoveNameChange(e.target.value);}
-    function attackerLevelChangeACB(e) { props.onAttackerLevelChange(Number(e.target.value)); }
+    function attackerChangeACB(e, newValue) {props.onAttackerNameChange(newValue);}
+    function attackerCurHPChangeACB(e) {props.onAttackerCurrentHPChange(e.target.value);}
+    function attackerHPPercentChangeACB(e) {props.onAttackerCurrentHPChange(Math.round((props.attackerFinalStats?.hp * e.target.value) / 100));}
+    function moveChangeACB(e, newValue) {props.onMoveNameChange(newValue);}
+    function critToggleACB(e, checked) { props.onCritChange(checked); }
+    function attackerCurrentHPPercentChangeACB(e) { props.onAttackerCurrentHPPercentChange(e.target.value); }
+    function attackerLevelChangeACB(e) { props.onAttackerLevelChange(e.target.value); }
     function attackerGenderChangeACB(e) { props.onAttackerGenderChange(e.target.value); }
     function attackerType1OverrideChangeACB(e) { props.onAttackerType1OverrideChange(e.target.value); }
     function attackerType2OverrideChangeACB(e) { props.onAttackerType2OverrideChange(e.target.value); }
     function attackerTeraTypeChangeACB(e) { props.onAttackerTeraTypeChange(e.target.value); }
     function attackerTeraToggleACB(e, checked) { props.onAttackerTerastallizedChange(checked); }
-    function attackerAbilityChangeACB(e) { props.onAttackerAbilityChange(e.target.value); }
-    function attackerItemChangeACB(e) { props.onAttackerItemChange(e.target.value); }
+    function attackerAbilityChangeACB(e, newValue) { props.onAttackerAbilityChange(newValue); }
+    function attackerItemChangeACB(e, newValue) { props.onAttackerItemChange(newValue); }
     function attackerNatureChangeACB(e) { props.onAttackerNatureChange(e.target.value); }
     function attackerStatusChangeACB(e) { props.onAttackerStatusChange(e.target.value); }
 
     function attackerEVChangeACB(stat) {
-        return function (e) { props.onAttackerEVChange(stat, Number(e.target.value)); };
+        return function (e) { props.onAttackerEVChange(stat, e.target.value); };
     }
     function attackerIVChangeACB(stat) {
-        return function (e) { props.onAttackerIVChange(stat, Number(e.target.value)); };
+        return function (e) { props.onAttackerIVChange(stat, e.target.value); };
     }
     function attackerBoostChangeACB(stat) {
-        return function (e) { props.onAttackerBoostChange(stat, Number(e.target.value)); };
+        return function (e) { props.onAttackerBoostChange(stat, e.target.value); };
     }
 
     //Defender
-    function defenderChangeACB(e) {props.onDefenderNameChange(e.target.value);}
-    function defenderLevelChangeACB(e) { props.onDefenderLevelChange(Number(e.target.value)); }
+    function defenderChangeACB(e, newValue) {props.onDefenderNameChange(newValue);}
+    function defenderCurHPChangeACB(e) {props.onDefenderCurrentHPChange(e.target.value);}
+    function defenderHPPercentChangeACB(e) {props.onDefenderCurrentHPChange(Math.round((props.defenderFinalStats?.hp * e.target.value) / 100));}
+    function defenderLevelChangeACB(e) { props.onDefenderLevelChange(e.target.value); }
     function defenderGenderChangeACB(e) { props.onDefenderGenderChange(e.target.value); }
     function defenderType1OverrideChangeACB(e) { props.onDefenderType1OverrideChange(e.target.value); }
     function defenderType2OverrideChangeACB(e) { props.onDefenderType2OverrideChange(e.target.value); }
     function defenderTeraTypeChangeACB(e) { props.onDefenderTeraTypeChange(e.target.value); }
     function defenderTeraToggleACB(e, checked) { props.onDefenderTerastallizedChange(checked); }
-    function defenderAbilityChangeACB(e) { props.onDefenderAbilityChange(e.target.value); }
-    function defenderItemChangeACB(e) { props.onDefenderItemChange(e.target.value); }
+    function defenderAbilityChangeACB(e, newValue) { props.onDefenderAbilityChange(newValue); }
+    function defenderItemChangeACB(e, newValue) { props.onDefenderItemChange(newValue); }
     function defenderNatureChangeACB(e) { props.onDefenderNatureChange(e.target.value); }
     function defenderStatusChangeACB(e) { props.onDefenderStatusChange(e.target.value); }
 
     function defenderEVChangeACB(stat) {
-        return function (e) { props.onDefenderEVChange(stat, Number(e.target.value)); };
+        return function (e) { props.onDefenderEVChange(stat, e.target.value); };
     }
     function defenderIVChangeACB(stat) {
-        return function (e) { props.onDefenderIVChange(stat, Number(e.target.value)); };
+        return function (e) { props.onDefenderIVChange(stat, e.target.value); };
     }
     function defenderBoostChangeACB(stat) {
-        return function (e) { props.onDefenderBoostChange(stat, Number(e.target.value)); };
+        return function (e) { props.onDefenderBoostChange(stat, e.target.value); };
     }
 
     //Field
