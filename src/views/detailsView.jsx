@@ -70,9 +70,21 @@ export function DetailsView(props) {
                 width={150}
                 alt={pokemon.name}
               />
+                         <Box>
+                <h3>Type:</h3>
+                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                  {pokemon.types?.map(printTypesCB)}
+                </ul>
+              </Box>
+              
             </Box>
-
+              {MoveList(0, pokemonIndex)}
+              {MoveList(1, pokemonIndex)}
+              {MoveList(2, pokemonIndex)}
+              {MoveList(3, pokemonIndex)}
+              {SearchItem()}
             <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
+              
               <Box component="aside">
                 <h3>Stats:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
@@ -80,28 +92,31 @@ export function DetailsView(props) {
                 </ul>
               </Box>
 
-              <Box>
-                <h3>Type:</h3>
-                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                  {pokemon.types?.map(printTypesCB)}
-                </ul>
-              </Box>
+   
+            
             </Box>
 
-            <Box sx={{gridColumn: "1 / -1", display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
-              {MoveList(0, pokemonIndex)}
-              {MoveList(1, pokemonIndex)}
-              {MoveList(2, pokemonIndex)}
-              {MoveList(3, pokemonIndex)}
               {AbilityList(pokemonIndex)}
-              {SearchItem()}
+            <Box sx={{gridColumn: "1 / -1", display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
+
+              
+              
             </Box>
           </Box>
         );
   }
     
-    function printBaseStatsCB(stats) {
-        return <li key={stats.stat.name}>{stats.base_stat +" + " + (stats.bonusStats?stats.bonusStats:0)+ " " + stats.stat.name} 
+    function printBaseStatsCB(stats) { //nature saknas
+      function calculateTotalStat(stats) {
+        if(stats?.stat.name ==='hp'){
+          const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value) )) + 10+100;
+          return total||stats.base_stat;
+        }
+        const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value) )) + 5;
+        console.log("Total stat for ", stats.stat.name, " is ", total);
+        return total||stats.base_stat;
+      }
+        return <li key={stats.stat.name}>{(calculateTotalStat(stats)>0?calculateTotalStat(stats):stats.base_stat)  + " " + stats.stat.name} 
                        {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
     }
 
@@ -233,6 +248,7 @@ function IVInput(statName){
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    console.log("IV change: ", event.target.value);
     props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);
   };
     const handleBlur = () => {
@@ -252,7 +268,7 @@ function IVInput(statName){
             inputProps={{
               step: 1,
               min: 0,
-              max: maxEV,
+              max: 31,
               type: 'number',
               'aria-labelledby': 'input-slider',
             }}

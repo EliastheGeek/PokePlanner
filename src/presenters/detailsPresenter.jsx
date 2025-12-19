@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setOpen, setCurrentPokemon, setEVstat, setAbility, showItems } from "/src/reduxStore.js";
+import { addActualMove, setOpen, setCurrentPokemon, setEVstat, setIVstat,setAbility, showItems } from "/src/reduxStore.js";
 import { doMoveThunk, doAbilityThunk, doItemThunk } from "/src/store/searchThunks.js";
 
 
@@ -50,6 +50,10 @@ export function Details() {
         const evChangeInfo = {newValue:newValue, statName:statName, pokemonIndex:pokemonIndex};
         dispatch(setEVstat(evChangeInfo));
     }
+    function ivChangeACB(newValue, statName, pokemonIndex){
+        const ivChangeInfo = {newValue:newValue, statName:statName, pokemonIndex:pokemonIndex};
+        dispatch(setIVstat(ivChangeInfo));
+    }
     function setAbilityACB(abilityName, pokemonIndex){
         const abilityInfo = {abilityName:abilityName, pokemonIndex:pokemonIndex};
         dispatch(doAbilityThunk(abilityInfo));
@@ -82,5 +86,6 @@ export function Details() {
                         addMove={addActualMoveACB} 
                         evChange={evChangeACB}
                         setAbility={setAbilityACB}
-                        onItemSelect={setItemACB}/>;
+                        onItemSelect={setItemACB}
+                        ivChange={ivChangeACB}/>;
 };

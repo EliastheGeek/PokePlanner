@@ -118,12 +118,13 @@ const pokeSlice = createSlice({
             // avoid duplicates
             if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
             if (state.team.length < teamMaxSize) {
-                /*Initialize actualMoves, moveInfo and bonusStats attributes */
+                /*Initialize actualMoves, moveInfo and IV,EV attributes */
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
                 pokemon.held_item = null;
                 if (Array.isArray(pokemon.stats)) {
-                    pokemon.stats = pokemon.stats.map(s => ({ ...s, bonusStats: 0 }));
+                    pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
+                    pokemon.stats = pokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
                 }
                 state.team = [...state.team, pokemon];
             }
@@ -166,7 +167,18 @@ const pokeSlice = createSlice({
                     return stats.stat.name === statName; });
             if (statIndex !== -1) {
                 const value = Math.floor(Number(newValue) / 4);
-                state.team[pokemonIndex].stats[statIndex].bonusStats = value;
+                state.team[pokemonIndex].stats[statIndex].EV_Value = value;
+            }
+        },
+        setIVstat(state, action){
+            const pokemonIndex = action.payload.pokemonIndex;
+            const statName = action.payload.statName;
+            const newValue = action.payload.newValue;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
+            const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){
+                return stats.stat.name === statName; });
+            if (statIndex !== -1) {
+                state.team[pokemonIndex].stats[statIndex].IV_Value = newValue;
             }
         },
         setAbility(state, action){
@@ -379,14 +391,16 @@ const pokeSlice = createSlice({
 });
 
 export const {
+    //Team
     addToTeam,
-    addActualMove,
-    addMoveInfo,
     removeFromTeam,
     setCurrentPokemon,
+    setCurrentPokemonName,
+    addActualMove,
+    addMoveInfo,
     setAbility,
     setItem,
-    setCurrentPokemonName,
+    setIVstat,
     setEVstat,
 
     //Search
