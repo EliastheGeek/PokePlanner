@@ -2,10 +2,9 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useState } from "react";
+import { formatPokeName } from "/src/utilities.js";
 
 export function SearchView(props) {
-
   return (
     <div className="searchWrapper">
       <Autocomplete
@@ -20,13 +19,17 @@ export function SearchView(props) {
           }
         }}
 
-        isOptionEqualToValue={(option, value) => 
-          option.name === value.name
-        }
-        getOptionLabel={(option) => option.name}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        getOptionLabel={(option) => formatPokeName(option.name)}
         options={props.options}
         loading={props.loading}
         disabled={props.teamLength >= 6}
+
+        renderOption={(liProps, option) => (
+          <li {...liProps}>
+            {formatPokeName(option?.name)}
+          </li>
+        )}
 
         renderInput={(params) => (
           <TextField
