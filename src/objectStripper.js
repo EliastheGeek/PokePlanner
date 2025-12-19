@@ -3,7 +3,7 @@ export function stripTeam(team){
         name: pokemon?.name ?? null,
 
         types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
-        abilities: (pokemon?.abilities ?? []).map(a => a.ability.name).filter(Boolean),
+        abilities: (pokemon?.abilities ?? []).filter(function(abilities){return abilities.chosen;}),
 
         moveInfo: stripMoveInfo(pokemon?.moveInfo) ?? [],
         stats: pokemon?.stats ?? [],
@@ -18,7 +18,7 @@ export function stripPokemon(pokemon){
         name: pokemon?.name ?? null,
 
         types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
-        abilities: (pokemon?.abilities ?? []).map(a => a.ability.name).filter(Boolean),
+        abilities: (pokemon?.abilities ?? []).filter(function(abilities){return abilities.chosen;}),
 
         held_item: pokemon?.held_item ?? null,
 
