@@ -171,7 +171,7 @@ const pokeSlice = createSlice({
                 const statIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){ 
                     return stats.stat.name === statName; });
             if (statIndex !== -1) {
-                const value = Math.floor(Number(newValue) / 4);
+                const value = newValue;
                 state.team[pokemonIndex].stats[statIndex].EV_Value = value;
             }
         },

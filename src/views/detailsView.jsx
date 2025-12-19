@@ -119,10 +119,10 @@ export function DetailsView(props) {
       function calculateTotalStat(stats) {
         if(stats?.stat.name ==='hp'){
 
-          const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value)*pokemon.level)/100) + 10+pokemon.level;
+          const total = Math.floor(((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 10+pokemon.level;
           return total||stats.base_stat;
         }
-        const total = Math.floor(((2 * stats.base_stat + stats.EV_Value + stats.IV_Value)*pokemon.level)/100) + 5;
+        const total = Math.floor(((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5;
         console.log("Total stat for ", stats.stat.name, " is ", total);
         return total||stats.base_stat;
       }
@@ -161,6 +161,7 @@ function MoveList(slot,index) {
  return (
   <div>
     <Autocomplete
+      key={`move-${slot}-${index}`}
       id="move-select"              
       sx={{ width: 200 }}
   
@@ -215,6 +216,7 @@ function AbilityList(index) {
   return (
     <div> 
     <Autocomplete
+      key={`ability-${index}`}
       id="ability-select"
       sx={{ width: 200 }}
       options={pokemon?.abilities ?? []}
@@ -254,7 +256,13 @@ function AbilityList(index) {
 }
 
 function IVInput(statName){
-  const [value, setValue] = React.useState(0);
+  const initialIV = pokemon?.stats?.find(s => s.stat.name === statName)?.IV_Value ?? 0;
+  const [value, setValue] = React.useState(initialIV);
+
+  React.useEffect(() => {
+    const iv = pokemon?.stats?.find(s => s.stat.name === statName)?.IV_Value ?? 0;
+    setValue(iv);
+  }, [pokemonIndex, statName, pokemon]);
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? 0 : Number(event.target.value));
@@ -287,7 +295,12 @@ function IVInput(statName){
         </Grid>);
 }
 function LevelInput(){
-  const [value, setValue] = React.useState(1);
+  const initialLevel = pokemon?.level ?? 1;
+  const [value, setValue] = React.useState(initialLevel);
+
+  React.useEffect(() => {
+    setValue(pokemon?.level ?? 1);
+  }, [pokemonIndex, pokemon]);
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? 1 : Number(event.target.value));
@@ -321,7 +334,13 @@ function LevelInput(){
 }
 
 function InputSlider(statName) {
-  const [value, setValue] = React.useState(0);
+  const initialEV = pokemon?.stats?.find(s => s.stat.name === statName)?.EV_Value ?? 0;
+  const [value, setValue] = React.useState(initialEV);
+
+  React.useEffect(() => {
+    const ev = pokemon?.stats?.find(s => s.stat.name === statName)?.EV_Value ?? 0;
+    setValue(ev);
+  }, [pokemonIndex, statName, pokemon]);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
