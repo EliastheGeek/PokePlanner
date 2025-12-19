@@ -44,8 +44,10 @@ export function DetailsView(props) {
         >
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button className="backToTeamViewBtn" onClick={backToTeamACB}>Back to team builder</Button>
+          
           <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}>
             <img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/>Previous</Button>
+
           <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>
             Next<img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
         </ButtonGroup>
@@ -100,7 +102,7 @@ export function DetailsView(props) {
     
     function printBaseStatsCB(stats) {
         return <li key={stats.stat.name}>{stats.base_stat +" + " + (stats.bonusStats?stats.bonusStats:0)+ " " + stats.stat.name} 
-                       {InputSlider(stats.stat.name)}</li>;
+                       {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
     }
 
     function printTypesCB(types) {
@@ -226,6 +228,38 @@ function AbilityList(index) {
   );
 }
 
+function IVInput(statName){
+  const [value, setValue] = React.useState(0);
+
+  const handleInputChange = (event) => {
+    setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);
+  };
+    const handleBlur = () => {
+    if (value < 0) {
+      setValue(0);
+    } else if (value > 31) {
+      setValue(31);
+    }
+  };
+  return (<Grid>
+    
+          <Input
+            value={value}
+            size="small"          
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 1,
+              min: 0,
+              max: maxEV,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+          IV
+        </Grid>);
+}
 
 
 function InputSlider(statName) {

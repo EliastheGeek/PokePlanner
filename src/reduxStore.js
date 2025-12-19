@@ -13,7 +13,7 @@ function clamp(n, lo, hi) {
 
 const initialState = {
     team: [pokemonConst,],
-    currentPokemonName: pokemonConst.name, //för att söka pokemon
+    currentPokemonName: pokemonConst.name, 
     open: false,
     loading: false,
     //Promise-stuff
@@ -190,9 +190,6 @@ const pokeSlice = createSlice({
         },
         setCurrentPokemonName(state,action){
             state.currentPokemonName = action.payload;
-        },
-        setSearchQuery(state, action) {
-            state.searchParams.query = action.payload;
         },
         //Search + Promise
         setSearchQuery(state, action) { state.searchParams.query = action.payload; },
