@@ -8,8 +8,8 @@ import { stripTeam } from "/src/objectStripper";
 const teamMaxSize = 6;
 
 const initialState = {
-    team: [pokemonConst,],
-    currentPokemonName: pokemonConst.name, 
+    team: [],
+    currentPokemonName: null, 
     open: false,
     natureOpen: false,
     loading: false,
