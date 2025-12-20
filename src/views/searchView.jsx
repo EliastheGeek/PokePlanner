@@ -8,7 +8,7 @@ export function SearchView(props) {
   return (
     <div className="searchWrapper">
       <Autocomplete
-        sx={{ width: 300 }}
+        sx={{ width: 300, size:200 }}
         open={props.open}
         onOpen={props.handleOpen}
         onClose={props.handleClose}

@@ -375,7 +375,7 @@ const pokeSlice = createSlice({
         setUser(state, action) { state.user = action.payload; },
         setReady(state, action) { state.ready = action.payload; },
         setTeam(state, action) { state.team = action.payload; },
-        clearTeam(state) { state.team = [pokemonConst]; },
+        clearTeam(state) { state.team = []; },
 
         
         fillFirestore(state, action) {

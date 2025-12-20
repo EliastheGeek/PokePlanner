@@ -39,7 +39,6 @@ export function TeamView(props){
     
 
     function showTeamCB(pokemon){
-
         function removeFromTeamACB(pokemon){
           props.onRemoveFromTeam(pokemon);
         }
@@ -65,7 +64,8 @@ export function TeamView(props){
                 className="imageWrapper"
               >
                 <img
-                  src={pokemon?.sprites?.front_default}
+
+                  src={pokemon?.sprites?.other.home.front_default}
                   alt={formatPokeName(pokemon.name)}
                 />
               </div>

@@ -279,8 +279,8 @@
 /* ------------ */
 
 .pokemonCard {
-  width: 180px;
-  height: 260px;
+  width: 240px;
+  height: 330px;
   padding: 16px;
   border-radius: 16px;
   background: rgb(241, 241, 241);
@@ -317,8 +317,8 @@
 }
 
 .imageWrapper {
-  width: 120px;
-  height: 120px;
+  width: 165px;
+  height: 165px;
   background: #f2f2f2;
   border-radius: 12px;
   display: flex;
@@ -350,13 +350,13 @@
 /* ---------- */
 
 .emptyCard {
-  width: 180px;
-  height: 260px;
+  width: 240px;
+  height: 330px;
   padding: 16px;
   border-radius: 16px;
   background: #fafafa;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  border: 2px dashed #cccccc;
+  border: 2px dashed #9c9c9c;
 
   display: flex;
   flex-direction: column;        
@@ -364,7 +364,7 @@
   justify-content: center;       
   gap: 12px;                  
 
-  color: #aaaaaa;
+  color: #808080;
   font-size: 18px;
   font-weight: 500;
   opacity: 0.4;

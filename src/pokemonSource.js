@@ -34,7 +34,6 @@ export function searchAbility(searchParams) {//searchparams är ability namn
 }
 
 export function searchItem(searchParams) {//searchparams är item namn
-    console.log("Searching for item: ", searchParams);
     const url = "https://pokeapi.co/api/v2/item/" + searchParams;
     const options = {
         method: "GET",
@@ -45,13 +44,12 @@ export function searchItem(searchParams) {//searchparams är item namn
     function resultACB(result) { return result;}
 }
 export function searchNature(searchParams) {//searchparams är nature namn
-    console.log("Searching for nature: ", searchParams);
     const url = "https://pokeapi.co/api/v2/nature/" + searchParams;
     const options = {
         method: "GET",
     };
     return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
-    function errorACB(error){ console.log("Error in searchItem: ", error);}
+    function errorACB(error){ console.log("Error in searchNature: ", error);}
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
 }
@@ -100,7 +98,7 @@ export function showAllItems(){
     
     function responseACB(response) {return response.json();}
     function resultACB(result) {const filteredResults = filterItemOptions(result);
-        console.log(filteredResults); return filteredResults.results;}
+        return filteredResults.results;}
 }   
 
 
