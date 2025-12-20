@@ -187,7 +187,6 @@ export function DetailsView(props) {
           return total;
         }
         const total = Math.floor(((((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5)*stats.natureModifier);
-        console.log("Total stat for ", stats.stat.name, " is ", total);
         return total;
       }
         return <li key={stats.stat.name}>{(calculateTotalStat(stats)||stats.base_stat)  + " " + formatPokeName(stats.stat.name)} 
