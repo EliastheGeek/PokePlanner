@@ -44,6 +44,17 @@ export function searchItem(searchParams) {//searchparams är item namn
     function responseACB(response) {return response.json();}
     function resultACB(result) { return result;}
 }
+export function searchNature(searchParams) {//searchparams är nature namn
+    console.log("Searching for nature: ", searchParams);
+    const url = "https://pokeapi.co/api/v2/nature/" + searchParams;
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB).catch(errorACB);
+    function errorACB(error){ console.log("Error in searchItem: ", error);}
+    function responseACB(response) {return response.json();}
+    function resultACB(result) { return result;}
+}
 
 export function showAllPokemon(){
     const url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1328";
@@ -95,6 +106,16 @@ export function showAllItems(){
 
 export function showAllAbilities(){
     const url = "https://pokeapi.co/api/v2/ability/?offset=0&limit=100000";
+    const options = {
+        method: "GET",
+    };
+    return fetch(url, options).then(responseACB).then(resultACB);
+
+    function responseACB(response) {return response.json();}
+    function resultACB(result) {return result.results;}
+}
+export function showAllNatures(){
+    const url = "https://pokeapi.co/api/v2/nature/?offset=0&limit=100000";
     const options = {
         method: "GET",
     };

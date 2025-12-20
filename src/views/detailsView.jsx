@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { display } from "@smogon/calc/dist/desc";
-
 import CircularProgress from '@mui/material/CircularProgress';
 import { render } from "katex";
 
@@ -92,7 +91,8 @@ export function DetailsView(props) {
               {MoveList(1, pokemonIndex)}
               {MoveList(2, pokemonIndex)}
               {MoveList(3, pokemonIndex)}
-              <Box>{AbilityList(pokemonIndex)}</Box>
+              
+              <Box>{AbilityList(pokemonIndex)}{NatureList(pokemonIndex)}</Box>
             </Box>
 
 
@@ -114,17 +114,79 @@ export function DetailsView(props) {
           </Box>
         );
   }
+  function NatureList(index){
+    function natureChangeACB(event){
+      props.setNature(event.target.innerText, index);
+    }
+    return(
+    <div>
+    <Autocomplete
+      key={`nature-${index}`}
+      id="nature-select"      
+      onOpen={props.handleOpenNature}
+      onClose={props.handleClose}        
+      sx={{ width: 200 }}
+      options={props.optionsNature}
+      autoHighlight
+
+      onChange={natureChangeACB}
+      getOptionLabel={(option) => option.name || ""}
+      renderOption={(props, option) => {
+        const { key, ...optionProps } = props;
+        return (
+          <Box
+          
+            key={key}
+            component="li"
+            sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+            {...optionProps}
+          >
+            {option?.name}
+          </Box>
+        
+
+        );
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Nature"
+          slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              autoComplete: 'new-password', // disable autocomplete and autofill
+            },
+          }}
+        />
+      )}
+          
+    />
+    {showNatures(pokemonIndex)}
+    </div>
+    );}
+  function showNatures(index){
+    const natureInfo = props.team[index].stats.natureInfo;
+    const none = "none"
+    if (!natureInfo) return <div>No nature chosen</div>;
+    return(
+      <div>
+          <h3>Nature Info:</h3>
+          <p>{natureInfo.name}</p>
+          <p>Decreased stat: {natureInfo.decrease||none}</p>
+          <p>Increased stat: {natureInfo.increase||none}</p>
+          </div>
+    );
+  }
     
     function printBaseStatsCB(stats) { //nature saknas
       function calculateTotalStat(stats) {
         if(stats?.stat.name ==='hp'){
-
-          const total = Math.floor(((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 10+pokemon.level;
-          return total||stats.base_stat;
+          const total = Math.floor(((2 * stats.base_stat + stats.IV_Value + stats.EV_Value/4)*pokemon.level)/100) + 10+pokemon.level;
+          return total;
         }
-        const total = Math.floor(((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5;
+        const total = Math.floor(((((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5)*stats.natureModifier);
         console.log("Total stat for ", stats.stat.name, " is ", total);
-        return total||stats.base_stat;
+        return total;
       }
         return <li key={stats.stat.name}>{calculateTotalStat(stats)  + " " + stats.stat.name} 
                        {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
@@ -265,6 +327,7 @@ function IVInput(statName){
   }, [pokemonIndex, statName, pokemon]);
 
   const handleInputChange = (event) => {
+    if(event.target.value>31) return;
     setValue(event.target.value === '' ? 0 : Number(event.target.value));
 
     props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);

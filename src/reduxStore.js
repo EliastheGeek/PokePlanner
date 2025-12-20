@@ -1,7 +1,7 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
 import { formatTimestamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
-import { searchPokemon, showAllPokemon, showAllMoves, showAllItems, showAllAbilities } from "./pokemonSource";
+import { searchPokemon, showAllPokemon, showAllMoves, showAllItems, showAllAbilities, showAllNatures } from "./pokemonSource";
 import { act } from "react";
 const teamMaxSize = 6;
 
@@ -15,6 +15,7 @@ const initialState = {
     team: [pokemonConst,],
     currentPokemonName: pokemonConst.name, 
     open: false,
+    natureOpen: false,
     loading: false,
     //Promise-stuff
     searchParams: {},
@@ -23,6 +24,7 @@ const initialState = {
     showMovesPromiseState: { promise: null, data: [], error: null },
     showItemsPromiseState: { promise: null, data: [], error: null },
     showAbilitiesPromiseState: { promise: null, data: [], error: null },
+    showNaturesPromiseState: { promise: null, data: [], error: null },
 
 
     //Persistance
@@ -126,6 +128,7 @@ const pokeSlice = createSlice({
                 if (Array.isArray(pokemon.stats)) {
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
+                    pokemon.stats = pokemon.stats.map(s => ({ ...s, natureModifier: 1 }));
                 }
                 state.team = [...state.team, pokemon];
             }
@@ -154,6 +157,7 @@ const pokeSlice = createSlice({
         currentPokemon(state,action){ state.currentPokemonName = action.payload.name; },
         showPokemon(state, action) {state.showPokemonPromiseState = { promise: null, data: [], error: null };},
         setOpen(state, action) {state.open = action.payload;},
+        setNatureOpen(state, action){state.natureOpen = action.payload;},
         setOptions(state, action) {state.showPokemonPromiseState.data = action.payload;},
         
         setCurrentPokemon(state,action){state.currentPokemonName = action.payload;},
@@ -186,6 +190,26 @@ const pokeSlice = createSlice({
                 state.team[pokemonIndex].stats[statIndex].IV_Value = newValue;
             }
         },
+        setNature(state, action){
+
+            const result = action.payload.results;
+            const pokemonIndex = action.payload.index;
+            const decrease = result.decreased_stat?.name;
+            const increase = result.increased_stat?.name;
+            const natureInfo = {name:result.name,decrease:decrease,increase:increase}
+            const minusIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){return decrease === stats.stat.name});
+            const plusIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){return increase === stats.stat.name});
+
+            state.team[pokemonIndex].stats = state.team[pokemonIndex].stats.map(s => ({ ...s, natureModifier: 1 }));
+            if(!decrease&&!increase){
+
+                 state.team[pokemonIndex].stats.natureInfo = natureInfo;
+                return;
+            }
+            state.team[pokemonIndex].stats[plusIndex].natureModifier=1.1;
+            state.team[pokemonIndex].stats[minusIndex].natureModifier=0.9;  
+            state.team[pokemonIndex].stats.natureInfo = natureInfo;
+        },
         setAbility(state, action){
             const results = action.payload.results;
             const pokemonIndex = action.payload.index;
@@ -217,7 +241,7 @@ const pokeSlice = createSlice({
         showMoves(state) { state.showMovesPromiseState = { promise: null, data: [], error: null }; },
         showItems(state) { state.showItemsPromiseState = { promise: null, data: [], error: null }; },
         showAbilities(state) { state.showAbilitiesPromiseState = { promise: null, data: [], error: null }; },
-        
+        showNatures(state){ state.showNaturesPromiseState = { promise: null, data: [], error: null }; },
         //Moves
         movesStarted(state, action) { state.showMovesPromiseState.promise = action.payload; state.showMovesPromiseState.data = []; state.showMovesPromiseState.error = null; },
         movesResolved(state, action) { const { promise, data } = action.payload; if (state.showMovesPromiseState.promise !== promise) return; state.showMovesPromiseState.data = data; },
@@ -232,6 +256,11 @@ const pokeSlice = createSlice({
         abilitiesStarted(state, action) { state.showAbilitiesPromiseState.promise = action.payload; state.showAbilitiesPromiseState.data = []; state.showAbilitiesPromiseState.error = null; },
         abilitiesResolved(state, action) { const { promise, data } = action.payload; if (state.showAbilitiesPromiseState.promise !== promise) return; state.showAbilitiesPromiseState.data = data; },
         abilitiesRejected(state, action) { const { promise, error } = action.payload; if (state.showAbilitiesPromiseState.promise !== promise) return; state.showAbilitiesPromiseState.error = error; },
+
+        //Natures
+        naturesStarted(state, action) { state.showNaturesPromiseState.promise = action.payload; state.showNaturesPromiseState.data = []; state.showNaturesPromiseState.error = null; },
+        naturesResolved(state, action) { const { promise, data } = action.payload; if (state.showNaturesPromiseState.promise !== promise) return; state.showNaturesPromiseState.data = data; },
+        naturesRejected(state, action) { const { promise, error } = action.payload; if (state.showNaturesPromiseState.promise !== promise) return; state.showNaturesPromiseState.error = error; },
 
         //Authentication
         setCurrentEmail(state, action){state.currentEmail = action.payload;},
@@ -408,23 +437,26 @@ export const {
     setLevel,
     setIVstat,
     setEVstat,
-
+    setNature,
     //Search
     setSearchQuery,
     doSearch,
     showPokemon,
     setOpen,
+    setNatureOpen,
 
     setUser,
     //Promises + Search
     showMoves, 
     showItems, 
     showAbilities,
+    showNatures,
 
     showStarted, showResolved, showRejected,
     movesStarted, movesResolved, movesRejected,
     itemsStarted, itemsResolved, itemsRejected,
     abilitiesStarted, abilitiesResolved, abilitiesRejected,
+    naturesStarted, naturesResolved, naturesRejected,
     searchStarted, searchResolved, searchRejected,
 
     setReady,
@@ -692,5 +724,19 @@ listenerMiddleware.startListening({
         promise
             .then((data) => store.dispatch(abilitiesResolved({ promise, data })))
             .catch((error) => store.dispatch(abilitiesRejected({ promise, error })));
+    },
+});
+
+listenerMiddleware.startListening({
+    type: "poke/showNatures",
+    effect(action, store) {
+        const promise = showAllNatures();
+        store.dispatch(naturesStarted(promise));
+
+        if (!promise) return;
+        
+        promise
+            .then((data) => store.dispatch(naturesResolved({ promise, data })))
+            .catch((error) => store.dispatch(naturesRejected({ promise, error })));
     },
 });

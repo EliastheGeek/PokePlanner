@@ -1,5 +1,5 @@
-import { doSearch,addToTeam, addMoveInfo, setAbility, setItem} from "/src/reduxStore.js";
-import { searchPokemon, searchMove, searchAbility, searchItem } from "/src/pokemonSource.js";
+import { doSearch,addToTeam, addMoveInfo, setAbility, setItem, setNature} from "/src/reduxStore.js";
+import { searchPokemon, searchMove, searchAbility, searchItem, searchNature } from "/src/pokemonSource.js";
 
 export function doPokeThunk(pokeQuery) {
     return async function (dispatch, getState) {
@@ -32,6 +32,14 @@ export function doItemThunk(itemInfo) {
         const results = await searchItem(itemInfo.itemName);
         const itemData = {results: results, index: itemInfo.pokemonIndex};
         dispatch(setItem(itemData));
+    }
+}
+export function doNatureThunk(natureInfo) {
+    return async function (dispatch, getState) {
+        if(!natureInfo.natureName) return;
+        const results = await searchNature(natureInfo.natureName);
+        const natureData = {results: results, index: natureInfo.pokemonIndex};
+        dispatch(setNature(natureData));
     }
 }
 
