@@ -47,7 +47,7 @@ export function clamp(n, lo, hi) {
     return Math.max(lo, Math.min(hi, n));
 }
 
-export const formatPokeName = (name) => { //Made with the help of AI
+export const formatPokeName = (name) => {
     if (!name) return "";
     return name
         .trim()

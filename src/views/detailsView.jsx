@@ -13,6 +13,9 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { display } from "@smogon/calc/dist/desc";
 import { formatPokeName } from "/src/utilities.js"
+import CircularProgress from '@mui/material/CircularProgress';
+import { render } from "katex";
+
 const Input = styled(MuiInput)`width: 42px;`;
 
 
@@ -41,8 +44,12 @@ export function DetailsView(props) {
         >
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button className="backToTeamViewBtn" onClick={backToTeamACB}>Back to team builder</Button>
-          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}><img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/> Previous</Button>
-          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>Next <img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
+          
+          <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}>
+            <img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/>Previous</Button>
+
+          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>
+            Next<img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
         </ButtonGroup>
         
         </Box>
@@ -56,45 +63,135 @@ export function DetailsView(props) {
       if (!props.team || !pokemon) return null;
      return ( 
           <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
+            
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <h2 style={{ margin: 0 }}>{formatPokeName(pokemon.name)}</h2>
+              
+              <h2 style={{ margin: 0 }}>{formatPokeName(pokemon.name)} Level: {LevelInput()}</h2>
+              
               <img
                 src={pokemon.sprites?.front_default}
                 width={150}
                 alt={formatPokeName(pokemon.name)}
+                
               />
-            </Box>
-
-            <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
-              <Box component="aside">
-                <h3>Stats:</h3>
-                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
-                  {pokemon.stats?.map(printBaseStatsCB)}
-                </ul>
-              </Box>
-
-              <Box>
+              
+              <Box>          
                 <h3>Type:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
                   {pokemon.types?.map(printTypesCB)}
                 </ul>
+      
+                  <Box component="aside">
+                    <h3>Stats:</h3>
+                    <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                    {pokemon.stats?.map(printBaseStatsCB)}
+                    </ul>
+                  </Box>
+              {SearchItem()}
               </Box>
-            </Box>
-
-            <Box sx={{gridColumn: "1 / -1", display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
               {MoveList(0, pokemonIndex)}
               {MoveList(1, pokemonIndex)}
               {MoveList(2, pokemonIndex)}
               {MoveList(3, pokemonIndex)}
-              {AbilityList(pokemonIndex)}
+              
+              <Box>{AbilityList(pokemonIndex)}{NatureList(pokemonIndex)}</Box>
             </Box>
+
+
+            <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
+              
+
+
+   
+            
+            </Box>
+
+              
+            <Box sx={{gridColumn: "1 / -1", display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
+
+              
+              
+            </Box>
+          
           </Box>
         );
   }
+  function NatureList(index){
+    function natureChangeACB(event){
+      props.setNature(event.target.innerText, index);
+    }
+    return(
+    <div>
+    <Autocomplete
+      key={`nature-${index}`}
+      id="nature-select"      
+      onOpen={props.handleOpenNature}
+      onClose={props.handleClose}        
+      sx={{ width: 200 }}
+      options={props.optionsNature}
+      autoHighlight
+
+      onChange={natureChangeACB}
+      getOptionLabel={(option) => option.name || ""}
+      renderOption={(props, option) => {
+        const { key, ...optionProps } = props;
+        return (
+          <Box
+          
+            key={key}
+            component="li"
+            sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+            {...optionProps}
+          >
+            {option?.name}
+          </Box>
+        
+
+        );
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Nature"
+          slotProps={{
+            htmlInput: {
+              ...params.inputProps,
+              autoComplete: 'new-password', // disable autocomplete and autofill
+            },
+          }}
+        />
+      )}
+          
+    />
+    {showNatures(pokemonIndex)}
+    </div>
+    );}
+  function showNatures(index){
+    const natureInfo = props.team[index].stats.natureInfo;
+    const none = "none"
+    if (!natureInfo) return <div>No nature chosen</div>;
+    return(
+      <div>
+          <h3>Nature Info:</h3>
+          <p>{natureInfo.name}</p>
+          <p>Decreased stat: {natureInfo.decrease||none}</p>
+          <p>Increased stat: {natureInfo.increase||none}</p>
+          </div>
+    );
+  }
     
-    function printBaseStatsCB(stats) {
-        return <li key={stats.stat.name}>{stats.base_stat +" + " + (stats.bonusStats?stats.bonusStats:0)+ " " + stats.stat.name} 
-                       {InputSlider(stats.stat.name)}</li>;
+    function printBaseStatsCB(stats) { //nature saknas
+      function calculateTotalStat(stats) {
+        if(stats?.stat.name ==='hp'){
+          const total = Math.floor(((2 * stats.base_stat + stats.IV_Value + stats.EV_Value/4)*pokemon.level)/100) + 10+pokemon.level;
+          return total;
+        }
+        const total = Math.floor(((((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5)*stats.natureModifier);
+        console.log("Total stat for ", stats.stat.name, " is ", total);
+        return total;
+      }
+        return <li key={stats.stat.name}>{(calculateTotalStat(stats)||stats.base_stat)  + " " + stats.stat.name} 
+                       {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
     }
 
     function printTypesCB(types) {
@@ -129,7 +226,8 @@ function MoveList(slot,index) {
  return (
   <div>
     <Autocomplete
-      id="move-select"
+      key={`move-${slot}-${index}`}
+      id="move-select"              
       sx={{ width: 200 }}
   
       options={props.team[index]?.moves || []}
@@ -168,6 +266,7 @@ function AbilityList(index) {
   return (
     <div> 
     <Autocomplete
+      key={`ability-${index}`}
       id="ability-select"
       sx={{ width: 200 }}
       options={pokemon?.abilities ?? []}
@@ -195,10 +294,93 @@ function AbilityList(index) {
   );
 }
 
+function IVInput(statName){
+  const initialIV = pokemon?.stats?.find(s => s.stat.name === statName)?.IV_Value ?? 0;
+  const [value, setValue] = React.useState(initialIV);
 
+  React.useEffect(() => {
+    const iv = pokemon?.stats?.find(s => s.stat.name === statName)?.IV_Value ?? 0;
+    setValue(iv);
+  }, [pokemonIndex, statName, pokemon]);
+
+  const handleInputChange = (event) => {
+    if(event.target.value>31) return;
+    setValue(event.target.value === '' ? 0 : Number(event.target.value));
+
+    props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);
+  };
+    const handleBlur = () => {
+    if (value < 0) {
+      setValue(0);
+    } else if (value > 31) {
+      setValue(31);
+    }
+  };
+  return (<Grid>
+    
+          <Input
+            value={value}
+            size="small"          
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 1,
+              min: 0,
+              max: 31,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+          IV
+        </Grid>);
+}
+function LevelInput(){
+  const initialLevel = pokemon?.level ?? 1;
+  const [value, setValue] = React.useState(initialLevel);
+
+  React.useEffect(() => {
+    setValue(pokemon?.level ?? 1);
+  }, [pokemonIndex, pokemon]);
+
+  const handleInputChange = (event) => {
+    setValue(event.target.value === '' ? 1 : Number(event.target.value));
+
+    props.setLevel(event.target.value === '' ? 1 : Number(event.target.value), pokemonIndex);
+  };
+    const handleBlur = () => {
+    if (value < 1) {
+      setValue(1);
+    } else if (value > 100) {
+      setValue(100);
+    }
+  };
+  return (<Grid>
+    
+          <Input
+            value={value}
+            size="small"          
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 1,
+              min: 1,
+              max: 100,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+
+        </Grid>);
+}
 
 function InputSlider(statName) {
-  const [value, setValue] = React.useState(0);
+  const initialEV = pokemon?.stats?.find(s => s.stat.name === statName)?.EV_Value ?? 0;
+  const [value, setValue] = React.useState(initialEV);
+
+  React.useEffect(() => {
+    const ev = pokemon?.stats?.find(s => s.stat.name === statName)?.EV_Value ?? 0;
+    setValue(ev);
+  }, [pokemonIndex, statName, pokemon]);
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
@@ -238,6 +420,7 @@ function InputSlider(statName) {
           <Input
             value={value}
             size="small"
+            readOnly={true}            
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
@@ -251,6 +434,65 @@ function InputSlider(statName) {
         </Grid>
       </Grid>
     </Box>
+  );
+}
+
+function renderSelectedItem(pokemonIndex) {
+    const selectedItem = props.team[pokemonIndex]?.held_item;
+    if (!selectedItem) {
+      return <div>No item selected</div>;
+    } else {
+      return (
+        <div><h3>Selected Item:</h3>
+          <div><p>{selectedItem.name}</p><img src={selectedItem.sprites?.default} alt={selectedItem.name} width={50}/></div>
+          <p>{selectedItem.effect_entries[0]?.effect || 'No description available'}</p>
+        </div>
+      );
+    }
+}
+function SearchItem() {
+
+  return (
+    <div className="searchWrapper">
+      <Autocomplete
+        sx={{ width: 200 }}
+        open={props.open}
+        onOpen={props.handleOpen}
+        onClose={props.handleClose}
+
+        onChange={(event, option) => {
+          if (option) {
+            props.onItemSelect(option,pokemonIndex);
+          }
+        }}
+
+        isOptionEqualToValue={(option, value) => 
+          option.id === value.id
+        }
+        getOptionLabel={(option) => option.name}
+        options={props.options}
+        loading={props.loading}
+
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search Item"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {props.loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              },
+            }}
+          />
+        )}
+      />
+      {renderSelectedItem(pokemonIndex)}
+    </div>
   );
 }
 

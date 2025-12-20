@@ -71,10 +71,12 @@ export function TeamView(props){
               </div>
         
               <h2 className="pokeName">{pokemon.name}</h2>
-              <p className="pokeInfo"># {pokemon.id}</p>
+              <p className="pokeInfo">Level: {pokemon.level} #{pokemon.id}</p>
+
               <p className="pokeInfo">
                 Type: {pokemon.types?.map(printTeraTypesCB)}
               </p>
+              
 
             </div>
           );
