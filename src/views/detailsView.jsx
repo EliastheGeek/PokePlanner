@@ -207,8 +207,8 @@ export function DetailsView(props) {
           <p>{formatPokeName(moveData.name)}</p>
           <p>Power: {moveData.power}</p>
           <p>Accuracy: {moveData.accuracy}</p>
-          <p>Type: {moveData.type?.name}</p>
-          <p>Damage type: {moveData.damage_class?.name}</p>
+          <p>Type: {formatPokeName(moveData.type?.name)}</p>
+          <p>Damage type: {formatPokeName(moveData.damage_class?.name)}</p>
           <p>PP: {moveData.pp}</p>
         </div>
       );
@@ -444,7 +444,7 @@ function renderSelectedItem(pokemonIndex) {
     } else {
       return (
         <div><h3>Selected Item:</h3>
-          <div><p>{selectedItem.name}</p><img src={selectedItem.sprites?.default} alt={selectedItem.name} width={50}/></div>
+          <div><p>{formatPokeName(selectedItem.name)}</p><img src={selectedItem.sprites?.default} alt={selectedItem.name} width={50}/></div>
           <p>{selectedItem.effect_entries[0]?.effect || 'No description available'}</p>
         </div>
       );
