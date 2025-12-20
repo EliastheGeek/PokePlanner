@@ -104,7 +104,10 @@
 }
 
 .landingPageText{
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  text-align: left;
 
 }
 
@@ -113,6 +116,12 @@
     width: 100%;
     padding: 16px;      
     border-radius: 0;
+  }
+  .landingPageText {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 }
 
