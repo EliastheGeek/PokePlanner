@@ -374,6 +374,9 @@ const pokeSlice = createSlice({
         //Just for persistence
         setUser(state, action) { state.user = action.payload; },
         setReady(state, action) { state.ready = action.payload; },
+        setTeam(state, action) { state.team = action.payload; },
+        clearTeam(state) { state.team = [pokemonConst]; },
+
         
         fillFirestore(state, action) {
             //(devComment) Lägg till flera variabler ifall fler sakker ska pushas till FireStore
@@ -465,6 +468,8 @@ export const {
     setCurrentEmail,
     setCurrentPassword,
     setAuthError,
+    setTeam,
+    clearTeam,
 
 
     // Damage calculator

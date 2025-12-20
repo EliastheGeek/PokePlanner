@@ -118,7 +118,7 @@ export function DamageCalculator() {
         damageError,
     } = useSelector((state) => state.poke);
 
-    const speciesOptions = (showPokemonPromiseState.data ?? []).map(x => x.name);
+    const speciesOptions = (showPokemonPromiseState.data ?? []).map(x => formatPokeName(x.name));
     const moveOptions = (showMovesPromiseState.data ?? []).map(x => formatPokeName(x.name));
     const itemOptions = (showItemsPromiseState.data ?? []).map(x => formatPokeName(x.name));
     const abilityOptions = (showAbilitiesPromiseState.data ?? []).map(x => formatPokeName(x.name));

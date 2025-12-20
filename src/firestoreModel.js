@@ -23,6 +23,8 @@ import {
   setUser,
   setReady,
   fillFirestore,
+  setTeam,
+  clearTeam,
 } from "/src/reduxStore.js";
 
 export function connectToPersistence(store) {
@@ -33,20 +35,26 @@ export function connectToPersistence(store) {
         return {hello: p.hello,
                 user: p.user,
                 ready: p.ready,
+                team: p.team,
         }
     }
 
     let curr = persistenceState(store.getState().poke);
+
     store.subscribe(() => {
         const prev = curr;
         curr = persistenceState(store.getState().poke);
 
-        if (prev.hello !== curr.hello) {   
-            if (curr.user && curr.ready) {
-                setDoc(firestoreDoc, {hello: curr.hello}, {merge:true})
-            }
+        if (!firestoreDoc || !curr.user || !curr.ready) return;
+
+        if (prev.hello !== curr.hello) {
+            setDoc(firestoreDoc, { hello: curr.hello }, { merge: true }); //hello
         }
-    })
+
+        if (prev.team !== curr.team) {
+            setDoc(firestoreDoc, { team: curr.team }, { merge: true }); //team
+        }
+    });
 
     if (curr.user) loadUserData(curr.user);
 
@@ -57,6 +65,7 @@ export function connectToPersistence(store) {
        if (userObj) {
             loadUserData(userObj);
         } else {
+            store.dispatch(clearTeam());
             store.dispatch(setReady(true));
         }
         // om user = null så sätts ready till true
@@ -77,14 +86,15 @@ export function connectToPersistence(store) {
     
     function readyACB(doc) {
         const data = doc.data();
-        const hello = data?.hello ?? "nello";
-        
-        store.dispatch(fillFirestore(hello));
-        //(devComment) Koden nedan måste finnas ifall vi har någon middleware (Redux side effect) 
-        // som uppdaterar något baserat på värden i FireStore
-        //Ekvivalent i DinnerModel är ifall vi uppdaterar om vi befinner oss på details. Utan koden
-        // får vi no data.
-        //if (data?.currentDish) store.dispatch(setCurrentDishId(data?.currentDish));
+
+        if (data?.team) {
+            store.dispatch(setTeam(data.team));
+        }
+
+        if (data?.hello) {
+            store.dispatch(fillFirestore(data.hello));
+        }
+
         store.dispatch(setReady(true));
     }
 
