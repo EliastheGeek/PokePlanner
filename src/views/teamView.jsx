@@ -1,5 +1,5 @@
 import pokeSilhouette from "/src/assets/pokesilhouette.png";
-
+import { formatPokeName } from "@/utilities";
 export function TeamView(props){
 
     const MAX_TEAM = 6;
@@ -54,27 +54,27 @@ export function TeamView(props){
               <button 
                 className="removeBtn" 
                 onClick={() => removeFromTeamACB(pokemon)}
-                title={`Remove ${pokemon.name} from team`}
+                title={`Remove ${formatPokeName(pokemon.name)} from team`}
               >
                 X
               </button>
 
               <div
-              title={`See details for ${pokemon.name}`}
+              title={`See details for ${formatPokeName(pokemon.name)}`}
               onClick={() => showMoreACB(pokemon)}
                 className="imageWrapper"
               >
                 <img
                   src={pokemon?.sprites?.front_default}
-                  alt={pokemon.name}
+                  alt={formatPokeName(pokemon.name)}
                 />
               </div>
         
-              <h2 className="pokeName">{pokemon.name}</h2>
+              <h2 className="pokeName">{formatPokeName(pokemon.name)}</h2>
               <p className="pokeInfo">Level: {pokemon.level} #{pokemon.id}</p>
 
               <p className="pokeInfo">
-                Type: {pokemon.types?.map(printTeraTypesCB)}
+                Type: {pokemon.types?.map(printTypesCB)}
               </p>
               
 
@@ -82,7 +82,7 @@ export function TeamView(props){
           );
         }
         
-    function printTeraTypesCB(types) {
-        return <li key={types.type.name}>{types.type.name}</li>;
+    function printTypesCB(types) {
+        return <li key={types.type.name}>{formatPokeName(types.type.name)}</li>;
     }
 }

@@ -143,7 +143,7 @@ export function DetailsView(props) {
             sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
             {...optionProps}
           >
-            {option?.name}
+            {formatPokeName(option?.name)}
           </Box>
         
 
@@ -173,9 +173,9 @@ export function DetailsView(props) {
     return(
       <div>
           <h3>Nature Info:</h3>
-          <p>{natureInfo.name}</p>
-          <p>Decreased stat: {natureInfo.decrease||none}</p>
-          <p>Increased stat: {natureInfo.increase||none}</p>
+          <p>{formatPokeName(natureInfo.name)}</p>
+          <p>Decreased stat: {formatPokeName(natureInfo.decrease||none)}</p>
+          <p>Increased stat: {formatPokeName(natureInfo.increase||none)}</p>
           </div>
     );
   }
@@ -190,12 +190,12 @@ export function DetailsView(props) {
         console.log("Total stat for ", stats.stat.name, " is ", total);
         return total;
       }
-        return <li key={stats.stat.name}>{(calculateTotalStat(stats)||stats.base_stat)  + " " + stats.stat.name} 
+        return <li key={stats.stat.name}>{(calculateTotalStat(stats)||stats.base_stat)  + " " + formatPokeName(stats.stat.name)} 
                        {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
     }
 
     function printTypesCB(types) {
-        return <li key={types.type.name}>{types.type.name}</li>;
+        return <li key={types.type.name}>{formatPokeName(types.type.name)}</li>;
     }
 
     function MoveInfo(slot, index){
@@ -469,7 +469,7 @@ function SearchItem() {
         isOptionEqualToValue={(option, value) => 
           option.id === value.id
         }
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => formatPokeName(option?.name)}
         options={props.options}
         loading={props.loading}
 
