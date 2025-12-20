@@ -5,18 +5,20 @@
 /* --------- */
 /* MAIN PAGE */
 /* --------- */
-
+.backgroundColor{
+    background-color: #f5f5f5;
+}
 .mainView {
   width: 100vw;
-  height: 100vh;
+  height: 93vh;
 
   border: 2px solid #ccc;
-  
+  transition: width 0.3s ease;
   box-sizing: border-box;
 
-  transition: width 0.3s ease;
+
   overflow: hidden;
-  background-color: #f5f5f5;
+
 }
 .menuHeader {
   position: sticky;

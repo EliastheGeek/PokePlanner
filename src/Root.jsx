@@ -74,7 +74,7 @@ export function Root(){
                 <header className="menuHeader">
                     <MenuBar />
                 </header>
-                <RouterProvider router={makeRouter()} />
+                <RouterProvider className={"backgroundColor"} router={makeRouter()} />
             </div>):
             (<SuspenseView promise="dummyPromise" />));
 }
