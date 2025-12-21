@@ -159,7 +159,7 @@ export function DamageCalcView(props) {
                                         type="number"
                                         size="small"
                                         sx={{ width: 70 }}
-                                        value={attackerRenderedHP}
+                                        value={isNaN(attackerRenderedHP) ? 0 : attackerRenderedHP}
                                         onChange={attackerCurHPChangeACB}
                                         inputProps={{ min: 0, max: props.attackerFinalStats?.hp ?? undefined, style: { textAlign: "center" } }}
                                     />
@@ -171,7 +171,7 @@ export function DamageCalcView(props) {
                                         type="number"
                                         size="small"
                                         sx={{ width: 70 }}
-                                        value={attackerHPPercent}
+                                        value={isNaN(attackerHPPercent) ? 100 : attackerHPPercent}
                                         onChange={attackerHPPercentChangeACB}
                                         disabled={props.attackerFinalStats?.hp == null}
                                         inputProps={{ min: 0, max: 100, style: { textAlign: "center" } }}
@@ -944,7 +944,7 @@ export function DamageCalcView(props) {
                                         type="number"
                                         size="small"
                                         sx={{ width: 70 }}
-                                        value={defenderRenderedHP}
+                                        value={isNaN(defenderRenderedHP) ? 0 : defenderRenderedHP}
                                         onChange={defenderCurHPChangeACB}
                                         inputProps={{ min: 0, max: props.defenderFinalStats?.hp ?? undefined, style: { textAlign: "center" } }}
                                     />
@@ -956,7 +956,7 @@ export function DamageCalcView(props) {
                                         type="number"
                                         size="small"
                                         sx={{ width: 70 }}
-                                        value={defenderHPPercent}
+                                        value={isNaN(defenderHPPercent) ? 100 : defenderHPPercent}
                                         onChange={defenderHPPercentChangeACB}
                                         disabled={props.defenderFinalStats?.hp == null}
                                         inputProps={{ min: 0, max: 100, style: { textAlign: "center" } }}
