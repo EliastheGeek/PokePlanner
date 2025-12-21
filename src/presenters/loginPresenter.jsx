@@ -23,7 +23,7 @@ export function Login(){
 
     useEffect(() => {
         if (user) {
-            window.location.hash = "#/";
+            window.location.hash = "#/team";
         }
     }, [user]);
 

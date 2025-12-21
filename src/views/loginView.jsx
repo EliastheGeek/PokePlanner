@@ -6,11 +6,10 @@ export function LoginView(props){
         <form onSubmit={submitHandlerACB}>
             <Box
                 sx={{
-                    height: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#f5f5f5"
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 }}>
                 <Card sx={{ width: 400, padding: 2 }}>
                     <CardContent
