@@ -25,11 +25,16 @@ export function SearchView(props) {
         loading={props.loading}
         disabled={props.teamLength >= 6}
 
-        renderOption={(liProps, option) => (
-          <li {...liProps}>
-            {formatPokeName(option?.name)}
-          </li>
-        )}
+
+        renderOption={(liProps, option) => {
+          const { key, ...restProps } = liProps;
+          return (
+            <li key={key} {...restProps}>
+              {formatPokeName(option?.name)}
+            </li>
+          );
+        }}
+
 
         renderInput={(params) => (
           <TextField
