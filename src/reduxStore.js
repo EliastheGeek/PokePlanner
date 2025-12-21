@@ -112,7 +112,7 @@ const pokeSlice = createSlice({
     name: "poke",
     initialState: initialState,
     reducers: {
-        addToTeam(state, action){
+    addToTeam(state, action){
             const pokemon = action.payload;
             if (!pokemon) return;
             // avoid duplicates
@@ -122,6 +122,7 @@ const pokeSlice = createSlice({
                 pokemon.actualMoves = [null, null, null, null];
                 pokemon.moveInfo = [null, null, null, null];
                 pokemon.held_item = null;
+                pokemon.natureInfo = null;
                 pokemon.level = 1;
                 if (Array.isArray(pokemon.stats)) {
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
@@ -192,6 +193,7 @@ const pokeSlice = createSlice({
 
             const result = action.payload.results;
             const pokemonIndex = action.payload.index;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
             const decrease = result.decreased_stat?.name;
             const increase = result.increased_stat?.name;
             const natureInfo = {name:result.name,decrease:decrease,increase:increase}
@@ -201,12 +203,12 @@ const pokeSlice = createSlice({
             state.team[pokemonIndex].stats = state.team[pokemonIndex].stats.map(s => ({ ...s, natureModifier: 1 }));
             if(!decrease&&!increase){
 
-                 state.team[pokemonIndex].stats.natureInfo = natureInfo;
+                 state.team[pokemonIndex].natureInfo = natureInfo;
                 return;
             }
             state.team[pokemonIndex].stats[plusIndex].natureModifier=1.1;
             state.team[pokemonIndex].stats[minusIndex].natureModifier=0.9;  
-            state.team[pokemonIndex].stats.natureInfo = natureInfo;
+            state.team[pokemonIndex].natureInfo = natureInfo;
         },
         setAbility(state, action){
             const results = action.payload.results;

@@ -1,10 +1,11 @@
 export function stripTeam(team){
     const strippedTeam = team.map(pokemon => ({
         name: pokemon?.name ?? null,
-
+        level: pokemon?.level,
         types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
         abilities: (pokemon?.abilities ?? []).filter(function(abilities){return abilities.chosen;}),
-
+        nature: pokemon?.natureInfo ?? [],
+        held_item: pokemon?.held_item ?? null,
         moveInfo: stripMoveInfo(pokemon?.moveInfo) ?? [],
         stats: pokemon?.stats ?? [],
         
@@ -16,12 +17,11 @@ export function stripTeam(team){
 export function stripPokemon(pokemon){
     const strippedPokemon = {
         name: pokemon?.name ?? null,
-
+        level: pokemon?.level,
         types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
         abilities: (pokemon?.abilities ?? []).filter(function(abilities){return abilities.chosen;}),
-
+        nature: pokemon?.natureInfo ?? [],
         held_item: pokemon?.held_item ?? null,
-
         moveInfo: stripMoveInfo(pokemon?.moveInfo) ?? [],
         stats: pokemon?.stats ?? [],
         

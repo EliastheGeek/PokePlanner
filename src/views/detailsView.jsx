@@ -167,7 +167,7 @@ export function DetailsView(props) {
     </div>
     );}
   function showNatures(index){
-    const natureInfo = props.team[index].stats.natureInfo;
+    const natureInfo = props.team[index].natureInfo;
     const none = "none"
     if (!natureInfo) return <div>No nature chosen</div>;
     return(
