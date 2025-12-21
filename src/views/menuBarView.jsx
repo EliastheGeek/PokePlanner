@@ -42,7 +42,7 @@ export default function MenuBarView(props) {
       } else if (window.location.hash === "#/" || window.location.hash === "") {
         setValue("one");
       }else {
-        setValue();
+        setValue(false);
       }
     }
 
