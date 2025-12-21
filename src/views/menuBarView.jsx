@@ -46,7 +46,7 @@ export default function MenuBarView(props) {
         elevation={1}
       >
         <Toolbar>
-          <Typography className='appName' variant="h5" component="div" sx={{ flexGrow: 1 }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
+          <Typography className='appName' variant="h5" component="div" sx={{ flexGrow: 1, cursor: "pointer", }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
           <Box className="defultMenu">
             <Tabs
               value={value}
