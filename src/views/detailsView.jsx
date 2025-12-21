@@ -194,7 +194,7 @@ export function DetailsView(props) {
     }
 
     function printTypesCB(types) {
-        return <li key={types.type.name}>{formatPokeName(types.type.name)}</li>;
+        return <li key={types.type.name}> <img src={`/src/assets/typeIcons/${types.type.name}.png`} width={112} style={{ paddingBottom: 3 }} /> </li>;
     }
 
     function MoveInfo(slot, index){
@@ -206,7 +206,7 @@ export function DetailsView(props) {
           <p>{formatPokeName(moveData.name)}</p>
           <p>Power: {moveData.power}</p>
           <p>Accuracy: {moveData.accuracy}</p>
-          <p>Type: {formatPokeName(moveData.type?.name)}</p>
+          <p style={{ display: "flex", alignItems: "center" }}>Type: <img style={{ marginLeft: "4px" }} src={`/src/assets/typeIcons/${moveData.type?.name}.png`} width={84} /></p>
           <p>Damage type: {formatPokeName(moveData.damage_class?.name)}</p>
           <p>PP: {moveData.pp}</p>
         </div>

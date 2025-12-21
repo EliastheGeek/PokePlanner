@@ -39,7 +39,8 @@ export function TeamView(props){
     
 
     function showTeamCB(pokemon){
-        function removeFromTeamACB(pokemon){
+        function removeFromTeamACB(e, pokemon){
+          e.stopPropagation();
           props.onRemoveFromTeam(pokemon);
         }
 
@@ -48,19 +49,18 @@ export function TeamView(props){
         }
 
         return (
-            <div className="pokemonCard" key={pokemon.id}>
+            <div className="pokemonCard" key={pokemon.id} onClick={() => showMoreACB(pokemon)}>
 
               <button 
                 className="removeBtn" 
-                onClick={() => removeFromTeamACB(pokemon)}
+                onClick={(e) => removeFromTeamACB(e, pokemon)}
                 title={`Remove ${formatPokeName(pokemon.name)} from team`}
               >
                 X
               </button>
 
               <div
-              title={`See details for ${formatPokeName(pokemon.name)}`}
-              onClick={() => showMoreACB(pokemon)}
+                title={`See details for ${formatPokeName(pokemon.name)}`}
                 className="imageWrapper"
               >
                 <img
@@ -83,6 +83,6 @@ export function TeamView(props){
         }
         
     function printTypesCB(types) {
-        return <li key={types.type.name}>{formatPokeName(types.type.name)}</li>;
+        return <span key={types.type.name}> <img src={`/src/assets/typeIcons/${types.type.name}.png`} width={112} style={{ paddingBottom: 3 }}/> </span>;
     }
 }
