@@ -83,6 +83,6 @@ export function TeamView(props){
         }
         
     function printTypesCB(types) {
-        return <li key={types.type.name}>{formatPokeName(types.type.name)}</li>;
+        return <span key={types.type.name}> <img src={`/src/assets/typeIcons/${types.type.name}.png`} width={112} style={{ paddingBottom: 3 }}/> </span>;
     }
 }
