@@ -69,7 +69,7 @@ export function DetailsView(props) {
               <h2 style={{ margin: 0 }}>{formatPokeName(pokemon.name)} Level: {LevelInput()}</h2>
               
               <img
-                src={pokemon?.sprites?.other.home.front_default}
+                src={pokemon?.sprites?.other?.home?.front_default}
                 width={150}
                 alt={formatPokeName(pokemon.name)}
                 

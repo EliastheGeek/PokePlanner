@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from 'react';
 import { toggleChatWindow, resetChat, setChatContext } from "/src/reduxStore.js";
-
 import { Team } from "/src/presenters/teamPresenter.jsx";
 import { Search } from "/src/presenters/searchPresenter.jsx";
 import { ChatBot } from "/src/presenters/chatPresenter.jsx";
@@ -29,7 +28,7 @@ export function MainLayout() {
     <div className="horizontalFlexParentMain">
       <div className={`teamView ${chatOpen ? "withChat" : "fullWidth"}`}>
         <div className="teamPanel">
-          <Team />
+          <Team className="teamScroll"/>
           <Search />
         </div>
       </div>

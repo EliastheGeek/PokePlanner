@@ -7,9 +7,27 @@ import { DamageCalculator } from "/src/presenters/damageCalcPresenter.jsx";
 import { ChatBot } from "/src/presenters/chatPresenter.jsx";
 import { SuspenseView } from "/src/views/suspenseView.jsx";
 import { MainDetailsLayout } from "/src/presenters/mainDetailsLayout.jsx";
-import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary } from "react-router-dom";
+import { createHashRouter, RouterProvider, UNSAFE_RemixErrorBoundary, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"
+import { useEffect } from "react";
 import "./style.css";
+
+function DetailsRedirect(){
+    const team = useSelector((state) => state.poke.team);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!team || team.length === 0){
+            // No team yet — send user back to team builder
+            navigate("/team", { replace: true });
+            return;
+        }
+        // Redirect to the first team pokemon's details
+        navigate(`/details/${team[0].name}`, { replace: true });
+    }, [team, navigate]);
+
+    return null;
+}
 
 function makeRouter() {
 
@@ -49,6 +67,10 @@ function makeRouter() {
     },
     {
         path: "/details",
+        element: <DetailsRedirect />,
+    },
+    {
+        path: "/details/:name",
         element: (
                 <div className="mainDetailsView">
                     <MainDetailsLayout />

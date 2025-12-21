@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { DetailsView } from "/src/views/detailsView.jsx";
 import { addActualMove, setOpen, setNatureOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setNature, setLevel, showItems, showNatures } from "/src/reduxStore.js";
 import { doMoveThunk, doAbilityThunk, doItemThunk, doNatureThunk } from "/src/store/searchThunks.js";
@@ -9,6 +10,7 @@ import { doMoveThunk, doAbilityThunk, doItemThunk, doNatureThunk } from "/src/st
 export function Details() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const loading = useSelector((state) => state.poke.loading);
     const open = useSelector((state) => state.poke.open);
     const team = useSelector((state) => state.poke.team);
@@ -17,6 +19,15 @@ export function Details() {
     const showItemsPromiseState = useSelector((state) => state.poke.showItemsPromiseState);
     const showNaturesPromiseState = useSelector((state) => state.poke.showNaturesPromiseState);
     const pokemon = pokemonIndex >= 0 ? team[pokemonIndex] : null;
+    const { name } = useParams();
+
+    useEffect(() => {
+        // If the route contains a pokemon name, make it the current pokemon
+        if (!name) return;
+        if (currentPokemonName !== name) {
+            dispatch(setCurrentPokemon(name));
+        }
+    }, [name, currentPokemonName, dispatch]);
 
      const handleOpen = () => {
         dispatch(setOpen(true));
@@ -35,6 +46,7 @@ export function Details() {
         if (nextIndex >= team.length) return;
 
         dispatch(setCurrentPokemon(team[nextIndex].name));
+        navigate(`/details/${team[nextIndex].name}`);
     }
 
     function previousPokemonACB() {
@@ -44,6 +56,7 @@ export function Details() {
         if (prevIndex < 0) return;
 
         dispatch(setCurrentPokemon(team[prevIndex].name));
+        navigate(`/details/${team[prevIndex].name}`);
     }
         
     function addActualMoveACB(moveName, slot, pokemonIndex){
@@ -81,10 +94,11 @@ export function Details() {
     useEffect(() => {
         if (team.length === 0) return;
 
-        if (pokemonIndex === -1) {
+        // Only default to the first team pokemon when there is no name in the route
+        if (pokemonIndex === -1 && !name) {
             dispatch(setCurrentPokemon(team[0].name));
         }
-    }, [team, pokemonIndex, dispatch]);
+    }, [team, pokemonIndex, dispatch, name]);
 
 
     return <DetailsView team={team} 

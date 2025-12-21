@@ -65,7 +65,7 @@ export function TeamView(props){
               >
                 <img
 
-                  src={pokemon?.sprites?.other.home.front_default}
+                  src={pokemon?.sprites?.other?.home?.front_default}
                   alt={formatPokeName(pokemon.name)}
                 />
               </div>
@@ -74,7 +74,7 @@ export function TeamView(props){
               <p className="pokeInfo">Level: {pokemon.level} #{pokemon.id}</p>
 
               <p className="pokeInfo">
-                Type: {pokemon.types?.map(printTypesCB)}
+                {pokemon.types?.map(printTypesCB)}
               </p>
               
 

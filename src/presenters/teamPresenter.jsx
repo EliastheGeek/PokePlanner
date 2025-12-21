@@ -30,6 +30,6 @@ export function Team(){
     function showDetailsACB(pokemon){
         console.log(pokemon);
         dispatch(setCurrentPokemon(pokemon.name));
-        navigate(`/details`);
+        navigate(`/details/${pokemon.name}`);
     }
 };
