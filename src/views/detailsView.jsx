@@ -110,17 +110,20 @@ export function DetailsView(props) {
 
               <Box className="detailsTypeLevel">
                   <h3>Type:</h3>
-                  <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                  <ul className="typeList">
                     {pokemon.types?.map(printTypesCB)}
                   </ul>
-                  Level: {LevelInput()}
+                  <div className="levelSelector">
+                    <label className="levelLabel">Level</label>
+                    {LevelInput()}
+                  </div>
               </Box>
             </Box>
 
             <Box className="detailsColumn2">
               <Box className="detailsStats"
                   component="aside">
-                <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
+                <ul style={{ paddingLeft: 0, lineHeight: 1.0 }}>
                   {pokemon.stats?.map(printBaseStatsCB)}
                 </ul>
               </Box>

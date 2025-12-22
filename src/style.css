@@ -525,6 +525,54 @@
   margin: 0;
 }
 
+.detailsTypeLevel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Clean up type list spacing */
+.typeList {
+  padding-left: 0;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* ---------- LEVEL SELECTOR ---------- */
+
+.levelSelector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f3f6fb;
+  border: 1px solid #d6dbe6;
+
+  width: fit-content;
+}
+
+/* Label */
+.levelLabel {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* If LevelInput is a MUI TextField / Select / Input */
+.levelSelector .MuiInputBase-root {
+  font-size: 1.1rem;     /* Bigger text */
+  height: 44px;          /* Taller control */
+}
+
+/* If LevelInput is a plain input */
+.levelSelector input {
+  font-size: 1.1rem;
+  height: 44px;
+  padding: 6px 10px;
+}
+
 
 
 /* ---- COLUMN 2 ---- */
