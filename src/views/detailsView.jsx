@@ -233,7 +233,7 @@ export function DetailsView(props) {
     );
   }
     
-    function printBaseStatsCB(stats) { //nature saknas
+    function printBaseStatsCB(stats) {
       if(stats?.stat.name ==='hp'){
         var total = calcStatFromBase({base:stats.base_stat,
                                   iv:stats.IV_Value, 
