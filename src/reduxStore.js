@@ -220,6 +220,7 @@ const pokeSlice = createSlice({
                  state.team[pokemonIndex].natureInfo = natureInfo;
                 return;
             }
+
             const natureInfo = {name:results.name,decrease:decrease,increase:increase}
             state.team[pokemonIndex].stats[plusIndex].natureModifier=1.1;
             state.team[pokemonIndex].stats[minusIndex].natureModifier=0.9;  

@@ -147,14 +147,14 @@ export function DetailsView(props) {
   function NatureList(index){
 
     function natureChangeACB(event){
+      
       props.setNature(event.target.innerText, index);
     }
-
+    
     const natureInfo = props.team[index]?.natureInfo || null;
 
     const selectedNature =
-      natureInfo
-        ? props.optionsNature.find(n => n.name === natureInfo.name) || null
+      natureInfo ? props.optionsNature.find(n => n.name === natureInfo.name) || null
         : null;
 
     return (
@@ -165,6 +165,8 @@ export function DetailsView(props) {
             key={`nature-${index}`}
             id="nature-select"
             sx={{ width: 200 }}
+            onOpen={props.handleOpenNature}
+            onClose={props.handleClose}
             options={props.optionsNature ?? []}
             value={selectedNature}
             autoHighlight
