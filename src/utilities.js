@@ -65,6 +65,21 @@ export function calcStatFromBase({ base, iv, ev, level, natureMult, isHP }) {
     return Math.floor(preNature *natureMult);
 }
 
+export function initializePokemon(pokemon){
+                /*Initialize actualMoves, moveInfo and IV,EV attributes */
+    pokemon.actualMoves = [null, null, null, null];
+    pokemon.moveInfo = [null, null, null, null];
+    pokemon.held_item = null;
+    pokemon.natureInfo = null;
+    pokemon.game_indices=null;
+    pokemon.level = 1;
+    if (Array.isArray(pokemon.stats)) {
+        pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
+        pokemon.stats = pokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
+        pokemon.stats = pokemon.stats.map(s => ({ ...s, natureModifier: 1 }));
+    }
+    return pokemon;
+}
 export function filterItemOptions(itemResults){
         // Ensure we have the expected shape and deduplicate by item.name (case-insensitive)
         if (!itemResults || !Array.isArray(itemResults.results)) return itemResults;

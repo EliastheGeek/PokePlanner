@@ -1,4 +1,4 @@
-import { doSearch,addToTeam, addMoveInfo, setAbility, setItem, setNature} from "/src/reduxStore.js";
+import { addToTeam, addMoveInfo, setAbility, setItem, setNature} from "/src/reduxStore.js";
 import { searchAPI } from "/src/pokemonSource.js";
 
 export function doPokeThunk(pokeQuery) {

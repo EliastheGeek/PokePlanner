@@ -1,7 +1,5 @@
 import {createElement, Fragment} from "react";
 //window.React= {createElement:createElement, Fragment:Fragment}; // needed in the lab because it works with both React and Vue
-
-//import "/src/teacherFetch.js";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux"

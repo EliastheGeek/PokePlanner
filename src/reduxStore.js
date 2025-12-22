@@ -4,6 +4,7 @@ import { pokemonConst } from "./pokemonConst";
 import { searchAPI, showAllAPI } from "./pokemonSource";
 import { act } from "react";
 import { stripTeam } from "/src/objectStripper";
+import { initializePokemon } from "./utilities";
 
 const teamMaxSize = 6;
 
@@ -14,8 +15,7 @@ const initialState = {
     natureOpen: false,
     loading: false,
     //Promise-stuff
-    searchParams: {},
-    searchResultsPromiseState: { promise: null, data: null, error: null },
+
     showPokemonPromiseState: { promise: null, data: [], error: null },
     showMovesPromiseState: { promise: null, data: [], error: null },
     showItemsPromiseState: { promise: null, data: [], error: null },
@@ -112,41 +112,16 @@ const pokeSlice = createSlice({
     name: "poke",
     initialState: initialState,
     reducers: {
-    addToTeam(state, action){
+        
+        //Team
+        addToTeam(state, action){
             const pokemon = action.payload;
             if (!pokemon) return;
             // avoid duplicates
             if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
             if (state.team.length < teamMaxSize) {
-                /*Initialize actualMoves, moveInfo and IV,EV attributes */
-                pokemon.actualMoves = [null, null, null, null];
-                pokemon.moveInfo = [null, null, null, null];
-                pokemon.held_item = null;
-                pokemon.natureInfo = null;
-                pokemon.game_indices=null;
-                pokemon.level = 1;
-                if (Array.isArray(pokemon.stats)) {
-                    pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
-                    pokemon.stats = pokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
-                    pokemon.stats = pokemon.stats.map(s => ({ ...s, natureModifier: 1 }));
-                }
-                state.team = [...state.team, pokemon];
+                state.team = [...state.team, initializePokemon(pokemon)];
             }
-        },
-        addActualMove(state, action){
-            const moveName = action.payload.moveName;
-            const pokemonIndex = action.payload.pokemonIndex;
-            const slot =action.payload.slot
-            if (pokemonIndex === -1) return;
-            const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
-            state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
-        },
-        addMoveInfo(state, action){
-            const results = action.payload.results;
-            const pokemonIndex = action.payload.index;
-            const slot = action.payload.slot;
-            if (pokemonIndex === -1) return;
-            state.team[pokemonIndex].moveInfo[slot] = results;
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
@@ -154,15 +129,27 @@ const pokeSlice = createSlice({
             }
             state.team = state.team.filter(keepPokemonCB);
         },
-        currentPokemon(state,action){ state.currentPokemonName = action.payload.name; },
-        showPokemon(state, action) {state.showPokemonPromiseState = { promise: null, data: [], error: null };},
-        setOpen(state, action) {state.open = action.payload;},
-        setNatureOpen(state, action){state.natureOpen = action.payload;},
-        setOptions(state, action) {state.showPokemonPromiseState.data = action.payload;},
-        
         setCurrentPokemon(state,action){state.currentPokemonName = action.payload;},
+
+        //Detail
+        addActualMove(state, action){
+            const moveName = action.payload.moveName;
+            const pokemonIndex = action.payload.pokemonIndex;
+            const slot =action.payload.slot
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
+            const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
+            state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
+        },
+        addMoveInfo(state, action){
+            const results = action.payload.results;
+            const pokemonIndex = action.payload.index;
+            const slot = action.payload.slot;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
+            state.team[pokemonIndex].moveInfo[slot] = results;
+        },
         setLevel(state, action){
             const pokemonIndex = action.payload.pokemonIndex;
+            if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
             const level = action.payload.level;
             state.team[pokemonIndex].level = level;
         },
@@ -191,7 +178,6 @@ const pokeSlice = createSlice({
             }
         },
         setNature(state, action){
-
             const result = action.payload.results;
             const pokemonIndex = action.payload.index;
             if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
@@ -200,10 +186,8 @@ const pokeSlice = createSlice({
             const natureInfo = {name:result.name,decrease:decrease,increase:increase}
             const minusIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){return decrease === stats.stat.name});
             const plusIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){return increase === stats.stat.name});
-
             state.team[pokemonIndex].stats = state.team[pokemonIndex].stats.map(s => ({ ...s, natureModifier: 1 }));
             if(!decrease&&!increase){
-
                  state.team[pokemonIndex].natureInfo = natureInfo;
                 return;
             }
@@ -230,12 +214,14 @@ const pokeSlice = createSlice({
             if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
             state.team[pokemonIndex].held_item = results;
         },
+
+        //MUI
+        setNatureOpen(state, action){state.natureOpen = action.payload;},
+        setOpen(state, action) {state.open = action.payload;},
+        setOptions(state, action) {state.showPokemonPromiseState.data = action.payload;},
+
         //Search + Promise
-        setSearchQuery(state, action) { state.searchParams.query = action.payload; },
-        doSearch(state, action) {
-            state.searchParams = action.payload;
-            state.searchResultsPromiseState = { promise: null, data: null, error: null };
-        },
+        showPokemon(state, action) {state.showPokemonPromiseState = { promise: null, data: [], error: null };},
         showMoves(state) { state.showMovesPromiseState = { promise: null, data: [], error: null }; },
         showItems(state) { state.showItemsPromiseState = { promise: null, data: [], error: null }; },
         showAbilities(state) { state.showAbilitiesPromiseState = { promise: null, data: [], error: null }; },
@@ -433,6 +419,7 @@ export const {
     addToTeam,
     removeFromTeam,
     setCurrentPokemon,
+    //Detail
     addActualMove,
     addMoveInfo,
     setAbility,
@@ -442,13 +429,10 @@ export const {
     setEVstat,
     setNature,
     //Search
-    setSearchQuery,
-    doSearch,
     showPokemon,
     setOpen,
     setNatureOpen,
 
-    setUser,
     //Promises + Search
     showMoves, 
     showItems, 
@@ -462,6 +446,8 @@ export const {
     naturesStarted, naturesResolved, naturesRejected,
     searchStarted, searchResolved, searchRejected,
 
+    //Persistence
+    setUser,
     setReady,
     fillFirestore,
     setCurrentEmail,
@@ -469,7 +455,6 @@ export const {
     setAuthError,
     setTeam,
     clearTeam,
-
 
     // Damage calculator
     setDamageAttackerName,
@@ -663,20 +648,6 @@ export const store = configureStore({
     }, 
 });
 
-listenerMiddleware.startListening(
-{
-    type: 'poke/doSearch',
-    effect(action, store){  
-        const params = action.payload;
-        if(!params) return;
-        const promise = searchAPI("pokemon",params);
-        store.dispatch(searchStarted(promise))
-        if (!promise) return;
-        promise
-            .then((data) => { store.dispatch(searchResolved({promise,data}));})
-            .catch((error) => {store.dispatch(searchRejected({promise,error}));})
-    }
-})
 
 listenerMiddleware.startListening(
 {

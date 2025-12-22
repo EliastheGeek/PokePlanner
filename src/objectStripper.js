@@ -1,19 +1,7 @@
 export function stripTeam(team){
-    const strippedTeam = team.map(pokemon => ({
-        name: pokemon?.name ?? null,
-        level: pokemon?.level,
-        types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
-        abilities: (pokemon?.abilities ?? []).filter(function(abilities){return abilities.chosen;}),
-        nature: pokemon?.natureInfo ?? [],
-        held_item: pokemon?.held_item ?? null,
-        moveInfo: stripMoveInfo(pokemon?.moveInfo) ?? [],
-        stats: pokemon?.stats ?? [],
-        
-    }));
-
+    const strippedTeam = team.map(pokemon => (stripPokemon(pokemon)));
     return strippedTeam;
 }
-
 export function stripPokemon(pokemon){
     const strippedPokemon = {
         name: pokemon?.name ?? null,
@@ -21,15 +9,22 @@ export function stripPokemon(pokemon){
         types: (pokemon?.types ?? []).map(t => t.type.name).filter(Boolean),
         abilities: (pokemon?.abilities ?? []).filter(function(abilities){return abilities.chosen;}),
         nature: pokemon?.natureInfo ?? [],
-        held_item: pokemon?.held_item ?? null,
+        held_item: stripItemInfo(pokemon?.held_item) ?? null,
         moveInfo: stripMoveInfo(pokemon?.moveInfo) ?? [],
         stats: pokemon?.stats ?? [],
         
     };
-
     return strippedPokemon;
 }
 
+function stripItemInfo(item){
+  if(!item) return null;
+  const strippedItem = {
+    name: item?.name ?? null,
+    effect: item?.effect_entries[0]?.effect ?? null,
+  }
+  return strippedItem;
+}
 function stripMoveInfo(moveInfoArray) {
   return (moveInfoArray ?? []).map(move => {
     if (!move) return null;
