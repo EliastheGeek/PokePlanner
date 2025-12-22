@@ -12,7 +12,7 @@ export function LandingView(props){
                     <Typography variant="body1">
                         Built for experienced Pokémon players, our Team Builder helps you design 
                         competitive, well-balanced teams with precision. Customize every Pokémon in one place, 
-                        edit everything from stats and moves to abilities and perks.
+                        edit everything from stats and moves to items and abilities.
                     </Typography>
                     <br />
                     <Typography className='landingPageTextHead' variant="h5">PokéBOT</Typography>

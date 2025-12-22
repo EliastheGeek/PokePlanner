@@ -182,7 +182,7 @@ export function DamageCalcView(props) {
                                 <Typography variant="body2">Health</Typography>
                                 <LinearProgress
                                     variant="determinate"
-                                    value={((attackerRenderedHP / props.attackerFinalStats?.hp) * 100) ?? 100}
+                                    value={((attackerRenderedHP / props.attackerFinalStats?.hp) * 100) || 100}
                                     color="success"
                                     sx={{
                                     height: 10,
@@ -967,7 +967,7 @@ export function DamageCalcView(props) {
                                 <Typography variant="body2">Health</Typography>
                                 <LinearProgress
                                     variant="determinate"
-                                    value={((defenderRenderedHP / props.defenderFinalStats?.hp) * 100) ?? 100}
+                                    value={((defenderRenderedHP / props.defenderFinalStats?.hp) * 100) || 100}
                                     color="success"
                                     sx={{
                                     height: 10,
@@ -1096,7 +1096,6 @@ export function DamageCalcView(props) {
                                 value={props.defenderLevel}
                                 onChange={defenderLevelChangeACB}
                                 inputProps={{ min: 1, max: 100 }}
-                                size="small"
                             />
 
                             <TextField

@@ -11,10 +11,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import { display } from "@smogon/calc/dist/desc";
 import { formatPokeName } from "/src/utilities.js"
 import CircularProgress from '@mui/material/CircularProgress';
-import { render } from "katex";
 import { calcStatFromBase } from "@/utilities";
 
 const Input = styled(MuiInput)`width: 42px;`;
@@ -31,7 +29,7 @@ export function DetailsView(props) {
     const maxEV = 252;
     const maxIV = 31;
     const maxLevel = 100;
-
+    const teamMax = 6;
     return (
     <div className="detailsNavigationBox">
       <Box
@@ -51,7 +49,7 @@ export function DetailsView(props) {
           <Button className="prevPokeBtn" onClick={onPrevious} disabled={pokemonIndex<=0}>
             <img src={props.team[pokemonIndex-1]?.sprites?.front_default ?? pokeSilhouetteMini}/>Previous</Button>
 
-          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(6, props.team.length - 1)}>
+          <Button className="nextPokeBtn" onClick={onNext} disabled={pokemonIndex >= Math.min(teamMax, props.team.length - 1)}>
             Next<img src={props.team[pokemonIndex+1]?.sprites?.front_default ?? pokeSilhouetteMini}/></Button>
         </ButtonGroup>
         
@@ -187,9 +185,8 @@ export function DetailsView(props) {
   }
     
     function printBaseStatsCB(stats) { //nature saknas
-      var total = 0;
       if(stats?.stat.name ==='hp'){
-        total = calcStatFromBase({base:stats.base_stat,
+        var total = calcStatFromBase({base:stats.base_stat,
                                   iv:stats.IV_Value, 
                                   ev:stats.EV_Value, 
                                   level:pokemon.level, 
@@ -198,7 +195,7 @@ export function DetailsView(props) {
                                 })
       }
       else{
-        total = calcStatFromBase({base:stats.base_stat,
+        var total = calcStatFromBase({base:stats.base_stat,
                                   iv:stats.IV_Value, 
                                   ev:stats.EV_Value, 
                                   level:pokemon.level, 

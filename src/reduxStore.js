@@ -6,16 +6,20 @@ import { act } from "react";
 import { stripTeam } from "/src/objectStripper";
 import { initializePokemon } from "./utilities";
 
-const teamMaxSize = 6;
-
+const teamMaxSize = 6; const maxEV = 252; const maxIV = 31;
+const maxBoost = 6; const minBoost = -6; const maxLevel = 100;
 const initialState = {
+
+    //Team
     team: [],
     currentPokemonName: null, 
+
+    //MUI
     open: false,
     natureOpen: false,
     loading: false,
-    //Promise-stuff
 
+    //Promise-stuff
     showPokemonPromiseState: { promise: null, data: [], error: null },
     showMovesPromiseState: { promise: null, data: [], error: null },
     showItemsPromiseState: { promise: null, data: [], error: null },
@@ -51,7 +55,7 @@ const initialState = {
     attackerType1Override: "",
     attackerType2Override: "",
     attackerEVs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-    attackerIVs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+    attackerIVs: { hp: maxIV, atk: maxIV, def: maxIV, spa: maxIV, spd: maxIV, spe: maxIV },
     attackerBoosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
 
     //Defender Details
@@ -67,7 +71,7 @@ const initialState = {
     defenderType1Override: "",
     defenderType2Override: "",
     defenderEVs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-    defenderIVs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+    defenderIVs: { hp: maxIV, atk: maxIV, def: maxIV, spa: maxIV, spd: maxIV, spe: maxIV },
     defenderBoosts: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
 
     //Field
@@ -117,8 +121,7 @@ const pokeSlice = createSlice({
         addToTeam(state, action){
             const pokemon = action.payload;
             if (!pokemon) return;
-            // avoid duplicates
-            if (state.team.some(p => p?.id === pokemon?.id)){ console.log("Blocked ", pokemon); return;}
+            if (state.team.some(p => p?.id === pokemon?.id)){ console.log(pokemon), "Already in team  "; return;}
             if (state.team.length < teamMaxSize) {
                 state.team = [...state.team, initializePokemon(pokemon)];
             }
@@ -178,19 +181,20 @@ const pokeSlice = createSlice({
             }
         },
         setNature(state, action){
-            const result = action.payload.results;
+            const results = action.payload.results;
             const pokemonIndex = action.payload.index;
             if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
-            const decrease = result.decreased_stat?.name;
-            const increase = result.increased_stat?.name;
-            const natureInfo = {name:result.name,decrease:decrease,increase:increase}
+            const decrease = results.decreased_stat?.name;
+            const increase = results.increased_stat?.name;
             const minusIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){return decrease === stats.stat.name});
             const plusIndex = state.team[pokemonIndex].stats.findIndex(function findCB(stats){return increase === stats.stat.name});
             state.team[pokemonIndex].stats = state.team[pokemonIndex].stats.map(s => ({ ...s, natureModifier: 1 }));
             if(!decrease&&!increase){
+                const natureInfo = {name:results.name,decrease:"none",increase:"none"}
                  state.team[pokemonIndex].natureInfo = natureInfo;
                 return;
             }
+            const natureInfo = {name:results.name,decrease:decrease,increase:increase}
             state.team[pokemonIndex].stats[plusIndex].natureModifier=1.1;
             state.team[pokemonIndex].stats[minusIndex].natureModifier=0.9;  
             state.team[pokemonIndex].natureInfo = natureInfo;
@@ -206,7 +210,8 @@ const pokeSlice = createSlice({
             const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ 
                 return abilities.ability.name === abilityName; });
             state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
-            state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(entry => entry.language.name === "en")?.effect || "";
+            state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(
+                                                                            entry => entry.language.name === "en")?.effect || "";
         },
         setItem(state, action){
             const results = action.payload.results;
@@ -221,7 +226,7 @@ const pokeSlice = createSlice({
         setOptions(state, action) {state.showPokemonPromiseState.data = action.payload;},
 
         //Search + Promise
-        showPokemon(state, action) {state.showPokemonPromiseState = { promise: null, data: [], error: null };},
+        showPokemon(state, action) {state.showPokemonPromiseState = { promise: null, data: [], error: null }; },
         showMoves(state) { state.showMovesPromiseState = { promise: null, data: [], error: null }; },
         showItems(state) { state.showItemsPromiseState = { promise: null, data: [], error: null }; },
         showAbilities(state) { state.showAbilitiesPromiseState = { promise: null, data: [], error: null }; },
@@ -260,7 +265,7 @@ const pokeSlice = createSlice({
 
         // Attacker details
         setAttackerCurrentHP(state, action) { state.attackerCurrentHP = clamp(action.payload, 0, 9999); },
-        setAttackerLevel(state, action) { state.attackerLevel = clamp(action.payload, 1, 100); },
+        setAttackerLevel(state, action) { state.attackerLevel = clamp(action.payload, 1, maxLevel); },
         setAttackerGender(state, action) { state.attackerGender = action.payload; },
         setAttackerAbility(state, action) { state.attackerAbility = action.payload; },
         setAttackerItem(state, action) { state.attackerItem = action.payload; },
@@ -274,24 +279,24 @@ const pokeSlice = createSlice({
         setAttackerEV(state, action) {
             const { stat, value } = action.payload;
             if (state.attackerEVs[stat] === undefined) return;
-            state.attackerEVs[stat] = clamp(value, 0, 252);
+            state.attackerEVs[stat] = clamp(value, 0, maxEV);
         },
         
         setAttackerIV(state, action) {
             const { stat, value } = action.payload;
             if (state.attackerIVs[stat] === undefined) return;
-            state.attackerIVs[stat] = clamp(value, 0, 31);
+            state.attackerIVs[stat] = clamp(value, 0, maxIV);
         },
         
         setAttackerBoost(state, action) {
             const { stat, value } = action.payload;
             if (state.attackerBoosts[stat] === undefined) return;
-            state.attackerBoosts[stat] = clamp(value, -6, 6);
+            state.attackerBoosts[stat] = clamp(value, minBoost, maxBoost);
         },
         
         //Defender Details
         setDefenderCurrentHP(state, action) { state.defenderCurrentHP = clamp(action.payload, 0, 9999); },
-        setDefenderLevel(state, action) { state.defenderLevel = clamp(action.payload, 1, 100); },
+        setDefenderLevel(state, action) { state.defenderLevel = clamp(action.payload, 1, maxLevel); },
         setDefenderGender(state, action) { state.defenderGender = action.payload; },
         setDefenderAbility(state, action) { state.defenderAbility = action.payload; },
         setDefenderItem(state, action) { state.defenderItem = action.payload; },
@@ -305,19 +310,19 @@ const pokeSlice = createSlice({
         setDefenderEV(state, action) {
             const { stat, value } = action.payload;
             if (state.defenderEVs[stat] === undefined) return;
-            state.defenderEVs[stat] = clamp(value, 0, 252);
+            state.defenderEVs[stat] = clamp(value, 0, maxEV);
         },
         
         setDefenderIV(state, action) {
             const { stat, value } = action.payload;
             if (state.defenderIVs[stat] === undefined) return;
-            state.defenderIVs[stat] = clamp(value, 0, 31);
+            state.defenderIVs[stat] = clamp(value, 0, maxIV);
         },
         
         setDefenderBoost(state, action) {
             const { stat, value } = action.payload;
             if (state.defenderBoosts[stat] === undefined) return;
-            state.defenderBoosts[stat] = clamp(value, -6, 6);
+            state.defenderBoosts[stat] = clamp(value, minBoost, maxBoost);
         },
         
         //Field
