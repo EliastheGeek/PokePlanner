@@ -189,7 +189,6 @@ export function DetailsView(props) {
     function printBaseStatsCB(stats) { //nature saknas
       var total = 0;
       if(stats?.stat.name ==='hp'){
-        console.log(stats)
         total = calcStatFromBase({base:stats.base_stat,
                                   iv:stats.IV_Value, 
                                   ev:stats.EV_Value, 
