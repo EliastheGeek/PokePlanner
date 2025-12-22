@@ -60,9 +60,6 @@ function makeRouter() {
                             <DamageCalculator />
                         </div>  
                     </div>
-                    <div className="pokeBotBox">
-                        <ChatBot />
-                    </div>
                 </div>),
     },
     {

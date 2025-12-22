@@ -26,6 +26,8 @@ const initialState = {
     showAbilitiesPromiseState: { promise: null, data: [], error: null },
     showNaturesPromiseState: { promise: null, data: [], error: null },
 
+    abilityInfo: null,
+
     //Persistance
     hello: "hello",
     user: undefined,
@@ -126,6 +128,30 @@ const pokeSlice = createSlice({
                 state.team = [...state.team, initializePokemon(pokemon)];
             }
         },
+        addActualMove(state, action){
+            const moveName = action.payload.moveName;
+            const pokemonIndex = action.payload.pokemonIndex;
+            const slot =action.payload.slot
+            if (pokemonIndex === -1) return;
+            const moveIndex = state.team[pokemonIndex].moves.findIndex(function findCB(moves){ return moves.move.name === moveName; });
+            state.team[pokemonIndex].actualMoves[slot] = state.team[pokemonIndex].moves[moveIndex];
+        },
+        addMoveInfo(state, action){
+            const results = action.payload.results;
+            const pokemonIndex = action.payload.index;
+            const slot = action.payload.slot;
+            if (pokemonIndex === -1) return;
+            state.team[pokemonIndex].moveInfo[slot] = results;
+        },
+        removeMove(state, action){
+            const { pokemonIndex, slot } = action.payload;
+
+            if (pokemonIndex === -1) return;
+
+            state.team[pokemonIndex].actualMoves[slot] = null;
+
+            state.team[pokemonIndex].moveInfo[slot] = null;
+        },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
                 return pokemon?.id !== action.payload.id;
@@ -194,6 +220,7 @@ const pokeSlice = createSlice({
                  state.team[pokemonIndex].natureInfo = natureInfo;
                 return;
             }
+
             const natureInfo = {name:results.name,decrease:decrease,increase:increase}
             state.team[pokemonIndex].stats[plusIndex].natureModifier=1.1;
             state.team[pokemonIndex].stats[minusIndex].natureModifier=0.9;  
@@ -210,8 +237,26 @@ const pokeSlice = createSlice({
             const abilityIndex = state.team[pokemonIndex].abilities.findIndex(function findCB(abilities){ 
                 return abilities.ability.name === abilityName; });
             state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
-            state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(
-                                                                            entry => entry.language.name === "en")?.effect || "";
+            state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(entry =>
+                                                                            entry.language.name === "en")?.effect || "";
+            state.team[pokemonIndex].abilityInfo = {
+                name: abilityName,
+                description: results.effect_entries.find(e => e.language.name === "en")?.effect || ""
+            };
+        },
+        removeAbility(state, action){
+            const pokemonIndex = action.payload;
+
+            if (
+                typeof pokemonIndex !== "number" ||
+                pokemonIndex < 0 ||
+                pokemonIndex >= state.team.length
+            ) {
+                return;
+            }
+
+            state.team[pokemonIndex].abilities.forEach(ab => ab.chosen = false);
+            state.team[pokemonIndex].abilityInfo = null;
         },
         setItem(state, action){
             const results = action.payload.results;
@@ -427,7 +472,9 @@ export const {
     //Detail
     addActualMove,
     addMoveInfo,
+    removeMove,
     setAbility,
+    removeAbility,
     setItem,
     setLevel,
     setIVstat,
