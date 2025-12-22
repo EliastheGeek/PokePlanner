@@ -14,6 +14,7 @@ import Tab from "@mui/material/Tab";
 
 
 export default function MenuBarView(props) {
+  //MUI collapsed menu (third-party)
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const menuOpen = Boolean(menuAnchorEl);
 
@@ -30,7 +31,7 @@ export default function MenuBarView(props) {
     handleMenuClose();
   };
 
-
+  //MUI tabs menu (third-party)
   const [value, setValue] = React.useState("one");
 
   React.useEffect(function () {
@@ -76,6 +77,7 @@ export default function MenuBarView(props) {
         <Toolbar>
           <Typography className="appName" variant="h5" component="div" sx={{ flexGrow: 1, cursor: "pointer", }} onClick={ handleHomeACB }>Pokemon Team Builder</Typography>
           <Box className="defultMenu">
+            {/*MUI tabs menu (third-party)*/}
             <Tabs
               value={value}
               onChange={handleChange}
@@ -101,6 +103,7 @@ export default function MenuBarView(props) {
             </Typography>
             <MenuIcon />
               </IconButton>
+              {/*MUI collapsed menu (third-party)*/}
             <Menu
               anchorEl={menuAnchorEl}
               open={menuOpen}
