@@ -123,7 +123,7 @@ export function DetailsView(props) {
             <Box className="detailsColumn2">
               <Box className="detailsStats"
                   component="aside">
-                <ul style={{ paddingLeft: 0, lineHeight: 1.0 }}>
+                <ul style={{ paddingLeft: 0, lineHeight: 1.5 }}>
                   {pokemon.stats?.map(printBaseStatsCB)}
                 </ul>
               </Box>
@@ -165,7 +165,7 @@ export function DetailsView(props) {
             id="nature-select"
             sx={{ width: 200 }}
             options={props.optionsNature ?? []}
-            value={selectedNature}               // ✅ FIXED
+            value={selectedNature}
             autoHighlight
             onChange={natureChangeACB}
             getOptionLabel={(option) =>
@@ -239,14 +239,21 @@ export function DetailsView(props) {
       const total = Math.floor(((((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5)*stats.natureModifier);
       return total;
     }
-      return  <li key={stats.stat.name} className="statRow">
-                {calculateTotalStat(stats)||stats.base_stat} {formatPokeName(stats.stat.name)}
+      return (
+        <li key={stats.stat.name} className="statRow">
+          {calculateTotalStat(stats) || stats.base_stat}{" "}
+          {formatPokeName(stats.stat.name)}
 
-                <div className="statControls">
-                  {InputSlider(stats.stat.name)}
-                  {IVInput(stats.stat.name)}
-                </div>
-              </li>;
+          <div className="statControls">
+            {InputSlider(stats.stat.name)}
+
+            <div className="ivBlock">
+              {IVInput(stats.stat.name)}
+              <div className="ivLabel">IV</div>
+            </div>
+          </div>
+        </li>
+      );
   }
 
   function printTypesCB(types) {
@@ -419,7 +426,6 @@ export function DetailsView(props) {
                 'aria-labelledby': 'input-slider',
               }}
             />
-            IV
           </Grid>);
   }
 
