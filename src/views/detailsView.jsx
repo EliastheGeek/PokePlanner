@@ -149,50 +149,70 @@ export function DetailsView(props) {
       props.setNature(event.target.innerText, index);
     }
 
-    return(
-      <div>
-        <Autocomplete
-          key={`nature-${index}`}
-          id="nature-select"      
-          onOpen={props.handleOpenNature}
-          onClose={props.handleClose}        
-          sx={{ width: 200 }}
-          options={props.optionsNature}
-          autoHighlight
+    const natureInfo = props.team[index]?.natureInfo || null;
 
-          onChange={natureChangeACB}
-          getOptionLabel={(option) => option.name || ""}
-          renderOption={(props, option) => {
-            const { key, ...optionProps } = props;
-            return (
-              <Box
-              
-                key={key}
-                component="li"
-                sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                {...optionProps}
-              >
-                {formatPokeName(option?.name)}
-              </Box>
-            
+    const selectedNature =
+      natureInfo
+        ? props.optionsNature.find(n => n.name === natureInfo.name) || null
+        : null;
 
-            );
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Nature"
-              slotProps={{
-                htmlInput: {
-                  ...params.inputProps,
-                  autoComplete: 'new-password', // disable autocomplete and autofill
-                },
-              }}
-            />
-          )}
-              
-        />
-        {showNatures(pokemonIndex)}
+    return (
+      <div className="selectInfoWrapper">
+
+        <div className="selectBox">
+          <Autocomplete
+            key={`nature-${index}`}
+            id="nature-select"
+            sx={{ width: 200 }}
+            options={props.optionsNature ?? []}
+            value={selectedNature}               // ✅ FIXED
+            autoHighlight
+            onChange={natureChangeACB}
+            getOptionLabel={(option) =>
+              option?.name ? formatPokeName(option.name) : ""
+            }
+            isOptionEqualToValue={(opt, val) =>
+              opt?.name === val?.name
+            }
+            renderOption={(liProps, option) => {
+              if (!option?.name) return null;
+              const { key, ...optionProps } = liProps;
+              return (
+                <Box key={key} component="li" {...optionProps}>
+                  {formatPokeName(option.name)}
+                </Box>
+              );
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Nature"
+                slotProps={{
+                  htmlInput: {
+                    ...params.inputProps,
+                    autoComplete: "new-password",
+                  },
+                }}
+              />
+            )}
+          />
+        </div>
+
+        <div className="infoBox">
+          {
+            <>
+              <div className="infoTitle">
+                {formatPokeName(natureInfo?.name)}
+              </div>
+              <div className="infoText">
+                Decreased stat: {formatPokeName(natureInfo.decrease || "none")}
+              </div>
+              <div className="infoText">
+                Increased stat: {formatPokeName(natureInfo.increase || "none")}
+              </div>
+            </>}
+        </div>
+
       </div>
     );}
 
@@ -200,7 +220,7 @@ export function DetailsView(props) {
 
     const natureInfo = props.team[index].natureInfo;
     const none = "none"
-    if (!natureInfo) return <div>No nature chosen</div>;
+    if (!natureInfo) return;
     return(
       <div>
           <p>{formatPokeName(natureInfo.name)}</p>
@@ -235,7 +255,7 @@ export function DetailsView(props) {
 
   function MoveInfo(slot, index){
     const moveData = props.team[index]?.moveInfo[slot];
-    if (moveData===null) return <div>No move info loaded</div>;
+    if (moveData===null) return;
     return (
       <div>
         <p>{formatPokeName(moveData.name)}</p>
@@ -297,38 +317,68 @@ export function DetailsView(props) {
   function AbilityList(index) {
 
     function addToAbilityListACB(evt, option){
-      if (!option) return; 
+      if (!option) {
+        props.clearAbility(index);
+        return;
+      }
       props.setAbility(option.ability.name, index);
     }
 
+    const chosenAbility = pokemon?.abilities?.find(ab => ab.chosen) || null;
+
     return (
-      <div> 
+      <div className="selectInfoWrapper">
+
+      <div className="selectBox">
         <Autocomplete
           key={`ability-${index}`}
           id="ability-select"
           sx={{ width: 200 }}
+          value={chosenAbility}
           options={pokemon?.abilities ?? []}
           autoHighlight
           onChange={addToAbilityListACB}
-          getOptionLabel={(option) => formatPokeName(option.ability?.name) || ""}
+          getOptionLabel={(option) =>
+            option?.ability?.name
+              ? formatPokeName(option.ability.name)
+              : ""
+          }
+          isOptionEqualToValue={(opt, val) =>
+            opt?.ability?.name === val?.ability?.name
+          }
           renderOption={(props, option) => {
+            if (!option?.ability?.name) return null;
             const { key, ...optionProps } = props;
             return (
-              <Box
-                key={key}
-                component="li"
-                sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                {...optionProps}
-              >
-                {formatPokeName(option.ability?.name)}
+              <Box key={key} component="li" {...optionProps}>
+                {formatPokeName(option.ability.name)}
               </Box>
             );
           }}
-          renderInput={(params) => ( <TextField {...params} label="Ability"/> )}
+          renderInput={(params) => (
+            <TextField {...params} label="Ability" />
+          )}
         />
-        <div>Chosen ability: {formatPokeName(pokemon?.abilities?.find(ab => ab.chosen)?.ability?.name)}</div>
-        <div>Description: {pokemon?.abilities?.find(ab => ab.chosen)?.description||<div>No ability chosen</div>}</div>
       </div>
+      
+      <div className="infoBox">
+        {pokemon.abilityInfo ? (
+          <>
+            <div className="infoTitle">
+              {formatPokeName(pokemon.abilityInfo.name)}
+            </div>
+            <div className="infoText">
+              {pokemon.abilityInfo.description}
+            </div>
+          </>
+        ) : (
+          <div className="infoText muted">
+            No ability info loaded
+          </div>
+        )}
+      </div>
+
+    </div>
     );
   }
 
@@ -479,7 +529,7 @@ export function DetailsView(props) {
   function renderSelectedItem(pokemonIndex) {
       const selectedItem = props.team[pokemonIndex]?.held_item;
       if (!selectedItem) {
-        return <div>No item selected</div>;
+        return;
       } else {
         return (
           <div>

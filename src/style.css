@@ -449,40 +449,45 @@
 /* DETAILS VIEW BUTTONS */
 /* -------------------- */
 
-/* Make all nav buttons symmetrical & consistent */
 .detailsNavBtnGroup .navBtn {
-  min-height: 60px;          /* about 40–50% smaller than default MUI */
+  min-height: 60px;
   padding: 4px 12px;
   font-size: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;                  /* spacing between image/text/arrow */
-  text-transform: none;      /* keep readable text */
+  gap: 6px;
+  text-transform: none;
 }
 
-/* Thumbnails inside buttons */
 .navThumb {
   width: 40px;
   height: 40px;
   object-fit: contain;
 }
 
-/* Arrows are small and aligned well */
 .detailsNavBtnGroup .arrow {
   font-size: 1rem;
   line-height: 1;
 }
 
-/* Optional hover polish */
 .detailsNavBtnGroup .navBtn:hover:not(:disabled) {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-/* Disabled state softened */
 .detailsNavBtnGroup .navBtn:disabled {
   opacity: 0.45;
   cursor: default;
+}
+
+.detailsNavBtnGroup .MuiButton-root:not(:disabled) {
+  border-color: rgba(0, 0, 0, 0.23);
+  position: relative;
+  z-index: 1;
+}
+
+.detailsNavBtnGroup .MuiButton-root:disabled {
+  z-index: 0;
 }
 
 /* ------------------------ */
@@ -531,7 +536,6 @@
   gap: 12px;
 }
 
-/* Clean up type list spacing */
 .typeList {
   padding-left: 0;
   margin: 0;
@@ -553,20 +557,17 @@
   width: fit-content;
 }
 
-/* Label */
 .levelLabel {
   font-weight: 600;
   font-size: 0.9rem;
   color: #333;
 }
 
-/* If LevelInput is a MUI TextField / Select / Input */
 .levelSelector .MuiInputBase-root {
-  font-size: 1.1rem;     /* Bigger text */
-  height: 44px;          /* Taller control */
+  font-size: 1.1rem;
+  height: 44px;
 }
 
-/* If LevelInput is a plain input */
 .levelSelector input {
   font-size: 1.1rem;
   height: 44px;
@@ -574,69 +575,67 @@
 }
 
 
-
 /* ---- COLUMN 2 ---- */
 
 .statRow {
   display: flex;
   flex-direction: column;
-  gap: 4px;               /* small vertical spacing between label and controls */
+  gap: 4px;
 }
 
-/* EV slider + IV field horizontally aligned */
 .statControls {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 12px;              /* spacing between slider and IV input */
+  gap: 12px;
 }
 
-/* Optional: tighten default MUI TextField size if needed */
 .statControls .MuiTextField-root {
-  width: 70px;            /* keeps IV box compact */
+  width: 70px;
 }
 
 
 /* ---- COLUMN 3 ---- */
 
+.selectInfoWrapper,
 .moveListWrapper {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
 }
 
+.selectBox,
 .moveSelect {
   flex-shrink: 0;
 }
 
+.infoBox,
 .moveInfoWrapper {
-  font-size: 0.8rem;
-  color: #444;
-  line-height: 1.3;
-  max-width: none;
-  width: 100%;
-  flex-grow: 1;
+  flex: 1;
   min-width: 0;
-}
-
-.moveInfoWrapper {
-  max-height: 120px;
-  overflow-y: auto;
-}
-
-.moveInfoTypeLine {
-  display: flex;
-  flex-wrap: wrap;         /* allow natural wrapping */
-  align-items: center;
-  min-width: 0;            /* allow shrink inside flex/grid */
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: #444;
 }
 
 .moveTypeIcon {
-  width: 50px;      /* reasonable, responsive */
+  width: 70px;  
   max-width: 100%;  
   height: auto;
+}
+
+/* -- WHEN CHAT OPEN -- */
+
+.detailsView.withChat .selectInfoWrapper,
+.detailsView.withChat .moveListWrapper {
+  flex-direction: column;
+}
+
+.detailsView.withChat .infoBox,
+.detailsView.withChat .moveInfoWrapper {
+  margin-top: 6px;
 }
 
 /* ---------------------- */

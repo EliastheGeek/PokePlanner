@@ -22,6 +22,8 @@ const initialState = {
     showAbilitiesPromiseState: { promise: null, data: [], error: null },
     showNaturesPromiseState: { promise: null, data: [], error: null },
 
+    abilityInfo: null,
+
     //Persistance
     hello: "hello",
     user: undefined,
@@ -231,6 +233,24 @@ const pokeSlice = createSlice({
                 return abilities.ability.name === abilityName; });
             state.team[pokemonIndex].abilities[abilityIndex].chosen = true;
             state.team[pokemonIndex].abilities[abilityIndex].description = results.effect_entries.find(entry => entry.language.name === "en")?.effect || "";
+            state.team[pokemonIndex].abilityInfo = {
+                name: abilityName,
+                description: results.effect_entries.find(e => e.language.name === "en")?.effect || ""
+            };
+        },
+        removeAbility(state, action){
+            const pokemonIndex = action.payload;
+
+            if (
+                typeof pokemonIndex !== "number" ||
+                pokemonIndex < 0 ||
+                pokemonIndex >= state.team.length
+            ) {
+                return;
+            }
+
+            state.team[pokemonIndex].abilities.forEach(ab => ab.chosen = false);
+            state.team[pokemonIndex].abilityInfo = null;
         },
         setItem(state, action){
             const results = action.payload.results;
@@ -449,6 +469,7 @@ export const {
     addMoveInfo,
     removeMove,
     setAbility,
+    removeAbility,
     setItem,
     setLevel,
     setIVstat,

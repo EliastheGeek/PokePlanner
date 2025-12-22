@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { removeMove, addActualMove, setOpen, setNatureOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setNature, setLevel, showItems, showNatures } from "/src/reduxStore.js";
+import { removeMove, removeAbility, addActualMove, setOpen, setNatureOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setNature, setLevel, showItems, showNatures } from "/src/reduxStore.js";
 import { doMoveThunk, doAbilityThunk, doItemThunk, doNatureThunk } from "/src/store/searchThunks.js";
 
 
@@ -93,6 +93,9 @@ export function Details() {
     function clearMoveACB(slot, pokemonIndex){
         dispatch(removeMove({ slot, pokemonIndex }));
     }
+    function clearAbilityACB(pokemonIndex){
+        dispatch(removeAbility({ pokemonIndex }));
+    }
 
     useEffect(() => {
         if (team.length === 0) return;
@@ -120,6 +123,7 @@ export function Details() {
                         clearMove={clearMoveACB}
                         evChange={evChangeACB}
                         setAbility={setAbilityACB}
+                        clearAbility={clearAbilityACB}
                         setNature={setNatureACB}
                         onItemSelect={setItemACB}
                         ivChange={ivChangeACB}
