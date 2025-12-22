@@ -6,7 +6,7 @@ To set up the project type: npm install in the working directory, then: npm run 
 ### Third-party components
 The webpage uses third party components in chatInterface.jsx (UI-components from shadcn.io). We also use MUI in chatInterface, damageCalcView, detailsView, landingView, loginView, menuBarView, suspenseView, searchView.
 
-We use some “bigger” prebuilt components from MUI in for example the menubar, these we have modified to fit our use case. Auto
+We use some “bigger” prebuilt components from MUI in for example the menubar, these we have modified to fit our use case. 
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
