@@ -15,6 +15,7 @@ import { display } from "@smogon/calc/dist/desc";
 import { formatPokeName } from "/src/utilities.js"
 import CircularProgress from '@mui/material/CircularProgress';
 import { render } from "katex";
+import { calcStatFromBase } from "@/utilities";
 
 const Input = styled(MuiInput)`width: 42px;`;
 
@@ -28,6 +29,8 @@ export function DetailsView(props) {
     }
 
     const maxEV = 252;
+    const maxIV = 31;
+    const maxLevel = 100;
 
     return (
     <div className="detailsNavigationBox">
@@ -134,7 +137,6 @@ export function DetailsView(props) {
       sx={{ width: 200 }}
       options={props.optionsNature}
       autoHighlight
-
       onChange={natureChangeACB}
       getOptionLabel={(option) => option.name || ""}
       renderOption={(props, option) => {
@@ -185,15 +187,26 @@ export function DetailsView(props) {
   }
     
     function printBaseStatsCB(stats) { //nature saknas
-      function calculateTotalStat(stats) {
-        if(stats?.stat.name ==='hp'){
-          const total = Math.floor(((2 * stats.base_stat + stats.IV_Value + stats.EV_Value/4)*pokemon.level)/100) + 10+pokemon.level;
-          return total;
-        }
-        const total = Math.floor(((((2 * stats.base_stat + stats.EV_Value/4 + stats.IV_Value)*pokemon.level)/100) + 5)*stats.natureModifier);
-        return total;
+      var total = 0;
+      if(stats?.stat.name ==='hp'){
+        total = calcStatFromBase({base:stats.base_stat,
+                                  iv:stats.IV_Value, 
+                                  ev:stats.EV_Value, 
+                                  level:pokemon.level, 
+                                  natureMult:stats.natureModifier, 
+                                  isHP:true
+                                })
       }
-        return <li key={stats.stat.name}>{(calculateTotalStat(stats)||stats.base_stat)  + " " + formatPokeName(stats.stat.name)} 
+      else{
+        total = calcStatFromBase({base:stats.base_stat,
+                                  iv:stats.IV_Value, 
+                                  ev:stats.EV_Value, 
+                                  level:pokemon.level, 
+                                  natureMult:stats.natureModifier, 
+                                  isHP:false
+                                })
+      }
+        return <li key={stats.stat.name}>{total + " " + formatPokeName(stats.stat.name)} 
                        {InputSlider(stats.stat.name)}{IVInput(stats.stat.name)}</li>;
     }
 
@@ -218,7 +231,7 @@ export function DetailsView(props) {
     }
 
 
-//addToMoveListACB får details sidan att byta vy till index 0 när man lägger till ett move
+
 function MoveList(slot,index) {
 
   function addToMoveListACB(evt, option){
@@ -306,36 +319,36 @@ function IVInput(statName){
     setValue(iv);
   }, [pokemonIndex, statName, pokemon]);
 
-  const handleInputChange = (event) => {
-    if(event.target.value>31) return;
-    setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    const handleInputChange = (event) => {
+      if(event.target.value>maxIV) return;
+      setValue(event.target.value === '' ? 0 : Number(event.target.value));
 
-    props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);
-  };
+      props.ivChange(event.target.value === '' ? 0 : Number(event.target.value), statName, pokemonIndex);
+    };
     const handleBlur = () => {
-    if (value < 0) {
-      setValue(0);
-    } else if (value > 31) {
-      setValue(31);
-    }
-  };
-  return (<Grid>
-    
-          <Input
-            value={value}
-            size="small"          
-            onChange={handleInputChange}
-            onBlur={handleBlur}
-            inputProps={{
-              step: 1,
-              min: 0,
-              max: 31,
-              type: 'number',
-              'aria-labelledby': 'input-slider',
-            }}
-          />
-          IV
-        </Grid>);
+      if (value < 0) {
+        setValue(0);
+      } else if (value > maxIV) {
+        setValue(maxIV);
+      }
+    };
+    return (<Grid>
+      
+            <Input
+              value={value}
+              size="small"          
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              inputProps={{
+                step: 1,
+                min: 0,
+                max: maxIV,
+                type: 'number',
+                'aria-labelledby': 'input-slider',
+              }}
+            />
+              IV
+          </Grid>);
 }
 function LevelInput(){
   const initialLevel = pokemon?.level ?? 1;
@@ -353,8 +366,8 @@ function LevelInput(){
     const handleBlur = () => {
     if (value < 1) {
       setValue(1);
-    } else if (value > 100) {
-      setValue(100);
+    } else if (value > maxLevel) {
+      setValue(maxLevel);
     }
   };
   return (<Grid>
@@ -367,7 +380,7 @@ function LevelInput(){
             inputProps={{
               step: 1,
               min: 1,
-              max: 100,
+              max: maxLevel,
               type: 'number',
               'aria-labelledby': 'input-slider',
             }}

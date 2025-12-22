@@ -5,10 +5,7 @@ import { DetailsView } from "/src/views/detailsView.jsx";
 import { addActualMove, setOpen, setNatureOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setNature, setLevel, showItems, showNatures } from "/src/reduxStore.js";
 import { doMoveThunk, doAbilityThunk, doItemThunk, doNatureThunk } from "/src/store/searchThunks.js";
 
-
-
 export function Details() {
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const loading = useSelector((state) => state.poke.loading);
@@ -20,16 +17,7 @@ export function Details() {
     const showNaturesPromiseState = useSelector((state) => state.poke.showNaturesPromiseState);
     const pokemon = pokemonIndex >= 0 ? team[pokemonIndex] : null;
     const { name } = useParams();
-
-    useEffect(() => {
-        // If the route contains a pokemon name, make it the current pokemon
-        if (!name) return;
-        if (currentPokemonName !== name) {
-            dispatch(setCurrentPokemon(name));
-        }
-    }, [name, currentPokemonName, dispatch]);
-
-     const handleOpen = () => {
+    const handleOpen = () => {
         dispatch(setOpen(true));
         dispatch(showItems());
     };
@@ -64,7 +52,6 @@ export function Details() {
         dispatch(addActualMove(moveNSlot))
         dispatch(doMoveThunk(moveNSlot))
     }
-
     function evChangeACB(newValue, statName, pokemonIndex){
         const evChangeInfo = {newValue:newValue, statName:statName, pokemonIndex:pokemonIndex};
         dispatch(setEVstat(evChangeInfo));
@@ -90,8 +77,7 @@ export function Details() {
         const natureInfo ={natureName:natureName, pokemonIndex:pokemonIndex}
         dispatch(doNatureThunk(natureInfo));
     }
-
-    useEffect(() => {
+     useEffect(() => {
         if (team.length === 0) return;
 
         // Only default to the first team pokemon when there is no name in the route
@@ -100,7 +86,14 @@ export function Details() {
         }
     }, [team, pokemonIndex, dispatch, name]);
 
-
+    useEffect(() => {
+        // If the route contains a pokemon name, make it the current pokemon
+        if (!name) return;
+        if (currentPokemonName !== name) {
+            dispatch(setCurrentPokemon(name));
+        }
+    }, [name, currentPokemonName, dispatch]);  
+    
     return <DetailsView team={team} 
                         handleOpen={handleOpen}
                         handleOpenNature={handleOpenNature}
@@ -119,5 +112,5 @@ export function Details() {
                         setNature={setNatureACB}
                         onItemSelect={setItemACB}
                         ivChange={ivChangeACB}
-                        setLevel={setLevelACB}/>;
+                        setLevel={setLevelACB}/>;                   
 };

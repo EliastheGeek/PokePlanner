@@ -1,7 +1,7 @@
 import { configureStore, createSlice, createListenerMiddleware } from "@reduxjs/toolkit";
 import { formatTimestamp, clamp } from "/src/utilities";
 import { pokemonConst } from "./pokemonConst";
-import { searchPokemon, showAllPokemon, showAllMoves, showAllItems, showAllAbilities, showAllNatures } from "./pokemonSource";
+import { searchAPI, showAllAPI } from "./pokemonSource";
 import { act } from "react";
 import { stripTeam } from "/src/objectStripper";
 
@@ -123,6 +123,7 @@ const pokeSlice = createSlice({
                 pokemon.moveInfo = [null, null, null, null];
                 pokemon.held_item = null;
                 pokemon.natureInfo = null;
+                pokemon.game_indices=null;
                 pokemon.level = 1;
                 if (Array.isArray(pokemon.stats)) {
                     pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
@@ -228,9 +229,6 @@ const pokeSlice = createSlice({
             const pokemonIndex = action.payload.index;
             if (pokemonIndex < 0 || pokemonIndex >= state.team.length) return;
             state.team[pokemonIndex].held_item = results;
-        },
-        setCurrentPokemonName(state,action){
-            state.currentPokemonName = action.payload;
         },
         //Search + Promise
         setSearchQuery(state, action) { state.searchParams.query = action.payload; },
@@ -435,7 +433,6 @@ export const {
     addToTeam,
     removeFromTeam,
     setCurrentPokemon,
-    setCurrentPokemonName,
     addActualMove,
     addMoveInfo,
     setAbility,
@@ -672,7 +669,7 @@ listenerMiddleware.startListening(
     effect(action, store){  
         const params = action.payload;
         if(!params) return;
-        const promise = searchPokemon(params);
+        const promise = searchAPI("pokemon",params);
         store.dispatch(searchStarted(promise))
         if (!promise) return;
         promise
@@ -685,7 +682,7 @@ listenerMiddleware.startListening(
 {
     type: 'poke/showPokemon',
     effect(action, store){
-        const promise = showAllPokemon();
+        const promise = showAllAPI("pokemon");
         store.dispatch(showStarted(promise))
 
         if (!promise) return;
@@ -699,7 +696,7 @@ listenerMiddleware.startListening({
     type: "poke/showMoves",
     effect(action, store) {
 
-        const promise = showAllMoves();
+        const promise = showAllAPI("move");
         store.dispatch(movesStarted(promise));
 
         if (!promise) return;
@@ -713,7 +710,7 @@ listenerMiddleware.startListening({
 listenerMiddleware.startListening({
     type: "poke/showItems",
     effect(action, store) {
-        const promise = showAllItems();
+        const promise = showAllAPI("item");
         store.dispatch(itemsStarted(promise));
 
         if (!promise) return;
@@ -727,7 +724,7 @@ listenerMiddleware.startListening({
 listenerMiddleware.startListening({
     type: "poke/showAbilities",
     effect(action, store) {
-        const promise = showAllAbilities();
+        const promise = showAllAPI("ability");
         store.dispatch(abilitiesStarted(promise));
 
         if (!promise) return;
@@ -741,7 +738,7 @@ listenerMiddleware.startListening({
 listenerMiddleware.startListening({
     type: "poke/showNatures",
     effect(action, store) {
-        const promise = showAllNatures();
+        const promise = showAllAPI("nature");
         store.dispatch(naturesStarted(promise));
 
         if (!promise) return;

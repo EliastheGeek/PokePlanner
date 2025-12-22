@@ -7,8 +7,6 @@ export function TeamView(props){
     const emptySlots = Array(MAX_TEAM - team.length).fill(null);
     const slots = [...team.slice(0, MAX_TEAM), ...emptySlots];
     
-
-
     function closeACB(evt) {
         // Handle right-click / context menu to close the view
         evt.preventDefault();
@@ -20,37 +18,30 @@ export function TeamView(props){
         <div className="teamView" onContextMenu={closeACB}>
             <div className="teamGrid">
                 {slots.map((pokemon, index) =>
-                    pokemon ? (
-                      showTeamCB(pokemon)
-                    ) : (
-                    <div key={"empty-"+index} className="emptyCard" onClick={props.handleOpen} >
+                    pokemon ? (showTeamCB(pokemon)) 
+                 :( <div key={"empty-"+index} className="emptyCard" onClick={props.handleOpen}>
                         <img 
                             src={pokeSilhouette}
-                            width={80}/>
-                            <b>Add Pokemon +</b>
+                            width={80}
+                        />
+                        <b>Add Pokemon +</b>
                     </div>
                     )
                 )}
             </div>
-            
-             
         </div>
     );
     
-
     function showTeamCB(pokemon){
-        function removeFromTeamACB(e, pokemon){
-          e.stopPropagation();
-          props.onRemoveFromTeam(pokemon);
-        }
-
-        function showMoreACB(pokemon){
-          props.onClickPokemon(pokemon);
-        }
-
+      function removeFromTeamACB(e, pokemon){
+        e.stopPropagation();
+        props.onRemoveFromTeam(pokemon);
+      }
+      function showMoreACB(pokemon){
+        props.onClickPokemon(pokemon);
+      }
         return (
             <div className="pokemonCard" key={pokemon.id} onClick={() => showMoreACB(pokemon)}>
-
               <button 
                 className="removeBtn" 
                 onClick={(e) => removeFromTeamACB(e, pokemon)}
@@ -58,31 +49,29 @@ export function TeamView(props){
               >
                 X
               </button>
+                <div
+                  title={`See details for ${formatPokeName(pokemon.name)}`}
+                  className="imageWrapper"
+                >
+                  <img
 
-              <div
-                title={`See details for ${formatPokeName(pokemon.name)}`}
-                className="imageWrapper"
-              >
-                <img
-
-                  src={pokemon?.sprites?.other?.home?.front_default}
-                  alt={formatPokeName(pokemon.name)}
-                />
-              </div>
-        
+                    src={pokemon?.sprites?.other?.home?.front_default}
+                    alt={formatPokeName(pokemon.name)}
+                  />
+                </div>
               <h2 className="pokeName">{formatPokeName(pokemon.name)}</h2>
               <p className="pokeInfo">Level: {pokemon.level} #{pokemon.id}</p>
-
-              <p className="pokeInfo">
-                {pokemon.types?.map(printTypesCB)}
-              </p>
-              
-
+              <p className="pokeInfo">{pokemon.types?.map(printTypesCB)}</p>
             </div>
           );
-        }
-        
+          
     function printTypesCB(types) {
-        return <span key={types.type.name}> <img src={`/src/assets/typeIcons/${types.type.name}.png`} width={112} style={{ paddingBottom: 3 }}/> </span>;
+        return <span key={types.type.name}> 
+                  <img src={`/src/assets/typeIcons/${types.type.name}.png`} 
+                       width={112} 
+                       style={{ paddingBottom: 3 }}
+                  /> 
+               </span>;
     }
+  }
 }

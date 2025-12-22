@@ -64,4 +64,17 @@ export function calcStatFromBase({ base, iv, ev, level, natureMult, isHP }) {
     const preNature = Math.floor(((2 * base + iv + e) * level) / 100) + 5;
     return Math.floor(preNature *natureMult);
 }
+
+export function filterItemOptions(itemResults){
+        // Ensure we have the expected shape and deduplicate by item.name (case-insensitive)
+        if (!itemResults || !Array.isArray(itemResults.results)) return itemResults;
+        const seen = new Set();
+        const uniqueResults = itemResults.results.filter(item => {
+            const name = item && item.name ? String(item.name).toLowerCase().trim() : '';
+            if (seen.has(name)) return false;
+            seen.add(name);
+            return true;
+        });
+        return { ...itemResults, results: uniqueResults };
+    }
 //avancerat, filterera alla pokemon som är tillgängliga för en version. TODO
