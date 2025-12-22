@@ -1,7 +1,8 @@
 # Project Submission
 
 ### Setup
-To set up the project type: npm install in the working directory, then: npm run dev. 
+To set up the project type: npm install in the working directory, then: npm run dev.
+The project is also deployed at https://pokemonteamplanner.web.app/
 
 ### Third-party components
 The webpage uses third party components in chatInterface.jsx (UI-components from shadcn.io). We also use MUI in chatInterface, damageCalcView, detailsView, landingView, loginView, menuBarView, suspenseView, searchView.
