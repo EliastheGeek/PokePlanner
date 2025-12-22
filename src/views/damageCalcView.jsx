@@ -400,7 +400,7 @@ export function DamageCalcView(props) {
                             <Box
                                 sx={{
                                     display: "grid",
-                                    gridTemplateColumns: "90px 48px 64px 72px 72px 56px",
+                                    gridTemplateColumns: "56px 48px 64px 72px 56px 56px",
                                     alignItems: "center",
                                     columnGap: 1,
                                     rowGap: 1,
@@ -1167,7 +1167,7 @@ export function DamageCalcView(props) {
                             <Box
                                 sx={{
                                     display: "grid",
-                                    gridTemplateColumns: "90px 48px 64px 72px 72px 56px",
+                                    gridTemplateColumns: "56px 48px 64px 72px 56px 56px",
                                     alignItems: "center",
                                     columnGap: 1,
                                     rowGap: 1,
