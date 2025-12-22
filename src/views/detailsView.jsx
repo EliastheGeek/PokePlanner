@@ -64,23 +64,26 @@ export function DetailsView(props) {
      return ( 
           <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", alignItems: "start",}}>
             
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              
-              <h2 style={{ margin: 0 }}>{formatPokeName(pokemon.name)} Level: {LevelInput()}</h2>
-              
-              <img
-                src={pokemon?.sprites?.other?.home?.front_default}
-                width={150}
-                alt={formatPokeName(pokemon.name)}
-                
-              />
-              
-              <Box>          
-                <h3>Type:</h3>
+            <Box className="detailsTitleImage">
+              <Typography className='landingPageTextHead' variant="h5">
+                {formatPokeName(pokemon.name)}
+                <img
+                  src={pokemon?.sprites?.other.home.front_default}
+                  width={150}
+                  alt={formatPokeName(pokemon.name)}
+                />
+              </Typography>
+              </Box >
+              <Box className="detailsTypeLevel">
+                     <h3>Type:</h3>
                 <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
                   {pokemon.types?.map(printTypesCB)}
                 </ul>
-      
+                 Level: {LevelInput()}
+                 </Box>
+              <Box >          
+                
+    
                   <Box component="aside">
                     <h3>Stats:</h3>
                     <ul style={{ paddingLeft: 0, lineHeight: 1.4 }}>
@@ -89,13 +92,14 @@ export function DetailsView(props) {
                   </Box>
               {SearchItem()}
               </Box>
+              <div >
               {MoveList(0, pokemonIndex)}
               {MoveList(1, pokemonIndex)}
               {MoveList(2, pokemonIndex)}
               {MoveList(3, pokemonIndex)}
-              
+              </div>
               <Box>{AbilityList(pokemonIndex)}{NatureList(pokemonIndex)}</Box>
-            </Box>
+            
 
 
             <Box sx={{display: "grid", gap: 2, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", alignItems: "start",}}>
