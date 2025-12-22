@@ -574,6 +574,9 @@
   padding: 6px 10px;
 }
 
+.levelSelector .MuiInputBase-input {
+  min-width: 80px;
+}
 
 /* ---- COLUMN 2 ---- */
 
