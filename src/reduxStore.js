@@ -112,7 +112,7 @@ const pokeSlice = createSlice({
     name: "poke",
     initialState: initialState,
     reducers: {
-    addToTeam(state, action){
+        addToTeam(state, action){
             const pokemon = action.payload;
             if (!pokemon) return;
             // avoid duplicates
@@ -146,6 +146,15 @@ const pokeSlice = createSlice({
             const slot = action.payload.slot;
             if (pokemonIndex === -1) return;
             state.team[pokemonIndex].moveInfo[slot] = results;
+        },
+        removeMove(state, action){
+            const { pokemonIndex, slot } = action.payload;
+
+            if (pokemonIndex === -1) return;
+
+            state.team[pokemonIndex].actualMoves[slot] = null;
+
+            state.team[pokemonIndex].moveInfo[slot] = null;
         },
         removeFromTeam(state,action){
             function keepPokemonCB(pokemon){
@@ -438,6 +447,7 @@ export const {
     setCurrentPokemonName,
     addActualMove,
     addMoveInfo,
+    removeMove,
     setAbility,
     setItem,
     setLevel,

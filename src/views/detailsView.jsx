@@ -33,8 +33,6 @@ export function DetailsView(props) {
         <Box
             sx={{
               flex: 1,
-              borderLeft: "1px solid #e0e0e0",
-              pl: 2,
               display: "flex",
               flexDirection: "column",
               gap: 1,
@@ -93,7 +91,7 @@ export function DetailsView(props) {
           <Box className="detailsGrid"
               sx={{
                 display: "grid",
-                gap: 24,
+                gap: 12,
                 alignItems: "start",
               }}
           >
@@ -256,7 +254,10 @@ export function DetailsView(props) {
   function MoveList(slot,index) {
 
     function addToMoveListACB(evt, option){
-      if (!option) return; 
+      if (!option) {
+        props.clearMove(slot, index);
+        return;
+      }
       props.addMove(option.move.name, slot, index);
     }
 
