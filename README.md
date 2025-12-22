@@ -1,3 +1,17 @@
+# Project Submission
+
+### Setup
+To set up the project type: npm install in the working directory, then: npm run dev. 
+
+### Third-party components
+The webpage uses third party components in chatInterface.jsx (UI-components from shadcn.io). We also use MUI in chatInterface, damageCalcView, detailsView, landingView, loginView, menuBarView, suspenseView, searchView.
+
+We use some “bigger” prebuilt components from MUI in for example the menubar, these we have modified to fit our use case. Auto
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
 # PokéPlanner-Project
 Build, test, and refine your competitive Pokémon teams in one place. Our teambuilder lets you pick Pokémon, customize moves, items, EVs & IVs, natures, and Tera types, while instantly tracking stats, type matchups, weaknesses, and synergy. A built-in damage calculator shows realistic damage rolls and KO chances for your moves, and an AI assistant in the corner is always ready to point out team flaws and suggest improvements. Log in to save, review, and improve your teams and return to them anytime.
 ## What we have done
