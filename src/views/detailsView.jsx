@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
-import { formatPokeName } from "/src/utilities.js"
+import { formatPokeName, typeIcons } from "/src/utilities.js"
 import CircularProgress from '@mui/material/CircularProgress';
 import { calcStatFromBase } from "@/utilities";
 
@@ -270,7 +270,7 @@ export function DetailsView(props) {
   }
 
   function printTypesCB(types) {
-    return <li key={types.type.name}> <img src={`/src/assets/typeIcons/${types.type.name}.png`} width={112} style={{ paddingBottom: 3 }} /> </li>;
+    return <li key={types.type.name}> <img src={typeIcons[types.type.name]} width={112} style={{ paddingBottom: 3 }} /> </li>;
   }
 
   function MoveInfo(slot, index){
@@ -284,7 +284,7 @@ export function DetailsView(props) {
         <p className="moveInfoTypeLine">
           Type: 
           <img className="moveTypeIcon" 
-              src={`/src/assets/typeIcons/${moveData.type?.name}.png`}
+              src={typeIcons[moveData.type?.name]}
           />
         </p>
         <p>Damage type: {formatPokeName(moveData.damage_class?.name)}</p>

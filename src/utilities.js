@@ -1,3 +1,22 @@
+import normalIcon from "/src/assets/typeIcons/normal.png";
+import fireIcon from "/src/assets/typeIcons/fire.png";
+import waterIcon from "/src/assets/typeIcons/water.png";
+import electricIcon from "/src/assets/typeIcons/electric.png";
+import grassIcon from "/src/assets/typeIcons/grass.png";
+import iceIcon from "/src/assets/typeIcons/ice.png";
+import fightingIcon from "/src/assets/typeIcons/fighting.png";
+import poisonIcon from "/src/assets/typeIcons/poison.png";
+import groundIcon from "/src/assets/typeIcons/ground.png";
+import flyingIcon from "/src/assets/typeIcons/flying.png";
+import psychicIcon from "/src/assets/typeIcons/psychic.png";
+import bugIcon from "/src/assets/typeIcons/bug.png";
+import rockIcon from "/src/assets/typeIcons/rock.png";
+import ghostIcon from "/src/assets/typeIcons/ghost.png";
+import dragonIcon from "/src/assets/typeIcons/dragon.png";
+import darkIcon from "/src/assets/typeIcons/dark.png";
+import steelIcon from "/src/assets/typeIcons/steel.png";
+import fairyIcon from "/src/assets/typeIcons/fairy.png";
+
 export function formatTimestamp(date) {
     const pad = (n) => String(n).padStart(2, '0');
 
@@ -104,14 +123,35 @@ export function initializePokemon(pokemon){
     return initPokemon;
 }
 export function filterItemOptions(itemResults){
-        //Item only appears once in listing
-        if (!itemResults || !Array.isArray(itemResults.results)) return itemResults;
-        const seen = new Set();
-        const uniqueResults = itemResults.results.filter(item => {
-            const name = item && item.name ? String(item.name).toLowerCase().trim() : '';
-            if (seen.has(name)) return false;
-            seen.add(name);
-            return true;
-        });
-        return { ...itemResults, results: uniqueResults };
-    }
+    //Item only appears once in listing
+    if (!itemResults || !Array.isArray(itemResults.results)) return itemResults;
+    const seen = new Set();
+    const uniqueResults = itemResults.results.filter(item => {
+        const name = item && item.name ? String(item.name).toLowerCase().trim() : '';
+        if (seen.has(name)) return false;
+        seen.add(name);
+        return true;
+    });
+    return { ...itemResults, results: uniqueResults };
+}
+
+export const typeIcons = {
+    normal: normalIcon,
+    fire: fireIcon,
+    water: waterIcon,
+    electric: electricIcon,
+    grass: grassIcon,
+    ice: iceIcon,
+    fighting: fightingIcon,
+    poison: poisonIcon,
+    ground: groundIcon,
+    flying: flyingIcon,
+    psychic: psychicIcon,
+    bug: bugIcon,
+    rock: rockIcon,
+    ghost: ghostIcon,
+    dragon: dragonIcon,
+    dark: darkIcon,
+    steel: steelIcon,
+    fairy: fairyIcon,
+};

@@ -1,5 +1,5 @@
 import pokeSilhouette from "/src/assets/pokesilhouette.png";
-import { formatPokeName } from "@/utilities";
+import { formatPokeName, typeIcons } from "@/utilities";
 export function TeamView(props){
 
     const MAX_TEAM = 6;
@@ -67,7 +67,7 @@ export function TeamView(props){
           
     function printTypesCB(types) {
         return <span key={types.type.name}> 
-                  <img src={`/src/assets/typeIcons/${types.type.name}.png`} 
+                  <img src={typeIcons[types.type.name]} 
                        width={112} 
                        style={{ paddingBottom: 3 }}
                   /> 
