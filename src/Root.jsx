@@ -1,4 +1,4 @@
-import { Summary } from "/src/presenters/summaryPresenter.jsx";
+
 import { MenuBar } from "/src/presenters/menuBarPresenter.jsx";
 import { Landing } from "/src/presenters/landingPresenter.jsx";
 import { Login } from "/src/presenters/loginPresenter.jsx";

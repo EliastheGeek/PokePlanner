@@ -71,7 +71,7 @@ export function DetailsView(props) {
               <Typography className='landingPageTextHead' variant="h5">
                 {formatPokeName(pokemon.name)}
                 <img
-                  src={pokemon?.sprites?.other.home.front_default}
+                  src={pokemon?.sprites?.front_home}
                   width={150}
                   alt={formatPokeName(pokemon.name)}
                 />
@@ -189,6 +189,7 @@ export function DetailsView(props) {
     function printBaseStatsCB(stats) { //nature saknas
       var total = 0;
       if(stats?.stat.name ==='hp'){
+        console.log(stats)
         total = calcStatFromBase({base:stats.base_stat,
                                   iv:stats.IV_Value, 
                                   ev:stats.EV_Value, 

@@ -66,22 +66,45 @@ export function calcStatFromBase({ base, iv, ev, level, natureMult, isHP }) {
 }
 
 export function initializePokemon(pokemon){
-                /*Initialize actualMoves, moveInfo and IV,EV attributes */
-    pokemon.actualMoves = [null, null, null, null];
-    pokemon.moveInfo = [null, null, null, null];
-    pokemon.held_item = null;
-    pokemon.natureInfo = null;
-    pokemon.game_indices=null;
-    pokemon.level = 1;
-    if (Array.isArray(pokemon.stats)) {
-        pokemon.stats = pokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
-        pokemon.stats = pokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
-        pokemon.stats = pokemon.stats.map(s => ({ ...s, natureModifier: 1 }));
+    function stripMoves(pokemon){
+        return (pokemon.moves ?? []).map(moves => {
+        if (!moves) return null;
+            return {
+                move: moves.move ?? null,
+            }
+        })
     }
-    return pokemon;
+    function stripSprites(pokemon){
+        if (!pokemon.sprites) return null;
+            return {
+                front_default: pokemon.sprites?.front_default ?? null,
+                front_home: pokemon.sprites?.other?.home?.front_default ?? null,
+            }
+    }
+    //Initialize actualMoves, moveInfo, natureInfo, level, IV, EV attributes 
+    const initPokemon={
+        name: pokemon.name,
+        id: pokemon.id,
+        abilities: pokemon.abilities,
+        actualMoves: [null, null, null, null],
+        moveInfo: [null, null, null, null],
+        moves: stripMoves(pokemon),
+        level: 1,
+        held_item: null,
+        natureInfo: null,
+        sprites: stripSprites(pokemon),
+        stats: pokemon.stats,
+        types: pokemon.types
+    }
+    if (Array.isArray(initPokemon.stats)) {
+        initPokemon.stats = initPokemon.stats.map(s => ({ ...s, EV_Value: 0 }));
+        initPokemon.stats = initPokemon.stats.map(s => ({ ...s, IV_Value: 0 }));
+        initPokemon.stats = initPokemon.stats.map(s => ({ ...s, natureModifier: 1 }));
+    }
+    return initPokemon;
 }
 export function filterItemOptions(itemResults){
-        // Ensure we have the expected shape and deduplicate by item.name (case-insensitive)
+        //Item only appears once in listing
         if (!itemResults || !Array.isArray(itemResults.results)) return itemResults;
         const seen = new Set();
         const uniqueResults = itemResults.results.filter(item => {
@@ -92,4 +115,3 @@ export function filterItemOptions(itemResults){
         });
         return { ...itemResults, results: uniqueResults };
     }
-//avancerat, filterera alla pokemon som är tillgängliga för en version. TODO

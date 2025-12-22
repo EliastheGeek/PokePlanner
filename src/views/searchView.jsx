@@ -6,6 +6,7 @@ import { formatPokeName } from "/src/utilities.js";
 
 export function SearchView(props) {
   return (
+    //MUI autocomplete
     <div className="searchWrapper">
       <Autocomplete
         sx={{ width: 300, size:200 }}

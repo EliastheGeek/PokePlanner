@@ -55,7 +55,7 @@ export function TeamView(props){
                 >
                   <img
 
-                    src={pokemon?.sprites?.other?.home?.front_default}
+                    src={pokemon?.sprites?.front_home}
                     alt={formatPokeName(pokemon.name)}
                   />
                 </div>
