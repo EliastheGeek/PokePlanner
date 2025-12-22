@@ -205,10 +205,10 @@ export function DetailsView(props) {
                 {formatPokeName(natureInfo?.name)}
               </div>
               <div className="infoText">
-                Decreased stat: {formatPokeName(natureInfo.decrease || "none")}
+                Decreased stat: {formatPokeName(natureInfo?.decrease || "none")}
               </div>
               <div className="infoText">
-                Increased stat: {formatPokeName(natureInfo.increase || "none")}
+                Increased stat: {formatPokeName(natureInfo?.increase || "none")}
               </div>
             </>}
         </div>
