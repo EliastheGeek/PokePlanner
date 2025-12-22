@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DetailsView } from "/src/views/detailsView.jsx";
-import { addActualMove, setOpen, setNatureOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setNature, setLevel, showItems, showNatures } from "/src/reduxStore.js";
+import { removeMove, removeAbility, addActualMove, setOpen, setNatureOpen, setCurrentPokemon, setEVstat, setIVstat, setAbility, setNature, setLevel, showItems, showNatures } from "/src/reduxStore.js";
 import { doMoveThunk, doAbilityThunk, doItemThunk, doNatureThunk } from "/src/store/searchThunks.js";
 
 export function Details() {
@@ -77,7 +77,14 @@ export function Details() {
         const natureInfo ={natureName:natureName, pokemonIndex:pokemonIndex}
         dispatch(doNatureThunk(natureInfo));
     }
-     useEffect(() => {
+    function clearMoveACB(slot, pokemonIndex){
+        dispatch(removeMove({ slot, pokemonIndex }));
+    }
+    function clearAbilityACB(pokemonIndex){
+        dispatch(removeAbility({ pokemonIndex }));
+    }
+
+    useEffect(() => {
         if (team.length === 0) return;
 
         // Only default to the first team pokemon when there is no name in the route
@@ -106,9 +113,11 @@ export function Details() {
                         pokemonIndex={pokemonIndex}
                         onNext={nextPokemonACB}
                         onPrevious={previousPokemonACB}
-                        addMove={addActualMoveACB} 
+                        addMove={addActualMoveACB}
+                        clearMove={clearMoveACB}
                         evChange={evChangeACB}
                         setAbility={setAbilityACB}
+                        clearAbility={clearAbilityACB}
                         setNature={setNatureACB}
                         onItemSelect={setItemACB}
                         ivChange={ivChangeACB}
