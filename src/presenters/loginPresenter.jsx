@@ -45,7 +45,7 @@ export function Login(){
 
         signIsIn? signInWithEmailAndPassword(auth, email, password).catch(onErrorACB) : createUserWithEmailAndPassword(auth, email, password).catch(onErrorACB)
         /* TODO save the error in some local app state or component state and send to the view */
-        function onErrorACB(err) { dispatch(setAuthError(err.message)); }        
+        function onErrorACB(err) { dispatch(setAuthError({ code: err.code, message: err.message })); }        
     }
     function emailHandlerACB(param) {
         dispatch(setCurrentEmail(param));

@@ -35,7 +35,7 @@ export function LoginView(props){
                             type="password"
                             variant="outlined" 
                             fullWidth/>
-                        {props.loginError ?   <Typography variant="body2" color="error" align="center">Wrong email or password</Typography> : null }
+                        {props.loginError ? <Typography variant="body2" color="error" align="center">{errorText(props.loginError)}</Typography> : null }
                         <Button 
                             type="submit"
                             value="login"
@@ -113,4 +113,23 @@ export function LoginView(props){
         props.onLogin(props.email, props.password, false)
     }
     function goBackACB(){ window.location.hash = "#/"; }
+
+    function errorText(error) {
+        if (!error) return null;
+
+        switch (error.code) {
+            case "auth/weak-password":
+                return "Password is too short (needs to be longer).";
+            case "auth/invalid-email":
+                return "Please enter a valid email address.";
+            case "auth/email-already-in-use":
+                return "That email is already registered. Try logging in.";
+            case "auth/user-not-found":
+            case "auth/wrong-password":
+            case "auth/invalid-credential":
+                return "Wrong email or password.";
+            default:
+                return error.message || "Authentication failed. Please try again.";
+        }
+    }
 }
